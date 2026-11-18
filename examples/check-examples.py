@@ -19,8 +19,14 @@ It runs three kinds of checks, and reports every failure with the rule it breaks
   lists, authority and parties resolve, terms and deadlines follow the profile,
   identifiers carry their normalized search key, owner groups hold the whole asset,
   views show only what their visibility class allows, and events hold no personal value.
-- Replay: the light chain verifies, with the destroyed filing replaced by its tombstone,
-  and replaying the filings rebuilds each expected bitemporal snapshot.
+- Chain and log: the light chain verifies, with each destroyed filing replaced by its
+  tombstone; the leaves of the log series of the register map one-to-one, in order, onto the
+  chain entries; each checkpoint matches its leaves; and the head of the chain is the last leaf
+  of the newest checkpoint. log.json stands in for the read interface of LOG-036.
+- Replay: replaying the filings, with corrections, restatements and tombstones, rebuilds each
+  expected bitemporal snapshot; a retroactive filing restates the later versions it affects; no
+  value that a destruction targets survives in another filing; and views apply conditional
+  visibility to the record they show, including a view of a register whose pack is planned.
 
 The fixture stands in the compact JSON form of each filing, with sorted keys, for its
 sealed bytes: the commitment is SHA-256 over the salt, then those bytes (REG-031).
@@ -42,6 +48,7 @@ URI = re.compile(r"^(https?://|mailto:|tel:)\S+$")
 VISIBILITY = ["public", "parties", "agency", "restricted"]
 FINAL = {"completed", "rejected", "withdrawn"}
 HISTORY = {"createdByFiling", "endedByFiling", "validFrom", "validTo"}
+COUNT_FROM = {"effective-date": "effectiveAt", "submission-date": "submittedAt", "completion-date": "completedAt"}
 REGISTER = "pleasure-craft-licenses"
 KIND_LIST = {"asset": "assets", "owner-group": "ownerGroups", "entitlement": "entitlements",
              "encumbrance": "encumbrances"}
@@ -239,50 +246,65 @@ def strip_history(row):
 def replay(filings, tombstones, valid_at, recorded_at, pack, tz):
     """Rebuilds derived state as of valid_at, as recorded at recorded_at (REG-040, REG-042).
 
-    filings and tombstones map a filing id to its document. Returns a StateSnapshot."""
+    filings and tombstones map a filing id to its document. A correction, live or destroyed,
+    replaces the filing that it corrects, at the place of that filing's sequence. A restatement
+    replaces the later version that it restates. A tombstone gives rows by id only, so the rows
+    that only it supports come out as destroyed rows (REG-095). Returns a StateSnapshot."""
     known = [f for f in filings.values()
              if f.get("processingStatus") == "completed" and f["completedAt"] <= recorded_at]
     known += [t for t in tombstones.values() if t["completedAt"] <= recorded_at]
-    by_id = {x.get("id") or x.get("filingId"): x for x in known}
-    replaced = {}
-    for f in sorted(known, key=lambda x: x["sequence"]):
-        if f.get("category") == "correction" and "corrects" in f:
-            replaced[f["corrects"]] = f
+
+    def fid(x):
+        return x.get("id") or x.get("filingId")
+
+    replaced, restated = {}, {}
+    for x in sorted(known, key=lambda x: x["sequence"]):
+        if x.get("category") == "correction" and x.get("corrects"):
+            replaced[x["corrects"]] = x
+        if "filingId" in x:
+            for r in x.get("restated") or []:
+                restated[(r["filingId"], r["kind"], r["entityId"])] = None
+        for r in (x.get("changes") or {}).get("restates") or []:
+            for kind, lst in KIND_LIST.items():
+                for row in (r.get("opens") or {}).get(lst) or []:
+                    restated[(r["filingId"], kind, row["id"])] = row
+
+    def rows_of(src):
+        """The opened rows, as (kind, id, row or None when destroyed), and the ended rows."""
+        if "filingId" in src:
+            return [(r["kind"], r["entityId"], None) for r in src.get("opened") or []], src.get("ended") or []
+        changes = src.get("changes") or {}
+        opened = [(kind, row["id"], row) for kind, lst in KIND_LIST.items()
+                  for row in (changes.get("opens") or {}).get(lst) or []]
+        return opened, changes.get("ends") or []
+
     entries = []
     for x in known:
-        fid = x.get("id") or x.get("filingId")
         if x["category"] != "change":
             continue
-        if fid in replaced:
-            c = replaced[fid]
-            entries.append((c["effectiveAt"], x["sequence"], c["id"], c.get("changes") or {}, False))
-        elif "filingId" in x:  # a tombstone: its rows are known by id only
-            opens = {}
-            for r in x.get("opened") or []:
-                opens.setdefault(KIND_LIST[r["kind"]], []).append({"entityId": r["entityId"]})
-            entries.append((x["effectiveAt"], x["sequence"], fid,
-                            {"opens": opens, "ends": x.get("ended") or []}, True))
-        else:
-            entries.append((x["effectiveAt"], x["sequence"], fid, x.get("changes") or {}, False))
+        src = replaced.get(fid(x), x)
+        opened, ended = rows_of(src)
+        # A correction keeps the place of the filing it corrects (REG-040).
+        entries.append((src["effectiveAt"], x["sequence"], fid(src), opened, ended))
     entries.sort(key=lambda e: (e[0], e[1]))
     current, versions = {}, []
-    for eff, _, fid, changes, destroyed in entries:
-        for ref in changes.get("ends") or []:
+    for eff, _, by, opened, ended in entries:
+        for ref in ended:
             key = (ref["kind"], ref["entityId"])
             if key in current:
                 v = current.pop(key)
-                v["validTo"], v["endedByFiling"] = eff, fid
-        for kind, lst in KIND_LIST.items():
-            for row in (changes.get("opens") or {}).get(lst) or []:
-                rid = row.get("id") or row.get("entityId")
-                key = (kind, rid)
-                if key in current:
-                    v = current.pop(key)
-                    v["validTo"], v["endedByFiling"] = eff, fid
-                v = {"kind": kind, "id": rid, "row": row, "createdByFiling": fid, "validFrom": eff,
-                     "destroyed": destroyed}
-                current[key] = v
-                versions.append(v)
+                v["validTo"], v["endedByFiling"] = eff, by
+        for kind, rid, row in opened:
+            key = (kind, rid)
+            if key in current:
+                v = current.pop(key)
+                v["validTo"], v["endedByFiling"] = eff, by
+            if (by, kind, rid) in restated:
+                row = restated[(by, kind, rid)]
+            v = {"kind": kind, "id": rid, "row": row, "createdByFiling": by, "validFrom": eff,
+                 "destroyed": row is None}
+            current[key] = v
+            versions.append(v)
     snap = {"registerCode": REGISTER, "validAt": valid_at, "recordedAt": recorded_at,
             "lastFilingSequence": max([x["sequence"] for x in known], default=0)}
     day = instant(valid_at).astimezone(tz).date().isoformat()
@@ -313,13 +335,36 @@ def effective_policy(path, register, pack, core, record=None):
         for p in policies:
             if p["path"] == path:
                 vis = p["visibility"]
-                if "when" in p and record is not None:
+                if "when" in p and record is None:
+                    # Without the record, the narrower of the two classes applies.
+                    vis = max(vis, p["otherwise"], key=VISIBILITY.index)
+                elif "when" in p:
                     present = bool(record.get(p["when"]["field"].split(".")[-1]))
                     holds = present if p["when"]["test"] == "present" else not present
                     vis = vis if holds else p["otherwise"]
                 return vis, p["opposable"], p["omissionReason"]
     d = core["defaults"]
     return d["unlistedFieldVisibility"], d["unlistedFieldOpposable"], "not-public-by-law"
+
+
+def find_row(snapshot, entity_id):
+    for lst in ("assets", "ownerGroups", "entitlements", "encumbrances"):
+        for row in snapshot.get(lst) or []:
+            if row["id"] == entity_id:
+                return row
+    return None
+
+
+def mth(leaves):
+    """The root of an RFC 6962 Merkle tree over leaves given as hexadecimal hashes."""
+    if not leaves:
+        return hashlib.sha256(b"").digest()
+    if len(leaves) == 1:
+        return hashlib.sha256(b"\x00" + bytes.fromhex(leaves[0])).digest()
+    k = 1
+    while k * 2 < len(leaves):
+        k *= 2
+    return hashlib.sha256(b"\x01" + mth(leaves[:k]) + mth(leaves[k:])).digest()
 
 
 def field_value(snapshot, path, entity_id):
@@ -465,6 +510,7 @@ def main():
     schemes = {s["code"]: s for s in pack["identifierSchemes"]}
     classes = {c["code"]: c for c in pack.get("entitlementClasses") or []}
     retention = register.get("retentionClasses") or []
+    tenancies = register.get("tenancies") or core["defaults"].get("tenancies") or []
     for t in types:
         if not any(r["appliesTo"] == "filing-type" and t in r["types"] for r in retention):
             fail(reg_where, f"filing type {t} has no retention class", "REG-090")
@@ -518,6 +564,8 @@ def main():
             fail(where, "a filing with a final status needs completedAt and a sequence", "REG-023, REG-030")
         if f.get("completedAt", f["submittedAt"]) < f["submittedAt"]:
             fail(where, "completedAt comes before submittedAt", "REG-023")
+        if final and f.get("updatedAt") != f.get("completedAt"):
+            fail(where, "updatedAt must be the completion: nothing changes after a final status", "REG-022")
         if not t["retroactive"] and f["effectiveAt"] < f["submittedAt"]:
             fail(where, f"filing type {t['code']} takes no effective instant before submission", "REG-023")
         if f.get("paymentStatus") not in pack["paymentStatuses"] or f.get("reviewStatus") not in pack["reviewStatuses"]:
@@ -572,6 +620,8 @@ def main():
                     for j, ident in enumerate(row.get("identifiers") or []):
                         check_identifier(ident, where, f"{path}.identifiers[{j}]")
                 if kind == "owner-group":
+                    if row["tenancy"] not in tenancies:
+                        fail(where, f"{path}: tenancy {row['tenancy']} is not a code of the profile", "REG-053")
                     n, d, members = row["interest"]["numerator"], row["interest"]["denominator"], row["members"]
                     if row["tenancy"] == "sole" and (len(members) != 1 or n != d):
                         fail(where, f"{path}: a sole group has one member and the whole asset", "REG-053")
@@ -587,8 +637,8 @@ def main():
                     check_identifier(row["number"], where, f"{path}.number", ec["numberScheme"])
                     if row["lifecycleState"] not in ec["actStates"]:
                         fail(where, f"{path} sets {row['lifecycleState']}, which is not an act-driven state", "REG-045")
-                    day = date_of(f["effectiveAt"])
                     for term in register.get("terms") or []:
+                        day = date_of(f[COUNT_FROM[term.get("countFrom", "effective-date")]])
                         if term["entitlementClass"] == ec["code"] and rule_type["code"] in term["startsWith"] \
                                 and in_force(term, day):
                             want = {"start": day, "end": add_period(dt.date.fromisoformat(day), term["term"]).isoformat()}
@@ -600,7 +650,8 @@ def main():
         deadline = [d for d in register.get("deadlines") or []
                     if d["filingType"] == t["code"] and in_force(d, date_of(f["effectiveAt"]))]
         if deadline:
-            limit = add_period(instant(f["effectiveAt"]).astimezone(tz).date(), deadline[0]["within"])
+            start = f[COUNT_FROM[deadline[0].get("countFrom", "effective-date")]]
+            limit = add_period(instant(start).astimezone(tz).date(), deadline[0]["within"])
             want = "met" if instant(f["submittedAt"]).astimezone(tz).date() <= limit else "missed"
             if f.get("deadlineStatus") != want:
                 fail(where, f"deadlineStatus must be {want}, from the deadline of the profile", "REG-033")
@@ -614,6 +665,26 @@ def main():
             if not any(r["code"] == e["retentionClass"] and r["appliesTo"] == "evidence-type"
                        and e["evidenceType"] in r["types"] for r in retention):
                 fail(where, f"evidence {e['documentId']} names no retention class of the profile for its type", "REG-090")
+
+    # Retroactive filings restate the later versions that they affect (REG-029).
+    def opened_ids(x):
+        return {(kind, row["id"]) for kind, lst in KIND_LIST.items()
+                for row in ((x.get("changes") or {}).get("opens") or {}).get(lst) or []}
+
+    for xid, x in filings.items():
+        if x.get("processingStatus") != "completed" or x.get("category") == "destruction":
+            continue
+        restates = {(r["filingId"], kind, row["id"]) for r in (x.get("changes") or {}).get("restates") or []
+                    for kind, lst in KIND_LIST.items() for row in (r.get("opens") or {}).get(lst) or []}
+        for yid, y in filings.items():
+            if yid == xid or y.get("processingStatus") != "completed" or y.get("category") == "destruction":
+                continue
+            if not (y["completedAt"] < x["completedAt"] and y["effectiveAt"] > x["effectiveAt"]):
+                continue
+            for kind, eid in opened_ids(x) & opened_ids(y):
+                if (yid, kind, eid) not in restates:
+                    fail(files[xid], f"the filing takes effect before filing {yid}, which completed first; it must "
+                         f"restate the {kind} {eid} that filing {yid} opened", "REG-029")
 
     # Light chain and destruction (REG-030, REG-031, REG-093 to REG-095).
     entries = {e["sequence"]: e for e in chain_doc.get("chainEntries") or []}
@@ -657,10 +728,54 @@ def main():
             fail(files[by], f"filing {d} must have its content and its salt destroyed together", "REG-093, LOG-081")
         if d not in tombstones:
             fail(files[by], f"filing {d} must leave a tombstone", "REG-094")
+    for did, d in filings.items():
+        if d.get("category") != "destruction":
+            continue
+        retained = {r["filingId"] for r in d.get("retainedFilings") or []}
+        for target in d.get("destructionTargets") or []:
+            for xid, x in filings.items():
+                if xid == did or xid in retained:
+                    continue
+                if any(v == target["id"] for _, v in leaves(x)):
+                    fail(files[xid], f"filing {xid} still holds the value {target['id']} that destruction filing "
+                         f"{did} targets: destroy it or list it as retained", "REG-093")
     for fid, t in tombstones.items():
+        if t["category"] == "correction" and not t.get("corrects"):
+            fail("examples/pleasure-craft/chain.json", f"the tombstone of correction {fid} must keep the corrected "
+                 "filing", "REG-094")
         if destroyed_by.get(fid) != t["destroyedByFiling"]:
             fail("examples/pleasure-craft/chain.json", f"tombstone {fid} must name the destruction filing that "
                  "lists it", "REG-094")
+
+    # The log series of the register (REG-031, REG-032).
+    log_path = os.path.join(ex, "log.json")
+    log_doc = load(log_path)
+    model.check(log_doc, "RegistryContainer", rel(log_path))
+    where = rel(log_path)
+    shards = log_doc.get("logShards") or []
+    all_leaves = [(sh["origin"], i, leaf) for sh in shards for i, leaf in enumerate(sh["leaves"])]
+    chain_commits = [entries[q]["commitment"] for q in sorted(entries)]
+    leaf_values = [leaf for _, _, leaf in all_leaves]
+    for q in sorted(entries):
+        if entries[q]["commitment"] not in leaf_values:
+            fail(where, f"chain entry {q} has no leaf in the log series of the register", "REG-032")
+    for origin, i, leaf in all_leaves:
+        if leaf not in chain_commits:
+            fail(where, f"leaf {i} of shard {origin} matches no chain entry or tombstone", "REG-032")
+    if sorted(leaf_values) == sorted(chain_commits) and leaf_values != chain_commits:
+        fail(where, "the log indexes must increase with the sequence", "REG-032")
+    for sh in shards:
+        sizes = [c["treeSize"] for c in sh["checkpoints"]]
+        if sizes != sorted(sizes) or sizes[-1] > len(sh["leaves"]):
+            fail(where, f"the checkpoints of shard {sh['origin']} must grow and cover only its leaves", "REG-032, LOG-061")
+        for c in sh["checkpoints"]:
+            if c["treeSize"] <= len(sh["leaves"]) and mth(sh["leaves"][:c["treeSize"]]).hex() != c["rootHash"]:
+                fail(where, f"checkpoint {c['treeSize']} of shard {sh['origin']} does not match the leaves",
+                     "REG-032, OBS-115")
+        if sizes[-1] != len(sh["leaves"]):
+            fail(where, f"the newest checkpoint of shard {sh['origin']} must cover every leaf", "REG-032")
+    if shards and chain_commits and shards[-1]["leaves"][-1] != chain_commits[-1]:
+        fail(where, "the head of the chain must be the last leaf of the newest checkpoint", "REG-032")
 
     # Replay against the expected snapshots (REG-040, REG-042, REG-053, REG-095).
     snaps_path = os.path.join(ex, "snapshots.json")
@@ -698,18 +813,22 @@ def main():
     for x in extracts.values():
         where = f"{rel(views_path)} extract {x['id']}"
         snap = replay(filings, tombstones, x["validAt"], x["recordedAt"], pack, tz)
-        if x["lastFilingSequence"] != snap["lastFilingSequence"] or \
-                x.get("lastFilingId") != seq_of.get(snap["lastFilingSequence"]):
+        if x.get("subjects") and (x["lastFilingSequence"] != snap["lastFilingSequence"] or
+                                  x.get("lastFilingId") != seq_of.get(snap["lastFilingSequence"])):
             fail(where, "the extract must state the last filing that it reflects", "REG-084")
         rank = VISIBILITY.index(x["view"])
         if rank > 0:
             pol = policies.get(x.get("accessPolicy"))
             if pol is None or VISIBILITY.index(pol["grants"]) < rank:
                 fail(where, f"a {x['view']} view needs an access policy of the profile that grants it", "REG-074")
-        if register["publicityRegime"] == "closed" and x["view"] == "public" and x.get("fields"):
-            fail(where, "a closed register shows no field in a public view", "REG-012")
+        if register["publicityRegime"] == "closed" and x["view"] == "public" and \
+                (x.get("fields") or x.get("subjects") or x.get("lastFilingId")):
+            fail(where, "a public view of a closed register shows no field and neither confirms nor denies a "
+                 "record", "REG-012")
+        elif not x.get("subjects") and not (register["publicityRegime"] == "closed" and x["view"] == "public"):
+            fail(where, "the extract must state its subjects", "REG-084")
         for fld in x.get("fields") or []:
-            vis, _, _ = effective_policy(fld["path"], register, pack, core)
+            vis, _, _ = effective_policy(fld["path"], register, pack, core, find_row(snap, fld["entityId"]))
             if VISIBILITY.index(vis) > rank:
                 fail(where, f"field {fld['path']} is {vis} under the profile, so a {x['view']} view cannot show it",
                      "REG-070")
@@ -722,6 +841,32 @@ def main():
                 fail(where, f"field {o['path']} is visible to a {x['view']} view and cannot be omitted", "REG-073")
             if o["reason"] != reason and o["reason"] not in ("destroyed", "unknown-to-register"):
                 fail(where, f"the omission of {o['path']} must give the reason {reason}", "REG-073")
+    # A view of a register whose pack is planned, with the record it shows (REG-071).
+    qc_path = os.path.join(root, "examples", "ca-qc", "beneficiary-views.json")
+    qc_doc = load(qc_path)
+    qc_records = {r["id"]: r for r in qc_doc.get("records") or []}
+    model.check({"extracts": qc_doc.get("extracts") or []}, "RegistryContainer", rel(qc_path))
+    for x in qc_doc.get("extracts") or []:
+        qwhere = f"{rel(qc_path)} extract {x['id']}"
+        _, _, qreg = registers.get(x["registerCode"], (None, None, None))
+        if qreg is None:
+            fail(qwhere, f"register {x['registerCode']} is not declared", "REG-010")
+            continue
+        rank = VISIBILITY.index(x["view"])
+        for fld in x.get("fields") or []:
+            rec = qc_records.get(fld["entityId"])
+            vis, _, _ = effective_policy(fld["path"], qreg, {}, core, rec)
+            if VISIBILITY.index(vis) > rank:
+                fail(qwhere, f"field {fld['path']} is {vis} for this record, so a {x['view']} view cannot show it",
+                     "REG-070, REG-071")
+            if rec is None or rec.get(fld["path"].split(".")[-1]) != fld["value"]:
+                fail(qwhere, f"field {fld['path']} does not hold the value of the record", "REG-084")
+        for o in x.get("omissions") or []:
+            recs = [qc_records.get(f["entityId"]) for f in x.get("fields") or []]
+            vis, _, reason = effective_policy(o["path"], qreg, {}, core, recs[0] if recs else None)
+            if o["reason"] != reason:
+                fail(qwhere, f"the omission of {o['path']} must give the reason {reason}", "REG-073")
+
     modes = {m["code"]: m for m in register.get("searchModes") or []}
     for s in views.get("searchRecords") or []:
         where = f"{rel(views_path)} search {s['id']}"
@@ -812,7 +957,7 @@ def main():
                     fail(rel(path), "each scenario needs a tag", "TST-027")
                 if not re.search(r'"\d{4}-\d{2}-\d{2}', text):
                     fail(rel(path), f"scenario {tag} states no date", "REG-105")
-                named = re.findall(r'(?:filing|dépôt) "([a-z0-9-]+)"', text)
+                named = re.findall(r'(?:filing|déclaration) "([a-z0-9-]+)"', text)
                 if not named:
                     fail(rel(path), f"scenario {tag} names no filing type", "REG-105")
                 for code in named:

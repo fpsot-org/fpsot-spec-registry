@@ -73,13 +73,16 @@ registers:
       - {path: UltimateBeneficiary.fullName, visibility: public, opposable: true, omissionReason: not-public-by-law, sourceId: req-beneficiary-information}
       - {path: UltimateBeneficiary.otherNames, visibility: public, opposable: false, omissionReason: not-public-by-law, sourceId: req-beneficiary-information}
       - {path: UltimateBeneficiary.birthDate, visibility: agency, opposable: false, omissionReason: not-public-by-law, sourceId: req-summary-table}
+      # The professional address takes the place of the home address in public. The page on
+      # opposability names only the name and the domicile, so this release marks it not opposable.
+      - {path: UltimateBeneficiary.professionalAddress, visibility: public, opposable: false, omissionReason: not-public-by-law, sourceId: req-summary-table}
       # The home address is public only when the beneficiary declares no professional address.
       - path: UltimateBeneficiary.homeAddress
         visibility: public
         when: {field: UltimateBeneficiary.professionalAddress, test: absent}
         otherwise: agency
         opposable: true
-        omissionReason: withheld-on-application
+        omissionReason: not-public-by-law
         sourceId: req-summary-table
     searchModes:
       # The government page dates the search by the name of a person from 31 July 2024.
@@ -112,6 +115,9 @@ registers:
     publicitySources: [highway-safety-code, saaq-disclosure-register]
     sealProfile: seal-log
     timeZone: America/Toronto
+    # Québec civil law knows undivided co-ownership, not joint tenancy with survivorship. The
+    # code and its fit with the default in-common are to be verified (REG-053).
+    tenancies: [sole, undivided-co-ownership]
     # Rights over vehicles live in the RDPRM, searchable by the vehicle identification number.
     externalRightsRegisters:
       - code: rdprm

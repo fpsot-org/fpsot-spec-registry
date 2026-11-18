@@ -16,7 +16,7 @@ It does not come from the law itself.
 1. *Legal effect.* For each register in scope, what does registration do in law?
 It may identify an asset for the administration, give notice or opposability, or create or prove title.
 Is any Canadian, Québec or French register in scope a source of title?
-REG-011 lets no profile of this release declare `title` until counsel names one.
+Under REG-011, no profile of this release may declare `title` until counsel names such a register.
 
 2. *Weight of an extract.* What weight in law do these documents carry?
 They are the statement of the Québec enterprise register and the certified statement of the RDPRM.
@@ -61,9 +61,11 @@ They sit in the Act to establish a legal framework for information technology.
 Secondary sources point to sections 5 to 7 and 39, _to be verified_.
 Does an append-only log of sealed filings meet them when it serves as the legal record?
 
-11. *Destruction and the chain.* In 2012, Bill C-19 ordered the federal government to destroy its long-gun records.
+11. *Destruction and the chain.* In 2012, the Ending the Long-gun Registry Act, S.C. 2012, c. 6, ordered the government to destroy the long-gun records.
 Does a deletion of the content and the salt, with a tombstone that keeps a hash, satisfy such an order?
 Does the tombstone of REG-094 keep too much, or too little?
+Must a register also destroy the corrections and later filings that repeat a targeted value, as REG-093 asks?
+What must it do when it cannot destroy one of them?
 
 12. *Retention instruments.* Which instruments govern filings, and which govern audit events?
 The candidates are the retention schedules under the Québec Archives Act and the disposition authorities of Library and Archives Canada.

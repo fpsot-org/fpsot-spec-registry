@@ -1,16 +1,18 @@
 = Conservation et destruction
 include::_fpsot-terms.adoc[]
 
-Un dépôt est un document juridique.
-La loi de son registre et le calendrier de conservation de son organisme le régissent.
+Une déclaration est un document juridique.
+La loi de son registre et le calendrier de conservation de son organisme la régissent.
 Un événement d’audit est un enregistrement opérationnel, que régit la spécification sur l’observabilité.
-Un dépôt émet des événements sans en être un, et les deux exigent des durées de conservation différentes.
-Les pièces justificatives d’un dépôt exigent souvent une troisième catégorie, plus courte.
+Une déclaration émet des événements sans en être un, et les deux exigent des durées de conservation différentes.
+Les pièces justificatives d’une déclaration exigent souvent une troisième catégorie, plus courte.
 Le registraire des entreprises du Québec détruit la copie de la pièce d’identité d’un administrateur une fois la déclaration déposée.
 
 La destruction n’est pas une hypothèse non plus.
-En 2012, le link:https://openparliament.ca/bills/41-1/C-19/[projet de loi C-19] a ordonné de détruire les données du registre fédéral des armes d’épaule.
+En 2012, le Parlement a adopté la link:https://laws-lois.justice.gc.ca/fra/loisAnnuelles/2012_6/[Loi sur l’abolition du registre des armes d’épaule], L.C. 2012, ch. 6.
+Elle a ordonné de détruire les données de ce registre fédéral.
 La link:https://www.laws-lois.justice.gc.ca/fra/lois/F-11.6/rpdc.html[Loi sur les armes à feu] lie maintenant cette destruction à une copie pour le Québec, _à vérifier_.
+
 Une règle générale d’interdiction de suppression y serait illégale.
 Une suppression silencieuse briserait la chaîne et la piste d’audit.
 La réponse repose sur les condensés salés de la spécification sur les documents signés.
@@ -18,76 +20,87 @@ La réponse repose sur les condensés salés de la spécification sur les docume
 == Catégories de conservation
 
 [[REG-090]]
-*REG-090.* Chaque type de dépôt et chaque type de pièce DOIT avoir une catégorie de conservation dans le profil.
+*REG-090.* Chaque type de déclaration et chaque type de pièce DOIT avoir une catégorie de conservation dans le profil.
 Chaque catégorie DOIT nommer la règle du calendrier de conservation qu’elle applique.
 OBS-102 exige la même chose des entrepôts de journaux.
 Une {term-legal-hold} selon OBS-103 DOIT empêcher le registre de détruire chaque document qu’elle vise.
 
 Le profil `ca-federal` nomme les autorisations de disposition de Bibliothèque et Archives Canada, _à vérifier_.
 Le profil `ca-qc` nomme le calendrier de conservation du registraire.
-Sa catégorie pour les copies de pièces d’identité prend fin dès qu’un dépôt est achevé.
+Sa catégorie pour les copies de pièces d’identité prend fin dès qu’une déclaration est achevée.
 
 [[REG-091]]
-*REG-091.* Un registre NE DOIT PAS conserver un dépôt seulement aussi longtemps que les événements qu’il émet.
-Les durées qu’OBS-100 à OBS-104 fixent pour les événements d’audit NE DOIVENT PAS abréger la vie d’un dépôt.
+*REG-091.* Un registre NE DOIT PAS conserver une déclaration seulement aussi longtemps que les événements qu’elle émet.
+Les durées qu’OBS-100 à OBS-104 fixent pour les événements d’audit NE DOIVENT PAS abréger la vie d’une déclaration.
 
 Le profil `ca-qc-floor` d’OBS-101 fixe des valeurs par défaut pour les entrepôts de journaux, non pour les documents juridiques.
-Un registre qui l’appliquerait à ses dépôts les perdrait des années trop tôt.
+Un registre qui l’appliquerait à ses déclarations les perdrait des années trop tôt.
 
 [[REG-092]]
-*REG-092.* Un dépôt NE DOIT contenir que des renvois à ses pièces justificatives.
-Chaque renvoi DOIT donner le condensé SHA-256 du document et sa catégorie de conservation.
-Un registre PEUT détruire une pièce à la fin de sa catégorie sans dépôt de destruction.
+*REG-092.* Une déclaration NE DOIT contenir que des renvois à ses pièces justificatives.
+Chaque renvoi DOIT donner le condensé SHA-256 salé du document et sa catégorie de conservation.
+Le registre DOIT garder le sel avec le document, et les détruire ensemble.
+Un registre PEUT détruire une pièce à la fin de sa catégorie sans déclaration de destruction.
 La destruction DOIT laisser un événement selon OBS-104.
 
-Le dépôt reste entier quand sa pièce disparaît, et le condensé prouve encore quel document il a employé.
-Un dépôt entier exige un dépôt de destruction, selon REG-093, parce que son contenu façonne le registre.
+La déclaration reste entière quand sa pièce disparaît, et le condensé prouve encore quel document elle a employé.
+Sans le sel, personne ne peut tester une supposition sur un document court à partir du condensé.
+Une déclaration entière exige une déclaration de destruction, selon REG-093, parce que son contenu façonne le registre.
 
-== Dépôts de destruction
+== Déclarations de destruction
 
 [[REG-093]]
-*REG-093.* Un registre NE DOIT détruire un dépôt que par un dépôt de la catégorie `destruction`.
-Le dépôt de destruction DOIT donner sa base juridique, les dépôts qu’il détruit et l’autorité qui l’a ordonné.
-Il DOIT aussi donner l’instant où le registre a vérifié les mesures de préservation de la preuve.
-Il DOIT donner chaque copie faite avant.
-Le registre DOIT détruire ensemble le contenu et le sel de chaque dépôt nommé, dans chaque copie, selon LOG-081.
+*REG-093.* Un registre NE DOIT détruire une déclaration que par une déclaration de la catégorie `destruction`.
+La déclaration de destruction DOIT donner sa base juridique, l’autorité qui l’a ordonnée et les valeurs qu’elle vise.
+Elle DOIT nommer chaque valeur visée par son champ et un identifiant opaque, jamais par une valeur personnelle.
+Elle DOIT nommer chaque déclaration qui contient une valeur visée, y compris les corrections et les déclarations ultérieures.
+Elle DOIT détruire chacune d’elles, ou l’énumérer comme conservée avec la raison qui empêche le registre de la détruire.
+Elle DOIT aussi donner l’instant de la vérification des mesures de préservation de la preuve, et chaque copie faite avant.
+
+Le registre DOIT détruire ensemble le contenu et le sel de chaque déclaration nommée, dans chaque copie, selon LOG-081.
 Il DOIT émettre un événement selon OBS-104 pour chaque destruction.
 
 Sans le sel, personne ne peut tester une supposition contre le condensé salé.
 Le condensé qui reste dans la chaîne et dans le journal ne dit alors rien du contenu.
+Une correction répète souvent les valeurs de la déclaration qu’elle corrige.
+Détruire seulement l’originale laisserait ces valeurs en place.
+Une déclaration cachetée ne peut pas perdre un seul champ.
+Le registre détruit donc chaque déclaration qui contient une valeur visée.
 
 [[REG-094]]
-*REG-094.* Chaque dépôt détruit DOIT laisser un témoin de destruction dans la classe `Tombstone` de `model/registry.yaml`.
-Le témoin DOIT garder le numéro d’ordre, le type, la catégorie, les instants d’effet et d’achèvement et le condensé salé.
-Il DOIT aussi garder le condensé salé précédent et les identifiants des lignes que le dépôt a ouvertes et fermées.
-Il NE DOIT garder aucune autre valeur du dépôt.
+*REG-094.* Chaque déclaration détruite DOIT laisser une trace de destruction dans la classe `Tombstone` de `model/registry.yaml`.
+La trace DOIT garder le numéro d’ordre, le type, la catégorie, les instants d’effet et d’achèvement et le condensé salé.
+Elle DOIT aussi garder le condensé salé précédent et les identifiants des lignes que la déclaration a ouvertes et fermées.
+Pour une correction, elle DOIT garder la déclaration corrigée et les identifiants des versions ultérieures réénoncées.
+Elle NE DOIT garder aucune autre valeur de la déclaration.
 
-Un témoin garde ce dont la chaîne et le rejeu ont besoin, et rien qui puisse identifier une personne.
+Une trace garde ce dont la chaîne et le rejeu ont besoin, et rien qui puisse identifier une personne.
 
 [[REG-095]]
 *REG-095.* Après une destruction, la chaîne légère DOIT encore se vérifier, selon REG-032.
-Le rejeu DOIT encore donner chaque instantané dont les dépôts restent entiers.
+Le rejeu DOIT encore donner chaque instantané dont les déclarations restent entières.
 Une ligne que seul un contenu détruit soutient DOIT figurer comme ligne détruite.
-Cette ligne donne sa sorte, son identifiant et son dépôt.
+Cette ligne donne sa sorte, son identifiant et sa déclaration.
 Un registre NE DOIT PAS deviner les valeurs d’une telle ligne.
 
-Dans le jeu d’essai, une ordonnance légale détruit le premier dépôt, une délivrance qu’une correction avait remplacée.
-La chaîne se vérifie, car le deuxième dépôt renvoie au condensé salé que garde le témoin.
+Dans le jeu d’essai, une ordonnance vise une pièce d’identité que la délivrance et sa première correction contenaient.
+La déclaration de destruction détruit les deux, et une seconde correction, sans la pièce, réénonce la délivrance.
+La chaîne se vérifie, car les deuxième et quatrième déclarations renvoient aux condensés salés que gardent les traces.
 Au 20 juin 2026, tel qu’enregistré le 30 juin, l’embarcation figure comme ligne détruite.
 
 [[REG-096]]
-*REG-096.* Une copie que fait un registre avant une destruction DOIT figurer dans le dépôt de destruction.
-Le dépôt DOIT donner la catégorie de son destinataire, son instant et sa base juridique.
+*REG-096.* Une copie que fait un registre avant une destruction DOIT figurer dans la déclaration de destruction.
+La déclaration DOIT donner la catégorie de son destinataire, son instant et sa base juridique.
 La copie est une communication, donc REG-074 et REG-076 s’y appliquent.
 
-La Loi sur les armes à feu lie cette fin à une copie pour le Québec, _à vérifier_.
-La trace de cette copie montre ce qui a quitté le registre avant que le reste disparaisse.
+La Loi sur les armes à feu lie cette destruction à une copie pour le Québec, _à vérifier_.
+La consignation de cette copie montre ce qui a quitté le registre avant que le reste disparaisse.
 
 == Références
 
 === Références informatives
 
-* link:https://openparliament.ca/bills/41-1/C-19/[Bill C-19, Ending the Long-gun Registry Act], 41^e^ législature, openparliament.ca, source secondaire. link:https://web.archive.org/web/20260510140105/https://openparliament.ca/bills/41-1/C-19/[Copie archivée]
+* link:https://laws-lois.justice.gc.ca/fra/loisAnnuelles/2012_6/[Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6], site Web de la législation (Justice), lois annuelles. link:https://web.archive.org/web/20260417091848/https://laws-lois.justice.gc.ca/fra/loisAnnuelles/2012_6/[Copie archivée]
 * link:https://www.laws-lois.justice.gc.ca/fra/lois/F-11.6/rpdc.html[Loi sur les armes à feu, dispositions connexes], site Web de la législation (Justice), lu en partie seulement. link:https://web.archive.org/web/20251113064859/https://laws-lois.justice.gc.ca/fra/lois/F-11.6/rpdc.html[Copie archivée]
 
 == Historique du document

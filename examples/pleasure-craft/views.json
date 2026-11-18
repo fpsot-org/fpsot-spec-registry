@@ -16,8 +16,8 @@
       "accessPolicy": "enforcement-officers",
       "validAt": "2026-08-10T15:00:00Z",
       "recordedAt": "2026-08-10T15:00:00Z",
-      "lastFilingSequence": 4,
-      "lastFilingId": "019a1b2c-3d4e-7f05-8a05-000000000504",
+      "lastFilingSequence": 5,
+      "lastFilingId": "019a1b2c-3d4e-7f05-8a05-000000000505",
       "fields": [
         {
           "path": "Entitlement.number.value",
@@ -62,17 +62,10 @@
       "updatedAt": "2026-08-10T15:00:00Z",
       "registerCode": "pleasure-craft-licenses",
       "extractType": "public-view",
-      "subjects": [
-        {
-          "kind": "entitlement",
-          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
-        }
-      ],
       "view": "public",
       "validAt": "2026-08-10T15:00:00Z",
       "recordedAt": "2026-08-10T15:00:00Z",
-      "lastFilingSequence": 4,
-      "lastFilingId": "019a1b2c-3d4e-7f05-8a05-000000000504",
+      "lastFilingSequence": 5,
       "omissions": [
         {
           "path": "Entitlement.number.value",
@@ -113,7 +106,7 @@
         }
       ],
       "executedAt": "2026-08-10T14:59:00Z",
-      "lastFilingSequence": 4,
+      "lastFilingSequence": 5,
       "resultIds": [
         "019a1b2c-3d4e-7f04-8a04-000000000401"
       ],

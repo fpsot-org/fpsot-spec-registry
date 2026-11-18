@@ -11,7 +11,7 @@ Les fichiers de `examples/pleasure-craft/` suivent un registre synthétique de p
 == Déclarer le registre
 
 Trouvez la loi qui établit le registre, et lisez ce que l’inscription y produit.
-Rédigez la déclaration dans votre profil, selon REG-010.
+Rédigez la fiche du registre dans votre profil, selon REG-010.
 Donnez l’effet juridique et le régime de publicité, chacun avec sa source, selon REG-011 et REG-012.
 Marquez `to-be-verified` chaque source que personne n’a lue à l’origine, selon REG-013.
 
@@ -22,25 +22,26 @@ Le fichier `profiles/ca-federal.yaml` déclare le registre des embarcations de p
 
 Employez un module publié quand il convient à votre domaine, comme `packs/pleasure-craft.yaml`.
 Sinon, rédigez un module selon REG-100.
-Il lui faut un schéma LinkML pour vos biens et un catalogue de types de dépôts.
+Il lui faut un schéma LinkML pour vos biens et un catalogue de types de déclarations.
 Il lui faut aussi le cycle de vie de chaque classe de droit.
 Il lui faut enfin vos schémas d’identifiants et la visibilité par défaut de chaque champ.
 Gardez le droit hors du module, selon REG-101.
 
-== Tenir les dépôts
+== Tenir les déclarations
 
-Écrivez chaque changement comme un dépôt, jamais comme une mise à jour directe, selon REG-020.
-Donnez à chaque dépôt ses trois instants, ses trois états et son pouvoir, selon REG-023 à REG-025.
+Écrivez chaque changement comme une déclaration, jamais comme une mise à jour directe, selon REG-020.
+Donnez à chaque déclaration ses trois instants, ses trois statuts et son pouvoir, selon REG-023 à REG-025.
 Confiez les frais et l’admissibilité à la spécification sur les décisions, selon REG-026.
-Gardez dans le dépôt les identifiants des enregistrements de décision.
-À l’achèvement, déclarez les lignes que le dépôt ouvre et ferme, selon REG-029.
+Gardez dans la déclaration les identifiants des enregistrements de décision.
+À l’achèvement, indiquez les lignes que la déclaration ouvre et ferme, selon REG-029.
 
-Apposez un cachet sur chaque dépôt achevé et journalisez-le selon la spécification sur les documents signés, selon REG-031.
-Donnez-lui le numéro d’ordre suivant et le condensé salé du dépôt précédent, selon REG-030.
+Apposez un cachet sur chaque déclaration achevée et journalisez-la selon la spécification sur les documents signés, selon REG-031.
+Donnez-lui le numéro d’ordre suivant et le condensé salé de la déclaration précédente, selon REG-030.
+Journalisez-la dans la série de journal propre au registre, selon REG-031.
 
 == Dériver l’état
 
-Construisez chaque vue par le rejeu des dépôts, selon REG-040.
+Construisez chaque vue par le rejeu des déclarations, selon REG-040.
 Répondez à chaque requête à un instant de validité, tel qu’enregistré à un autre instant, selon REG-042.
 Une table gardée pour la vitesse doit rester une projection que le rejeu peut reconstruire, selon REG-043.
 
@@ -52,9 +53,11 @@ Consignez chaque recherche, et apposez un cachet sur chaque extrait délivré, s
 
 == Corriger et détruire
 
-Corrigez un dépôt par un nouveau dépôt qui le remplace, selon REG-027.
-Quand une loi ou une ordonnance exige une destruction, présentez un dépôt de destruction, selon REG-093.
-Détruisez ensemble le contenu et le sel, et gardez le témoin de destruction, selon REG-094.
+Corrigez une déclaration par une nouvelle déclaration qui la remplace, selon REG-027.
+Si elle prend effet avant une version déjà ouverte, réénoncez cette version, selon REG-034.
+Quand une loi ou une ordonnance exige une destruction, présentez une déclaration de destruction, selon REG-093.
+Nommez chaque déclaration qui contient une valeur visée, corrections comprises.
+Détruisez ensemble le contenu et le sel, et gardez la trace de destruction, selon REG-094.
 
 == Vérifier le résultat
 
@@ -66,7 +69,7 @@ pip install --require-hashes -r examples/requirements.txt
 python3 examples/check-examples.py chemin/vers/votre/copie
 ----
 
-Une réussite montre que vos dépôts, votre chaîne et vos instantanés tiennent ensemble selon les règles structurelles.
+Une réussite montre que vos déclarations, votre chaîne, votre journal et vos instantanés tiennent ensemble selon les règles structurelles.
 Il en va de même pour vos extraits, vos événements et vos scénarios.
 Elle ne vérifie pas votre moteur, ce que feront les jeux d’essai de rejeu de REG-105.
 

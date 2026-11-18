@@ -32,18 +32,18 @@ Cette spécification reprend les concepts et laisse de côté les paquets spatia
 
 == Beneficial Ownership Data Standard
 
-La link:https://standard.openownership.org/en/0.4.0/standard/reference.html[norme BODS 0.4] sépare les déclarations des enregistrements.
-Chaque déclaration a son propre identifiant, et chaque enregistrement a un état : nouveau, mis à jour ou fermé.
-Cette séparation reflète celle entre les dépôts et l’état dérivé.
+La link:https://standard.openownership.org/en/0.4.0/standard/reference.html[norme BODS 0.4] sépare les énoncés des enregistrements.
+Chaque énoncé a son propre identifiant, et chaque enregistrement a un statut : nouveau, mis à jour ou fermé.
+Cette séparation reflète celle entre les déclarations et l’état dérivé.
 
 [cols="2,2,3",options="header"]
 |===
 |BODS 0.4 |Cette spécification |Note
-|Déclaration |`Filing` |Une déclaration ne change jamais, un dépôt non plus.
+|Énoncé (statement) |`Filing` |Un énoncé ne change jamais, une déclaration non plus.
 |Enregistrement et son état |Version de ligne et ses champs d’historique |Un enregistrement fermé est une ligne avec `validTo`.
-|Déclaration de personne |`Person` de DMO-041 |
-|Déclaration d’entité |`Organization` de DMO-042 |
-|Déclaration de relation |`OwnerGroup`, ou `PartyRelationship` de DMO-044 |Propriété d’une part, ou contrôle.
+|Énoncé de personne |`Person` de DMO-041 |
+|Énoncé d’entité |`Organization` de DMO-042 |
+|Énoncé de relation |`OwnerGroup`, ou `PartyRelationship` de DMO-044 |Propriété d’une part, ou contrôle.
 |Sujet exempté de divulgation |Motif d’omission `withheld-on-application` ou `not-public-by-law` |REG-073.
 |Information inconnue de l’éditeur |Motif d’omission `unknown-to-register` |REG-073.
 |===
@@ -51,7 +51,7 @@ Cette séparation reflète celle entre les dépôts et l’état dérivé.
 == Core Business Vocabulary
 
 Le link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] de SEMIC décrit une entreprise immatriculée.
-Il ne définit aucun événement ni aucun cycle de vie, donc les dépôts de cette spécification fournissent l’historique.
+Il ne définit aucun événement ni aucun cycle de vie, donc les déclarations de cette spécification fournissent l’historique.
 
 [cols="2,2,3",options="header"]
 |===
@@ -60,7 +60,7 @@ Il ne définit aucun événement ni aucun cycle de vie, donc les dépôts de cet
 |Identifiant légal |`PartyIdentification` de DMO-046 |
 |Adresse du siège |`PostalAddress` de DMO-033 |
 |Forme de l’entreprise |`PartyClassification` de DMO-047 |
-|Statut de l’entreprise |L’état de l’immatriculation, selon REG-045 |Dérivé des dépôts, jamais conservé seul.
+|Statut de l’entreprise |L’état de l’immatriculation, selon REG-045 |Dérivé des déclarations, jamais conservé seul.
 |===
 
 == GovStack Digital Registries
@@ -74,16 +74,16 @@ Certaines de ses règles transversales correspondent à cette spécification, et
 |===
 |GovStack |Cette spécification |Note
 |Création de schémas |Module de domaine, selon REG-100 |Un module est une donnée publiée, non un schéma créé à l’exécution.
-|Modification et suppression d’un enregistrement |Un nouveau dépôt, selon REG-020 et REG-022 |L’adaptateur fait de chaque modification un dépôt.
+|Modification et suppression d’un enregistrement |Une nouvelle déclaration, selon REG-020 et REG-022 |L’adaptateur fait de chaque modification une déclaration.
 |DRS-8, journalisation de chaque lecture de données personnelles |REG-076 |Un événement d’audit selon OBS-042.
 |DRS-37, la personne concernée voit qui a lu ses données |REG-077 |Une recommandation ici.
-|Enregistrement logique gardé lors d’une suppression, sauf si une loi exige une suppression physique |REG-044 et REG-093 |Le dépôt de destruction est la suppression physique légale.
+|Enregistrement logique gardé lors d’une suppression, sauf si une loi exige une suppression physique |REG-044 et REG-093 |La déclaration de destruction est la suppression physique légale.
 |===
 
 == Verifiable Credentials Data Model
 
 Le link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0] convient aux droits délivrés.
-La link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0] porte leur état.
+La link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0] porte leur statut.
 
 [cols="2,2,3",options="header"]
 |===
@@ -91,9 +91,9 @@ La link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstr
 |Émetteur |L’organisme qui tient le registre |
 |Sujet de l’attestation |L’`Entitlement` et ses parties |
 |`validFrom` et `validUntil` |`validity` de l’`Entitlement` |Des jours dans le fuseau horaire du registre.
-|État de l’attestation |Dépôts du cycle de vie, selon REG-045 |Un état lié au temps n’exige aucun changement d’état.
+|Statut de l’attestation |Déclarations du cycle de vie, selon REG-045 |Un état lié au temps n’exige aucun changement de statut.
 |Schéma de l’attestation |Le schéma du module |
-|Preuve |Le dépôt et ses renvois aux pièces |Des renvois seulement, selon REG-092.
+|Preuve |La déclaration et ses renvois aux pièces |Des renvois seulement, selon REG-092.
 |===
 
 == Système technique « une fois pour toutes »

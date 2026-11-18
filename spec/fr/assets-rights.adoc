@@ -6,7 +6,7 @@ Un {term-asset} est une chose que le registre identifie, comme un bateau, un vé
 Sa {term-ownership} est un ensemble de groupes de propriétaires.
 Un {term-entitlement} est ce que le registre accorde à des parties, comme un permis, une autorisation ou une immatriculation.
 Une charge grève un bien ou un droit.
-Un privilège, une saisie, une interdiction et un signalement sont des charges.
+Une sûreté, une saisie, une interdiction et un signalement sont des charges.
 
 La propriété et le droit restent distincts.
 Le propriétaire d’un aéronef peut différer de son exploitant inscrit.
@@ -40,6 +40,9 @@ La portée d’unicité dit au registre si un nouveau bien peut prendre une marq
 Le module des embarcations de plaisance déclare le numéro de permis et le numéro de série de la coque.
 Il n’en donne pas encore le format.
 
+Les schémas de cette version sont des données de module en YAML.
+Un schéma publié exige aussi ses fichiers Turtle et JSON-LD, selon VOC-050.
+
 [[REG-052]]
 *REG-052.* Un lien entre deux biens DOIT être un lien typé, avec un type de lien du module de domaine.
 Il NE DOIT PAS être un texte libre.
@@ -52,6 +55,7 @@ Un moteur sur une coque et une remorque sous une embarcation sont des liens qu�
 *REG-053.* La propriété d’un bien DOIT être l’ensemble de ses groupes de propriétaires actuels.
 Chaque groupe DOIT être un enregistrement de la classe `OwnerGroup`.
 Il DOIT indiquer son mode de détention et l’intérêt qu’il détient, sous forme de fraction.
+Le mode de détention DOIT être un code du profil, et le profil `core` donne ces trois codes par défaut.
 
 * `sole` : un seul membre, qui détient tout le bien.
 * `joint` : deux membres ou plus, qui détiennent ensemble tout le bien.
@@ -60,21 +64,22 @@ Il DOIT indiquer son mode de détention et l’intérêt qu’il détient, sous 
 À chaque instant, les intérêts des groupes actuels d’un bien DOIVENT totaliser exactement un.
 
 Une fraction faite de deux entiers ne s’arrondit jamais.
-La loi de chaque collectivité publique dit si des propriétaires conjoints ont un droit de survie.
-Le profil l’indique.
+La propriété conjointe avec droit de survie vient de la common law.
+Le droit civil québécois connaît plutôt la copropriété par _indivision_.
+Le profil `ca-qc` énumère donc ses propres codes, _à vérifier_.
 
 [[REG-054]]
 *REG-054.* Un transfert DOIT fermer les groupes de propriétaires qu’il remplace et en ouvrir de nouveaux.
 Il NE DOIT PAS changer sur place les membres d’un groupe actuel.
 
 Lors d’un transfert, le registre des maisons usinées de la Colombie-Britannique ferme des groupes de propriétaires et en ouvre d’autres.
-Son code source se trouve au link:https://github.com/bcgov/ppr[même endroit] que celui du registre des biens personnels.
-Chaque groupe garde alors le dépôt qui l’a ouvert et celui qui l’a fermé.
+Son code se trouve dans le link:https://github.com/bcgov/ppr[même dépôt] que celui du registre des biens personnels.
+Chaque groupe garde alors la déclaration qui l’a ouvert et celle qui l’a fermé.
 Ensemble, ils donnent la chaîne des titres.
 
 [[REG-055]]
-*REG-055.* Chaque type de dépôt de transfert DOIT énumérer les causes qu’il accepte, comme `sale`, `death`, `court-order` et `operation-of-law`.
-Chaque dépôt de transfert DOIT indiquer sa cause.
+*REG-055.* Chaque type de déclaration de transfert DOIT énumérer les causes qu’il accepte, comme `sale`, `death`, `court-order` et `operation-of-law`.
+Chaque déclaration de transfert DOIT indiquer sa cause.
 Les pièces justificatives d’un transfert, comme un acte de vente ou un testament, DOIVENT être `restricted`.
 Un profil PEUT élargir leur visibilité.
 
@@ -85,38 +90,44 @@ Les pièces nomment souvent des personnes qui ne sont pas parties au registre.
 
 [[REG-056]]
 *REG-056.* Un droit NE DOIT PAS impliquer la propriété, et un groupe de propriétaires NE DOIT PAS impliquer un droit.
-Un dépôt qui change les deux DOIT déclarer chaque changement à part, selon REG-029.
+Une déclaration qui change les deux DOIT indiquer chaque changement à part, selon REG-029.
 
 [[REG-057]]
 *REG-057.* Chaque droit DOIT être un enregistrement de la classe `Entitlement`.
 Il DOIT contenir sa classe, son numéro et sa période de validité en dates.
 Il DOIT aussi contenir le rôle de chaque partie, les biens visés, s’il y en a, et ses conditions codées.
 La période de validité DOIT suivre DAT-023.
-Le registre DOIT convertir l’instant d’effet en date dans le fuseau horaire de sa déclaration.
+Le registre DOIT convertir l’instant d’effet en date dans le fuseau horaire de sa fiche de registre.
 Le numéro DOIT suivre REG-051.
 
 [[REG-058]]
 *REG-058.* Le cycle de vie de chaque classe de droit DOIT être une donnée de son module, selon REG-045.
 La durée d’une classe DOIT être une donnée du profil, avec sa source.
-Le profil DOIT aussi énumérer les types de dépôts qui ouvrent une nouvelle période.
-La validité qu’ouvre un dépôt DOIT égaler la durée en vigueur, comptée depuis la date de son instant d’effet.
+Le profil DOIT aussi énumérer les types de déclarations qui ouvrent une nouvelle période.
+La validité qu’ouvre une déclaration DOIT égaler la durée en vigueur.
+La durée court depuis la date de l’instant que nomme son `countFrom`.
+S’il n’en nomme aucun, elle court depuis la date d’effet.
 
 Selon l’article 105, un permis vaut cinq ans depuis sa délivrance, son transfert ou son renouvellement.
 Le profil `ca-federal` contient cette règle comme donnée, et le module n’en contient rien.
+Un transfert peut dater de la vente ou de la déclaration, _à vérifier_.
+Le paramètre `countFrom` reste donc un choix du profil.
 
 == Charges
 
 [[REG-059]]
-*REG-059.* Un registre DEVRAIT tenir chaque privilège, saisie, interdiction ou signalement comme un enregistrement de la classe `Encumbrance`.
-Chacun DEVRAIT avoir un dépôt qui l’ouvre et des dépôts qui le changent ou le ferment.
+*REG-059.* Un registre DEVRAIT tenir chaque sûreté, saisie, interdiction ou signalement comme un enregistrement de la classe `Encumbrance`.
+Chacun DEVRAIT avoir une déclaration qui l’ouvre et des déclarations qui le changent ou le ferment.
 Il DEVRAIT avoir une durée quand la loi en donne une.
 
 Le système français d’immatriculation des véhicules contient les gages, les oppositions et les suspensions de chaque véhicule.
 La link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[CNIL le décrit] ainsi.
 Le Québec tient ces droits dans un registre distinct.
+
 Transports Canada n’inscrit aucune sûreté sur les aéronefs, selon la link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[circulaire d’information 202-002].
 Seule une famille facultative du moteur de base, avec une marque dans le profil, couvre les trois cas.
-Le modèle suit les restrictions de la link:https://www.iso.org/standard/81263.html[norme ISO 19152-1], le Land Administration Domain Model.
+Cette famille correspond aux restrictions de la link:https://www.iso.org/standard/81263.html[norme ISO 19152-1], _à vérifier_.
+La page xref:alignment.adoc[Alignement sur d’autres normes] le montre.
 
 [[REG-060]]
 *REG-060.* Les droits sur les biens d’un registre peuvent se trouver dans un autre registre.
@@ -131,7 +142,7 @@ Une copie des droits d’un autre organisme finirait par différer de l’origin
 == Parties
 
 [[REG-061]]
-*REG-061.* Chaque partie d’un dépôt ou d’une ligne DOIT être une `Party` selon DMO-040, nommée par son identifiant.
+*REG-061.* Chaque partie d’une déclaration ou d’une ligne DOIT être une `Party` selon DMO-040, nommée par son identifiant.
 Un registre NE DOIT PAS tenir ses propres enregistrements de personnes ou d’organisations.
 Le rôle d’une partie DOIT être un code du module de domaine.
 
@@ -142,7 +153,7 @@ Un registre qui en garderait sa propre copie tiendrait deux vérités sur une m�
 
 === Références informatives
 
-* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province de la Colombie-Britannique, code source. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Copie archivée]
+* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province de la Colombie-Britannique, dépôt de code source. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Copie archivée]
 * link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024, Geographic information, Land Administration Domain Model, Part 1: Generic conceptual model], ISO, 2024, payante, non lue. link:https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html[Copie archivée]
 * link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular AC No. 202-002], Transports Canada, version anglaise. link:https://web.archive.org/web/20261101053933/https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Copie archivée]
 * link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[SIV, système d’immatriculation des véhicules], Commission nationale de l’informatique et des libertés. link:https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[Copie archivée]

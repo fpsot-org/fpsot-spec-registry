@@ -34,6 +34,9 @@ It MUST give the format when the pack read it at the source.
 Each identifier MUST keep its value in the exact form of its issuer, under DAT-066.
 It MUST also hold its search key, which the normalization steps give.
 
+The schemes of this release are pack data in YAML.
+A released scheme also needs its Turtle and JSON-LD files, under VOC-050.
+
 Registration marks come back into use after a deregistration.
 A uniqueness scope tells the register whether a new asset may take a mark that an old one held.
 The pleasure craft pack declares the license number and the hull serial number, and does not yet state their formats.
@@ -50,6 +53,7 @@ An engine on a hull and a trailer under a craft are links that a search may need
 *REG-053.* The ownership of an asset MUST be the set of its current owner groups.
 Each group MUST be a record of the class `OwnerGroup`.
 It MUST state its tenancy and the interest that it holds, as a fraction.
+The tenancy MUST be a code of the profile, and the `core` profile gives these three by default.
 
 * `sole`: one member, who holds the whole asset.
 * `joint`: two or more members, who hold the whole asset together.
@@ -58,7 +62,9 @@ It MUST state its tenancy and the interest that it holds, as a fraction.
 At each instant, the interests of the current groups of an asset MUST add up to exactly one.
 
 Fractions as two integers never round.
-Whether joint owners have a right of survivorship depends on the law of the jurisdiction, and the profile says so.
+Joint tenancy with survivorship comes from the common law.
+Québec civil law knows undivided co-ownership, the _indivision_, instead.
+The `ca-qc` profile therefore lists its own codes, _to be verified_.
 
 [[REG-054]]
 *REG-054.* A transfer MUST end the owner groups that it replaces and open new ones.
@@ -96,10 +102,14 @@ The number MUST follow REG-051.
 *REG-058.* The lifecycle of each entitlement class MUST be data of its pack, under REG-045.
 The term of a class MUST be data of the profile, with its source.
 The profile MUST also list the filing types that start a new term.
-The validity that a filing opens MUST equal the term in force, counted from the date of its effective instant.
+The validity that a filing opens MUST equal the term in force.
+The term counts from the date of the instant that its `countFrom` names.
+When it names none, the term counts from the effective date.
 
 Under section 105 of the amended Small Vessel Regulations, a license runs five years from its issue, transfer or renewal.
 The `ca-federal` profile holds that rule as data, and the pack holds none of it.
+A transfer may date from the sale or from the filing, _to be verified_.
+The `countFrom` parameter therefore stays a choice of the profile.
 
 == Encumbrances
 
@@ -113,7 +123,7 @@ The link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[CNIL 
 Québec keeps those rights in a separate register.
 Transport Canada records no aircraft liens at all, under link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular 202-002].
 Only an optional family in the core, with a profile flag, covers all three.
-The model follows the restrictions of link:https://www.iso.org/standard/81263.html[ISO 19152-1], the Land Administration Domain Model.
+The family maps to the restrictions of link:https://www.iso.org/standard/81263.html[ISO 19152-1], _to be verified_, as the page xref:alignment.adoc[Alignment with other standards] shows.
 
 [[REG-060]]
 *REG-060.* The rights over the assets of a register may live in another register.

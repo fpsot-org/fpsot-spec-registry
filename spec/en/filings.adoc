@@ -42,8 +42,14 @@ So is migration, while correction and destruction have their own categories.
 
 [[REG-022]]
 *REG-022.* A register MUST NOT change the content of a filing once it receives it.
-Until the filing reaches a final processing status, the register MAY change only its three statuses, `completedAt`, `sequence` and `previousCommitment`.
-After a final status, the register MUST NOT change anything in the filing.
+Until the filing reaches a final processing status, the register MAY set only these fields.
+
+* The three statuses of REG-024, `completedAt` and `updatedAt`.
+* `sequence` and `previousCommitment`, under REG-030.
+* `changes`, under REG-029 and REG-034, and `deadlineStatus`, under REG-033.
+* `decisionIds`, under REG-026.
+
+After a final status, the register MUST NOT change the filing, except to destroy its content and salt under REG-093.
 A later change in the facts MUST be a new filing.
 
 The Québec enterprise register treats a correction as a filing type of its own, the corrective declaration.
@@ -60,8 +66,8 @@ A filing that can change in place would let the register rewrite the evidence of
 
 A filing whose `effectiveAt` comes after its `completedAt` MUST change nothing before its `effectiveAt`.
 Only a filing type that the catalog marks as retroactive may have an `effectiveAt` before its `submittedAt`.
-A transfer and a correction are such types.
 
+In the pleasure craft pack, a transfer and a correction are retroactive types.
 A buyer often files days after a sale, so the sale and the filing have different dates.
 LEAR holds a future-effective filing until its effective date.
 Both dates matter in law, and the completion date tells when the register knew.
@@ -154,6 +160,8 @@ The chain needs no key of its own, and no checkpoint or witness of its own.
 [[REG-031]]
 *REG-031.* The register MUST seal each filing that reaches a final status, and log it under the signed records specification.
 The commitment that a filing gets MUST be its entry in the transparency log, the salted hash of LOG-031.
+Each register MUST log its filings in a log series of its own, which holds no other entry.
+The series is cut into yearly shards under LOG-035, and the origin of each checkpoint names it under LOG-032.
 Each register MUST claim at least the `seal-log` profile of LOG-002, and `seal-log-preserve` when it keeps its filings forever.
 A register MUST NOT add a signature, a checkpoint or a witness of its own to the chain.
 
@@ -170,15 +178,23 @@ The time stamp of the seal is then evidence of that instant.
 * Each `previousCommitment` equals the commitment that the filing before it got.
 * Each filing that still has its content gives back its commitment, from its salt and its sealed bytes.
 * Each destroyed filing has a tombstone that keeps its commitment, under REG-094.
-* Each commitment is in the transparency log, under LOG-054.
+* Each commitment is in the log series of the register, with its inclusion proof, under LOG-054.
+* The leaves of that series map one to one onto the chain entries and the tombstones.
+* The log indexes increase with the sequence, from one shard to the next.
+* The newest filing has as its commitment the last leaf of the newest checkpoint of the series.
+* Each checkpoint extends the one before, under LOG-061 and OBS-115.
 
-A verifier that stops at the first failure hides the others.
-LOG-054 asks for the same separate reporting.
+The chain alone cannot show a tail that someone removed or rewrote, nor a chain rebuilt from the start.
+The witnesses of LOG-041 and the mirrors of LOG-037 already hold the checkpoints of the series.
+A removed, rewritten or reordered filing then breaks the match between the chain and the log.
+A verifier that stops at the first failure hides the others, and LOG-054 asks for the same separate reporting.
 
 == Deadlines
 
 [[REG-033]]
-*REG-033.* A profile MAY set deadlines for filing types, each counted from the effective date and dated under REG-014.
+*REG-033.* A profile MAY set deadlines for filing types, each dated under REG-014.
+Each deadline counts from the date of the instant that its `countFrom` names.
+When it names none, the deadline counts from the effective date.
 When a deadline applies, the register MUST record in `deadlineStatus` whether the filing met it.
 A register MUST NOT reject a filing only because it came late.
 The exception is a profile that cites a provision that bars a late filing.
@@ -186,6 +202,17 @@ The exception is a profile that cites a provision that bars a late filing.
 Section 103 lets a craft run without a transferred license until the 30th day after a transfer.
 The impact analysis statement reads it as a 30-day window to apply, yet nothing in it bars a late application.
 A register that refused late transfers would leave the wrong owner on record.
+
+== Out-of-order completion
+
+[[REG-034]]
+*REG-034.* A filing may take effect before a version that an already completed filing opened for the same entity.
+It MUST then restate that later version in full, in the `restates` part of its stated changes.
+From its completion on, the replay MUST use the restated values in place of the later version.
+
+A correction that fixes an issue can change a value that a later transfer carried over.
+Without the restatement, the replay would have to run the rules again to carry the new value forward.
+In the fixture, each correction that fixes the issue restates the license version that the transfer opened.
 
 == References
 

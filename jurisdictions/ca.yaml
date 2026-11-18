@@ -1,7 +1,7 @@
 # Comparison data. The format is defined by fpsot-spec-doc (model/jurisdiction.yaml).
 # SOR/2025-272 and its regulatory impact analysis statement were read at the source. The
 # advisory circular on aircraft was read through the research notes. The bill on the long-gun
-# registry was read through a secondary source. This file is informational and not legal advice.
+# registry was read only in its summary and the text on destruction. This file is informational and not legal advice.
 code: CA
 name: {en: Canada, fr: Canada}
 rows:
@@ -21,7 +21,7 @@ rows:
     source: {title: "Regulations Amending the Small Vessel Regulations, SOR/2025-272, sections 105 and 106", date: "2025-12-31", url: "https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html", archive: "https://web.archive.org/web/20260412123703/https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"}
     last_checked: "2026-11-18"
   - id: REG-093
-    text: {en: "In 2012, Parliament provided for the destruction of the records of the long-gun registry. The provisions are to be verified.", fr: "En 2012, le Parlement a prévu la destruction des données du registre des armes d’épaule. Les dispositions sont à vérifier."}
+    text: {en: "The Ending the Long-gun Registry Act, S.C. 2012, c. 6, provides that the records of the long-gun registry be destroyed. The provisions are to be verified.", fr: "La Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6, prévoit la destruction des données du registre des armes d’épaule. Les dispositions sont à vérifier."}
     status: same
-    source: {title: "Bill C-19, Ending the Long-gun Registry Act, 41st Parliament, openparliament.ca, secondary source", url: "https://openparliament.ca/bills/41-1/C-19/", archive: "https://web.archive.org/web/20260510140105/https://openparliament.ca/bills/41-1/C-19/"}
+    source: {title: "Ending the Long-gun Registry Act, S.C. 2012, c. 6, Justice Laws Website", date: "2012", url: "https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/", archive: "https://web.archive.org/web/20260309192405/https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/"}
     last_checked: "2026-11-18"

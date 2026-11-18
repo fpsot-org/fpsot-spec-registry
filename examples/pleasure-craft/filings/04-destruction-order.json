@@ -23,7 +23,14 @@
     "orderReference": "EX-2026-0042"
   },
   "destroys": [
-    "019a1b2c-3d4e-7f05-8a05-000000000501"
+    "019a1b2c-3d4e-7f05-8a05-000000000501",
+    "019a1b2c-3d4e-7f05-8a05-000000000503"
+  ],
+  "destructionTargets": [
+    {
+      "path": "Filing.evidence.documentId",
+      "id": "019a1b2c-3d4e-7f07-8a07-000000000702"
+    }
   ],
   "legalBasis": {
     "uri": "https://example.org/orders/EX-2026-0042",
@@ -38,5 +45,5 @@
       "retentionClass": "license-evidence"
     }
   ],
-  "previousCommitment": "98c5492599a524fd426c3b462daff83835791ac6e480b024a66233d9338fe1fb"
+  "previousCommitment": "83cd71718c65ae0b5769e2d1875fe4088290f1f248128335c960525e627f9ef3"
 }

@@ -32,15 +32,15 @@ Feature: Replay of a pleasure craft license register
       And the last filing "license-renewal" of the license ends its validity on "2036-05-20"
       When the register replays its filings as of "2036-06-01T12:00:00Z" recorded at "2036-06-01T12:00:00Z"
       Then the state of the license is "expired"
-      And the last filing sequence of the snapshot is 5
+      And the last filing sequence of the snapshot is 6
 
   Rule: A correction replaces a filing for every later record time
 
     @pleasure-craft-license-004
     Scenario: The hull serial number follows the correction once it is recorded
       Given the register "pleasure-craft-licenses" under the profile "ca-federal" at version "0.1.0"
-      And the filing "filing-correction" that corrects sequence 1, completed at "2026-07-15T15:00:00Z"
-      When the register replays its filings as of "2026-06-01T12:00:00Z" recorded at "2026-07-31T12:00:00Z"
+      And the filing "filing-correction" that corrects sequence 1, completed at "2026-08-06T15:00:00Z"
+      When the register replays its filings as of "2026-06-01T12:00:00Z" recorded at "2026-08-10T12:00:00Z"
       Then the hull serial number of the craft is "EXA 12354 B626"
       And the owner group "019a1b2c-3d4e-7f03-8a03-000000000301" was created by the correction and ended by sequence 2
 
@@ -49,8 +49,8 @@ Feature: Replay of a pleasure craft license register
     @pleasure-craft-license-005
     Scenario: A destroyed filing leaves a tombstone and the chain still verifies
       Given the register "pleasure-craft-licenses" under the profile "ca-federal" at version "0.1.0"
-      And the filing "destruction-order" that destroys sequence 1, completed at "2026-08-04T15:00:00Z"
-      When a verifier checks the light chain from sequence 1 to sequence 5
-      Then the content and the salt of sequence 1 are gone and its tombstone keeps its commitment
+      And the filing "destruction-order" that destroys sequences 1 and 3, completed at "2026-08-04T15:00:00Z"
+      When a verifier checks the light chain from sequence 1 to sequence 6 against the log series of the register
+      Then the content and the salt of sequences 1 and 3 are gone and their tombstones keep their commitments
       And the previous commitment of sequence 2 equals the commitment in the tombstone
       And as of "2026-06-20T12:00:00Z" recorded at "2026-06-30T12:00:00Z" the craft shows as a destroyed row

@@ -6,7 +6,7 @@
 
 - [Overview](spec/en/index.adoc): scope, conformance classes, legal status, owners of the parts and conformance; REG-001 to REG-006.
 - [Jurisdiction profiles](spec/en/profiles.adoc): REG-010 to REG-016.
-- [Filings](spec/en/filings.adoc): REG-020 to REG-033.
+- [Filings](spec/en/filings.adoc): REG-020 to REG-034.
 - [Derived state and history](spec/en/history.adoc): REG-040 to REG-046.
 - [Assets, ownership, entitlements and encumbrances](spec/en/assets-rights.adoc): REG-050 to REG-061.
 - [Visibility, opposability and access](spec/en/visibility.adoc): REG-070 to REG-077.

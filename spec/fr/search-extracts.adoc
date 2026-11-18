@@ -8,7 +8,7 @@ Une inscription manquée par une correspondance exacte ou approchée peut change
 Cette page traite donc chaque mode de recherche comme une donnée du profil, et chaque résultat comme un enregistrement.
 
 Un extrait ou un certificat est ce sur quoi un tiers se fonde.
-Il doit dire quel registre, quel sujet, quel instant et quel dernier dépôt il reflète.
+Il doit dire quel registre, quel sujet, quel instant et quelle dernière déclaration il reflète.
 Il doit porter un cachet selon la spécification sur les documents signés, qui vise déjà les extraits de registre.
 
 == Modes de recherche
@@ -36,7 +36,7 @@ Un registre qui certifie un résultat DOIT le délivrer comme un extrait selon R
 L’enregistrement DOIT nommer cet extrait.
 
 Le registre des biens personnels de la Colombie-Britannique garde ses résultats de recherche comme des enregistrements à part.
-Le dernier dépôt de l’enregistrement distingue un dépôt tardif d’une recherche qui en a manqué un.
+La dernière déclaration de l’enregistrement distingue une déclaration tardive d’une recherche qui en a manqué une.
 
 [[REG-083]]
 *REG-083.* Une recherche sur des renseignements personnels DOIT employer `POST` sur la sous-ressource `searches` de sa collection, selon API-049.
@@ -48,13 +48,14 @@ Un nom ou une adresse dans une chaîne de requête finit dans les journaux du se
 
 [[REG-084]]
 *REG-084.* Un extrait ou un certificat DOIT être un enregistrement de la classe `Extract` de `model/registry.yaml`.
-Il DOIT indiquer le registre, le sujet, l’instant de validité, le moment d’enregistrement et le dernier dépôt qu’il reflète.
+Il DOIT indiquer le registre, le sujet, l’instant de validité, le moment d’enregistrement et la dernière déclaration qu’il reflète.
+Une vue publique d’un registre fermé n’indique ni sujet ni dernière déclaration, selon REG-012.
 Il DOIT aussi indiquer la vue qu’il applique, la politique d’accès qui la fonde et chaque omission avec son motif.
 Chaque valeur DOIT égaler le rejeu de REG-042 pour ces instants.
 Le registre DOIT apposer un cachet sur chaque extrait et le journaliser, au profil de cachet de son registre.
 
 Le jeu d’essai contient un extrait pour un agent d’application de la loi et une vue publique du registre fermé.
-La vérification du jeu d’essai reconstruit chaque valeur de l’extrait à partir des dépôts.
+La vérification du jeu d’essai reconstruit chaque valeur de l’extrait à partir des déclarations.
 
 [[REG-085]]
 *REG-085.* La mise en page d’un extrait DEVRAIT être une donnée du profil, à part de l’enregistrement de REG-084.
@@ -69,12 +70,12 @@ La valeur d’un état des renseignements du Québec ou d’un extrait Kbis fran
 
 [[REG-086]]
 *REG-086.* Un registre DEVRAIT aussi délivrer chaque droit comme attestation vérifiable selon le link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0].
-L’état de l’attestation DEVRAIT suivre les dépôts du cycle de vie, par une link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0].
+Le statut de l’attestation DEVRAIT suivre les déclarations du cycle de vie, par une link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0].
 Un registre PEUT aussi délivrer un extrait comme attestation vérifiable.
 Cette version ne fixe aucun protocole de portefeuille.
 
 Les portefeuilles sont hors de portée dans la première version de la spécification sur l’identité, et dans celle-ci aussi.
-Une attestation avec `validFrom`, `validUntil` et une liste d’états fonctionnera avec les portefeuilles à venir.
+Une attestation avec `validFrom`, `validUntil` et une liste de statuts fonctionnera avec les portefeuilles à venir.
 La question de savoir si un registre fermé peut délivrer une attestation publique relève des juristes.
 
 == Registres d’entreprises
@@ -85,8 +86,8 @@ Il DEVRAIT aussi rattacher ses champs au link:https://semiceu.github.io/Core-Bus
 La partie reste une `Party` de DMO-040.
 
 Le Core Business Vocabulary donne une dénomination, un identifiant, une adresse, une forme et un statut, mais aucun historique.
-Les dépôts de cette spécification fournissent cet historique.
-BODS sépare les déclarations des enregistrements, comme on sépare ici les dépôts de l’état dérivé.
+Les déclarations de cette spécification fournissent cet historique.
+BODS sépare les énoncés des enregistrements, comme on sépare ici les déclarations de l’état dérivé.
 
 == Références
 

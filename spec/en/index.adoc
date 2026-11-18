@@ -51,7 +51,7 @@ A party can claim more than one.
 |Class |Who claims it |Rules
 |`core` |A core engine, which keeps filings and derives state for any domain |The rules of every page, except those that bind a pack, a profile or an operator only
 |`pack` |The author of a domain pack, such as pleasure craft or drones |REG-021, REG-045, REG-050 to REG-052, REG-058, REG-100, REG-101 and REG-105
-|`profile` |The author of a jurisdiction profile |REG-010 to REG-016, REG-033, REG-060, REG-070 to REG-074, REG-080, REG-085 and REG-090
+|`profile` |The author of a jurisdiction profile |REG-010 to REG-016, REG-033, REG-046, REG-053, REG-058, REG-060, REG-070 to REG-074, REG-080, REG-085 and REG-090
 |`publication` |A register operator, which runs a register and serves its views and extracts |REG-012, REG-031, REG-074 to REG-077, REG-082 to REG-086 and REG-093 to REG-096
 |===
 
@@ -91,6 +91,9 @@ It MUST NOT define its own.
 |Methods, errors, paging, idempotency and events |RESTful API: API-030, API-049, API-060, API-100 to API-103
 |Scenarios, conformance suites and synthetic data |Testing: TST-020 to TST-036, TST-044, TST-050
 |===
+
+The identifier schemes, filing types and other code lists of this release are pack data in YAML and LinkML enumerations.
+A released scheme also needs its Turtle and JSON-LD files, under VOC-050.
 
 A domain specification sits on top of the others.
 If it defined its own party or its own seal, two models of the same fact would drift apart.
@@ -149,13 +152,15 @@ The folder `examples/pleasure-craft/` holds a synthetic register of pleasure cra
 Every person, number and order in it is fictional.
 
 * `parties.json` holds the parties, in the form of the data models specification.
-* `filings/` holds four filings: a transfer within 30 days, a correction, a destruction order and a renewal.
-* `chain.json` holds the light chain of five filings and the tombstone of the first one.
-That first filing was an issue, and a lawful order destroyed it.
+* `filings/` holds four filings: a transfer within 30 days, a destruction order, a correction and a renewal.
+* `chain.json` holds the light chain of six filings and two tombstones.
+A lawful order destroyed the first filing, an issue, and the filing that first corrected it.
+* `log.json` stands in for the log series of the register: its leaves and checkpoints in two yearly shards.
 * `salts.json` stands in for the salts that the register keeps with its sealed filings.
-* `snapshots.json` holds six bitemporal snapshots, which a replay of the filings must give back.
+* `snapshots.json` holds seven bitemporal snapshots, which a replay of the filings must give back.
 * `views.json` holds an extract for enforcement officers, a public view of the closed register and a search record.
 * `events/` holds the two events of the transfer.
+* `../ca-qc/beneficiary-views.json` holds a public view of a Québec beneficiary record, for the conditional visibility of REG-071.
 * `examples/features/` holds the scenarios in English and in French.
 
 The script `examples/test-examples.sh` checks that `examples/check-examples.py` rejects broken copies of these files.

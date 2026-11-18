@@ -31,11 +31,12 @@ default_prefix: registry
 default_range: string
 imports:
   - linkml:types
-  # A copy of model/data-types.yaml, release v0.1.1 of the FPSOT data types specification (DMO-012).
+  # A copy of model/data-types.yaml, release v0.1.2 of the FPSOT data types specification (DMO-012).
+  # The file is identical in releases v0.1.1 and v0.1.2.
   - imports/data-types
   # A copy of model/party.yaml, release v0.1.0 of the FPSOT data models specification, with no
   # change (DMO-012). LinkML resolves its own import, imports/data-types, from its folder, so
-  # model/imports/imports/data-types.yaml holds a second copy of the same data types release.
+  # model/imports/imports/data-types.yaml holds a second copy of the same data types file.
   - imports/party
 
 types:
@@ -98,6 +99,7 @@ classes:
       tombstones: {range: Tombstone, multivalued: true, inlined_as_list: true, description: "What remains of destroyed filings. REG-094."}
       snapshots: {range: StateSnapshot, multivalued: true, inlined_as_list: true, description: "Bitemporal snapshots of derived state. REG-042."}
       extracts: {range: Extract, multivalued: true, inlined_as_list: true, description: "Extracts and certificates. REG-084."}
+      logShards: {range: LogShard, multivalued: true, inlined_as_list: true, description: "A stand-in for the read interface of LOG-036 over the log series of a register, for tests: the leaves and checkpoints of each shard. REG-031, REG-032."}
       searchRecords: {range: SearchRecord, multivalued: true, inlined_as_list: true, description: "Records of searches. REG-082."}
 
   HistoryRow:
@@ -134,10 +136,12 @@ classes:
     description: >-
       One legal event in a register: an application that a party submits, an
       act of the registrar, a correction, an order, a migration or a
-      destruction. Its content never changes once submitted. Only the three
-      statuses, completedAt, sequence and previousCommitment change, and only
-      until the filing reaches a final processing status, after which the
-      register seals it and nothing changes. REG-020 to REG-033.
+      destruction. Its content never changes once submitted. Until the filing
+      reaches a final processing status, the register sets only the three
+      statuses, completedAt, sequence, previousCommitment, changes,
+      deadlineStatus, decisionIds and updatedAt. After that status, the
+      register seals it and nothing changes, except the destruction of its
+      content and salt under REG-093. REG-020 to REG-033.
     attributes:
       registerCode:
         range: CodeValue
@@ -217,10 +221,20 @@ classes:
       corrects:
         range: Uuid
         description: "The filing that this correction replaces. Only in the correction category. REG-027."
+      destructionTargets:
+        range: DestructionTarget
+        multivalued: true
+        inlined_as_list: true
+        description: "The values that the order or the schedule behind a destruction targets, each by its field path and an opaque id. Only in the destruction category. REG-093."
+      retainedFilings:
+        range: RetainedFiling
+        multivalued: true
+        inlined_as_list: true
+        description: "Each filing that holds a targeted value and that the register cannot destroy, with the reason. Only in the destruction category. REG-093."
       destroys:
         range: Uuid
         multivalued: true
-        description: "The filings whose content and salt this destruction filing destroys. Only in the destruction category. REG-093."
+        description: "The filings whose content and salt this destruction filing destroys: every filing that holds a targeted value, corrections and later filings included, except those listed in retainedFilings. Only in the destruction category. REG-093."
       legalBasis:
         range: LegalSource
         inlined: true
@@ -268,7 +282,7 @@ classes:
     attributes:
       evidenceType: {range: CodeValue, required: true, description: "The evidence type, from the domain pack."}
       documentId: {range: Uuid, required: true, description: "The id of the stored document."}
-      digest: {range: Sha256Digest, required: true, description: "The SHA-256 hash of the document, so that the filing can prove which document it used."}
+      digest: {range: Sha256Digest, required: true, description: "The salted SHA-256 hash of the document, so that the filing can prove which document it used. The register keeps the salt with the document and destroys them together. REG-092."}
       retentionClass: {range: CodeValue, required: true, description: "The retention class of the document, from the profile. REG-090."}
 
   ExportRecord:
@@ -289,6 +303,58 @@ classes:
     attributes:
       opens: {range: RowSet, inlined: true, description: "The rows that the filing opens."}
       ends: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the filing ends: the version of each entity that is current at its effective instant."}
+      restates:
+        range: Restatement
+        multivalued: true
+        inlined_as_list: true
+        description: "The later versions that a retroactive filing affects, each restated in full. REG-029."
+
+  Restatement:
+    description: >-
+      A later version of an entity, which an already completed filing opened
+      with a later effective instant, restated in full by a filing whose
+      effective instant comes before it. From the completion of the restating
+      filing, the replay uses the restated values. REG-029.
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The completed filing that opened the later version."}
+      opens: {range: RowSet, inlined: true, required: true, description: "The later versions, restated, one list per kind."}
+
+  DestructionTarget:
+    description: "A value that a destruction targets, named by its field path and an opaque id, never by the value itself when that value is personal. REG-093."
+    attributes:
+      path: {range: FieldPath, required: true, description: "The field that holds the value."}
+      id: {range: Uuid, required: true, description: "The opaque id of the value, such as the id of a document or of a party."}
+
+  RetainedFiling:
+    description: "A filing that holds a targeted value and that the register cannot destroy, with the reason. REG-093."
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The filing that keeps the value."}
+      reason: {range: CodeValue, required: true, description: "Why the register cannot destroy it, such as legal-hold."}
+
+  RestatedReference:
+    description: "In a tombstone, a later version that the destroyed filing restated, by its filing, kind and id. REG-094."
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The filing that opened the later version."}
+      kind: {range: RowKind, required: true, description: "The kind of row."}
+      entityId: {range: Uuid, required: true, description: "The id of the entity."}
+
+  LogShard:
+    description: >-
+      A stand-in, for tests, for what the read interface of LOG-036 gives about
+      one shard of the log series of a register: its origin, its leaves in
+      order and the checkpoints that a monitor saw, oldest first. The
+      signatures and cosignatures of the checkpoints come from LOG-032 and
+      LOG-041, and the stand-in leaves them out. REG-031, REG-032.
+    attributes:
+      origin: {required: true, pattern: "\\S", description: "The origin line of the shard, under LOG-032, which names the series of the register and the year."}
+      leaves: {range: Sha256Digest, multivalued: true, required: true, description: "The leaves of the shard, in index order."}
+      checkpoints: {range: Checkpoint, multivalued: true, inlined_as_list: true, required: true, description: "The checkpoints that the monitor saw, oldest first. The last one is the newest."}
+
+  Checkpoint:
+    description: "The size and root of a shard at one checkpoint, as RFC 6962 computes the root. LOG-032."
+    attributes:
+      treeSize: {range: integer, required: true, minimum_value: 0, description: "The number of leaves that the checkpoint covers."}
+      rootHash: {range: Sha256Digest, required: true, description: "The root of the tree of those leaves."}
 
   RowSet:
     description: "Rows of derived state, one list per kind. REG-029, REG-042."
@@ -309,8 +375,9 @@ classes:
   Tombstone:
     description: >-
       What remains of a filing after a lawful destruction: the chain slots,
-      the dates, the type and the ids of the rows that it opened and ended.
-      It holds no other value of the filing. REG-094.
+      the dates, the type and the ids of the rows that it opened and ended,
+      and for a correction, the corrected filing and the ids of the versions
+      that it restated. It holds no other value of the filing. REG-094.
     attributes:
       filingId: {range: Uuid, required: true, description: "The id of the destroyed filing."}
       registerCode: {range: CodeValue, required: true, description: "The register of the destroyed filing."}
@@ -324,6 +391,8 @@ classes:
       opened: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the destroyed filing opened, by kind and id only."}
       ended: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the destroyed filing ended, by kind and id only."}
       destroyedByFiling: {range: Uuid, required: true, description: "The destruction filing that destroyed the content. REG-093."}
+      corrects: {range: Uuid, description: "For a destroyed correction, the filing that it corrected. The effective instant is then the corrected one. REG-094."}
+      restated: {range: RestatedReference, multivalued: true, inlined_as_list: true, description: "The later versions that the destroyed filing restated, by id only. REG-094."}
 
   # ---- Derived rows ----
 
@@ -371,7 +440,7 @@ classes:
       REG-053, REG-054.
     attributes:
       assetId: {range: Uuid, required: true, description: "The asset that the group holds an interest in."}
-      tenancy: {range: Tenancy, required: true, description: "How the group holds its interest."}
+      tenancy: {range: CodeValue, required: true, description: "How the group holds its interest, from the tenancy codes of the profile, which default to sole, joint and in-common. REG-053."}
       interest: {range: Fraction, inlined: true, required: true, description: "The share of the asset that the group holds."}
       members:
         description: "The parties of the group. A sole group has one, a joint group two or more."
@@ -481,7 +550,7 @@ classes:
     attributes:
       registerCode: {range: CodeValue, required: true, description: "The register. REG-084."}
       extractType: {range: CodeValue, required: true, description: "The kind of extract, from the profile, such as certified-extract."}
-      subjects: {range: RowReference, multivalued: true, inlined_as_list: true, required: true, description: "The rows that the extract is about. REG-084."}
+      subjects: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the extract is about. Absent only in a public view of a closed register, which neither confirms nor denies a record. REG-012, REG-084."}
       view: {range: VisibilityClass, required: true, description: "The widest visibility class that the reader may see. REG-070."}
       accessPolicy: {range: CodeValue, description: "The access policy of the profile that grants the view, for a view wider than public. REG-074."}
       validAt: {range: Instant, required: true, description: "The instant in the world that the extract describes. REG-084."}
@@ -524,6 +593,7 @@ classes:
       sealProfile: {range: SealProfile, required: true, description: "The floor of LOG-002 for every register."}
       unlistedFieldVisibility: {range: VisibilityClass, required: true, description: "The class of a field that neither the pack nor a profile lists."}
       unlistedFieldOpposable: {range: boolean, required: true, description: "Whether a field that neither the pack nor a profile lists is opposable."}
+      tenancies: {range: CodeValue, multivalued: true, required: true, description: "The default tenancy codes: sole, joint and in-common. REG-053."}
 
   ProfileSource:
     description: "An outside source that a profile relies on, with whether the research read it. REG-013."
@@ -556,6 +626,7 @@ classes:
       publicitySources: {range: CodeValue, multivalued: true, required: true, description: "The sources of the publicity regime. REG-012."}
       sealProfile: {range: SealProfile, required: true, description: "The profile of LOG-002 that the register claims for its filings and extracts. REG-031."}
       timeZone: {range: TimeZoneName, required: true, description: "The time zone that turns an effective instant into a date. REG-057, DAT-030."}
+      tenancies: {range: CodeValue, multivalued: true, description: "The tenancy codes of the register, when its law needs others than the defaults of the core profile, such as a code for the Québec indivision. REG-053."}
       externalRightsRegisters: {range: ExternalRegister, multivalued: true, inlined_as_list: true, description: "Other registers that hold rights over the assets. REG-060."}
       fieldPolicies: {range: FieldPolicy, multivalued: true, inlined_as_list: true, description: "The visibility and opposability of fields, over the pack defaults. REG-070."}
       accessPolicies: {range: AccessPolicy, multivalued: true, inlined_as_list: true, description: "The access policies. REG-074."}
@@ -629,7 +700,8 @@ classes:
     description: "The term of an entitlement class, counted from the effective date of some filing types. REG-058."
     attributes:
       entitlementClass: {range: CodeValue, required: true, description: "The entitlement class."}
-      startsWith: {range: CodeValue, multivalued: true, required: true, description: "The filing types whose effective date starts a new term."}
+      startsWith: {range: CodeValue, multivalued: true, required: true, description: "The filing types that start a new term."}
+      countFrom: {range: CountFrom, description: "The instant of the filing whose date starts the term. effective-date when absent. REG-058."}
       term: {range: Duration, required: true, description: "The length of the term. DAT-020."}
       validity: {range: DateInterval, inlined: true, required: true, description: "The effective dates of filings to which this value applies. REG-014."}
       sourceId: {range: CodeValue, required: true, description: "The source of the term."}
@@ -638,7 +710,8 @@ classes:
     description: "A deadline for a filing type, counted from its effective date. REG-033."
     attributes:
       filingType: {range: CodeValue, required: true, description: "The filing type that the deadline applies to."}
-      within: {range: Duration, required: true, description: "The time from the effective date within which the filing is due. DAT-020."}
+      within: {range: Duration, required: true, description: "The time within which the filing is due. DAT-020."}
+      countFrom: {range: CountFrom, description: "The instant of the filing whose date starts the deadline. effective-date when absent. REG-033."}
       validity: {range: DateInterval, inlined: true, required: true, description: "The effective dates of filings to which this value applies. REG-014."}
       lateFilingBarred: {range: boolean, required: true, description: "True only when the cited provision bars a late filing."}
       sourceId: {range: CodeValue, required: true, description: "The source of the deadline."}
@@ -752,12 +825,12 @@ enums:
       owner-group: {}
       entitlement: {}
       encumbrance: {}
-  Tenancy:
-    description: "How an owner group holds its interest. REG-053."
+  CountFrom:
+    description: "Which instant of a filing starts a term or a deadline, in the time zone of the register. REG-033, REG-058."
     permissible_values:
-      sole: {description: "One owner holds the whole asset."}
-      joint: {description: "Two or more owners hold the whole asset together, with survivorship where the law gives it."}
-      in-common: {description: "The group holds a fraction of the asset beside other groups."}
+      effective-date: {description: "The date of effectiveAt. The default."}
+      submission-date: {description: "The date of submittedAt."}
+      completion-date: {description: "The date of completedAt."}
   VisibilityClass:
     description: "Who may see a field, from the widest to the narrowest. REG-070."
     permissible_values:

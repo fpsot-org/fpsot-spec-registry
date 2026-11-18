@@ -14,15 +14,15 @@ Cette page range donc chaque propriété juridique dans un profil juridictionnel
 Un profil énonce la pratique de la {abbr-fpsot-first}, et il ne constitue pas un avis juridique.
 Chaque fichier de profil nomme les textes qu’il suit et marque ceux qui sont _à vérifier_.
 
-== Déclarations de registre
+== Fiches de registre
 
 [[REG-010]]
-*REG-010.* Chaque registre DOIT avoir une déclaration dans un profil, dans la classe `RegisterDeclaration` de `model/registry.yaml`.
-La déclaration DOIT donner les instruments juridiques qui établissent le registre, son effet juridique et son régime de publicité.
+*REG-010.* Chaque registre DOIT avoir une fiche dans un profil, dans la classe `RegisterDeclaration` de `model/registry.yaml`.
+La fiche DOIT donner les instruments juridiques qui établissent le registre, son effet juridique et son régime de publicité.
 Elle DOIT aussi donner son module de domaine, son profil de cachet et le fuseau horaire de ses dates.
-Chaque dépôt nomme son registre, et un registre sans déclaration ne reçoit aucun dépôt.
+Chaque déclaration nomme son registre, et un registre sans fiche n’en reçoit aucune.
 
-La déclaration est l’endroit où un acheteur, une vérificatrice ou un tribunal lit ce qu’est le registre.
+La fiche est l’endroit où un acheteur, une vérificatrice ou un tribunal lit ce qu’est le registre.
 Le profil `ca-federal` déclare le registre des permis d’embarcation de plaisance.
 Le profil `ca-qc` déclare deux registres dont les modules n’existent pas encore.
 
@@ -30,14 +30,14 @@ Le profil `ca-qc` déclare deux registres dont les modules n’existent pas enco
 
 [[REG-011]]
 *REG-011.* L’effet juridique d’un registre DOIT être l’une de ces trois valeurs.
-La déclaration DOIT citer sa source.
+La fiche DOIT citer sa source.
 
 * `administrative-identification` : l’inscription identifie un bien et une partie pour l’administration, et ne dit rien du titre.
 * `notice-opposability` : l’inscription fait connaître un droit aux tiers, ou le leur rend opposable.
 * `title` : l’inscription crée ou prouve le titre.
 
-Les profils de cette version ne déclarent aucun registre avec `title`.
-Un profil qui déclare `title` DOIT citer la disposition qui fait que l’inscription crée ou prouve le titre.
+Un profil de cette version NE DOIT PAS déclarer `title`.
+Une version ultérieure pourra le permettre quand des juristes auront nommé un registre où l’inscription crée ou prouve le titre.
 
 Transports Canada indique, dans la link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[circulaire d’information 202-002], qu’un certificat d’immatriculation n’est pas un titre.
 Les link:https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[questions et réponses du RDPRM] disent qu’un droit inscrit est réputé connu de tous.
@@ -53,6 +53,7 @@ Les politiques de champ, les politiques d’accès et les modes de recherche du 
 Un registre `closed` NE DOIT PAS rendre un champ public, ni ouvrir un mode de recherche au public.
 Une vue publique d’un registre `closed` NE DOIT montrer aucun champ.
 Elle DOIT donner un motif pour chaque champ qu’elle omet.
+Elle NE DOIT ni confirmer ni nier qu’un enregistrement existe, et donne donc la même réponse à chaque requête.
 
 La France montre à elle seule trois régimes.
 Son registre national des entreprises montre la plupart des champs au public, avec des exceptions.
@@ -94,7 +95,7 @@ Le résumé de l’étude d’impact dit que ces renseignements sont privés et 
 [[REG-014]]
 *REG-014.* Chaque profil DOIT avoir son propre numéro de version selon Semantic Versioning 2.0.0, distinct de celui de la spécification.
 Chaque durée et chaque délai DOIT porter les dates d’effet auxquelles sa valeur s’applique.
-Un dépôt DOIT employer la valeur en vigueur à la date de son instant d’effet.
+Une déclaration DOIT employer la valeur en vigueur à la date de son instant d’effet.
 Cette date se lit dans le fuseau horaire de son registre.
 Une version qui retire ou assouplit un paramètre du même profil DOIT prendre un nouveau numéro de version majeure.
 
@@ -112,7 +113,7 @@ Il NE DOIT PAS non plus coder en dur une durée de conservation ou un mode de re
 Un module de domaine NE DOIT PAS contenir une valeur que fixe une loi.
 Un profil NE DOIT PAS assouplir une obligation des règles de base.
 
-Un module contient la mécanique d’un domaine, comme ses types de dépôts et ses schémas d’identifiants.
+Un module contient la mécanique d’un domaine, comme ses types de déclarations et ses schémas d’identifiants.
 Un profil contient le droit d’une collectivité publique, comme la durée de cinq ans d’un permis d’embarcation de plaisance.
 Le même module sert alors chaque collectivité publique qui délivre de tels permis, chacune avec son profil.
 
@@ -123,7 +124,7 @@ Le même module sert alors chaque collectivité publique qui délivre de tels pe
 Un champ que ni le module ni un profil n’énumère est `restricted` et non opposable.
 Le profil de cachet est au moins `seal-log`.
 Une règle peut avoir besoin d’un paramètre que ni le profil ni les valeurs par défaut ne donnent.
-Le moteur DOIT alors refuser d’achever le dépôt.
+Le moteur DOIT alors refuser d’achever la déclaration.
 Il NE DOIT PAS présumer une valeur.
 
 Une valeur par défaut silencieuse ferait d’une lacune du profil un choix juridique que personne n’a fait.

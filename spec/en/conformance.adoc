@@ -52,6 +52,7 @@ The pleasure craft register is closed, and its events must not open it.
 It MUST create a filing with `POST`, with an `Idempotency-Key` under API-060.
 It MUST NOT offer an operation that changes the content of a filing or deletes it.
 A withdrawal MUST be a change of the processing status of REG-024 before completion, never a deletion.
+The provider MUST test the interface against its published description, under TST-040.
 
 A base path such as `/registry` MAY prefix the paths, under API-019.
 
@@ -62,6 +63,7 @@ A base path such as `/registry` MAY prefix the paths, under API-019.
 The fixtures MUST hold ordered filings, the light chain and the expected snapshots of REG-042.
 They MUST also hold scenarios in English and in French, under TST-020 to TST-036.
 Each scenario MUST state its dates and name the filing types that it uses.
+The suite MUST also test each event against the schema of its type, under TST-043.
 
 A replay test feeds filings in and compares the snapshots that come out.
 It is the strongest test of a register whose state comes from events.

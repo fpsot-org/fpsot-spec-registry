@@ -49,6 +49,7 @@ A name or an address in a query string ends up in server logs and in browser his
 [[REG-084]]
 *REG-084.* An extract or a certificate MUST be a record of the class `Extract` of `model/registry.yaml`.
 It MUST state the register, the subject, the valid instant, the record instant and the last filing that it reflects.
+A public view of a closed register states no subject and no last filing, under REG-012.
 It MUST also state the view that it applies, the access policy behind it and each omission with its reason.
 Each value MUST equal the replay of REG-042 for those instants.
 The register MUST seal and log each extract under the signed records specification, at the seal profile of its register.

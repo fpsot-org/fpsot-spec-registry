@@ -19,6 +19,8 @@ The decisions specification keeps the same two clocks for rule versions, under D
 *REG-040.* Each view of register state MUST equal a replay of the completed filings of the register.
 The replay MUST apply the stated changes of REG-029 in order of effective instant, then of sequence.
 For each record time at or after a correction, it MUST apply the correction in place of the corrected filing.
+The changes of a correction take the sequence of the filing that it corrects, not their own.
+Once a filing restates a version under REG-034, the replay MUST use the restated version for each later record time.
 A filing that has no `completed` status MUST NOT change the replay.
 
 The fixture `examples/pleasure-craft/snapshots.json` holds six snapshots, and `examples/check-examples.py` rebuilds each one from the filings.
@@ -51,7 +53,7 @@ A court may ask who held a license on the day of an accident.
 It may ask for that answer as the register showed it on the day of a search.
 The fixture asks about 20 June 2026, as recorded on 30 June.
 The answer shows the craft as a destroyed row.
-The same day recorded on 10 August shows the corrected hull serial number.
+The same day recorded on 10 August shows the corrected hull serial number, from the second correction.
 
 == Stored views
 

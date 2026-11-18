@@ -1,11 +1,11 @@
 {
-  "id": "019a1b2c-3d4e-7f05-8a05-000000000505",
+  "id": "019a1b2c-3d4e-7f05-8a05-000000000506",
   "createdAt": "2031-05-20T14:00:00Z",
   "updatedAt": "2031-05-20T16:00:00Z",
   "registerCode": "pleasure-craft-licenses",
   "filingType": "license-renewal",
   "category": "change",
-  "sequence": 5,
+  "sequence": 6,
   "submittedAt": "2031-05-20T14:00:00Z",
   "effectiveAt": "2031-05-20T16:00:00Z",
   "completedAt": "2031-05-20T16:00:00Z",
@@ -61,5 +61,5 @@
       ]
     }
   },
-  "previousCommitment": "9d5ca8ce7b514c0b0d9750d669159c1bbac9fdecf620a0f0aebe9d666f5db35d"
+  "previousCommitment": "9d2f3bf0f87926b81ce2c28ec7e08a1db2b29a097a224a008b2f721003b8d0d0"
 }

@@ -9,8 +9,9 @@ The evidence that supports a filing often needs a third, shorter class.
 The Québec enterprise registrar destroys the copy of the identity document of a director once the declaration is on file.
 
 Destruction is not hypothetical either.
-In 2012, link:https://openparliament.ca/bills/41-1/C-19/[Bill C-19] ordered the federal government to destroy the records of its long-gun registry.
-The link:https://www.laws-lois.justice.gc.ca/fra/lois/F-11.6/rpdc.html[Firearms Act] now ties it to a copy for Québec, _to be verified_.
+In 2012, the link:https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/[Ending the Long-gun Registry Act], S.C. 2012, c. 6, ordered the government to destroy the long-gun records.
+The link:https://laws-lois.justice.gc.ca/eng/acts/F-11.6/rpdc.html[Firearms Act] now ties that destruction to a copy for Québec, _to be verified_.
+
 A blanket rule of no deletion would be unlawful there.
 A silent deletion would break the chain and the audit trail.
 The answer rests on the salted hashes of the signed records specification.
@@ -35,29 +36,39 @@ A register that applied it to filings would lose them years too early.
 
 [[REG-092]]
 *REG-092.* A filing MUST hold only references to its evidence.
-Each reference MUST give the SHA-256 hash of the document and its retention class.
+Each reference MUST give the salted SHA-256 hash of the document and its retention class.
+The register MUST keep the salt with the document, and destroy them together.
 A register MAY destroy a document of evidence at the end of its class without a destruction filing.
 The destruction MUST leave an event under OBS-104.
 
 The filing stays whole when its evidence goes, and the hash still proves which document it used.
+Without the salt, nobody can test a guess about a short document against the hash.
 A whole filing needs a destruction filing, under REG-093, because its content shapes the register.
 
 == Destruction filings
 
 [[REG-093]]
 *REG-093.* A register MUST destroy a filing only through a filing of the category `destruction`.
-The destruction filing MUST give its legal basis, the filings that it destroys and the authority that ordered it.
+The destruction filing MUST give its legal basis, the authority that ordered it and the values that it targets.
+It MUST name each target by its field and an opaque id, never by a personal value.
+It MUST name every filing that holds a targeted value, corrections and later filings included.
+It MUST destroy each of them, or list it as retained with the reason that the register cannot destroy it.
 It MUST also give the instant at which the register checked for legal holds, and each copy made before.
+
 The register MUST destroy the content and the salt of each named filing together, in every copy, under LOG-081.
 It MUST emit an event under OBS-104 for each destruction.
 
 Without the salt, nobody can test a guess against the commitment.
 The commitment that stays in the chain and in the log then says nothing about the content.
+A correction often repeats the values of the filing that it corrects.
+Destroying the original alone would leave them in place.
+A sealed filing cannot lose one field, so the register destroys every filing that holds a target.
 
 [[REG-094]]
 *REG-094.* Each destroyed filing MUST leave a tombstone in the class `Tombstone` of `model/registry.yaml`.
 The tombstone MUST keep the sequence, the type, the category, the effective and completion instants and the commitment.
 It MUST also keep the previous commitment and the ids of the rows that the filing opened and ended.
+For a correction, it MUST keep the corrected filing and the ids of the later versions that it restated.
 It MUST NOT keep any other value of the filing.
 
 A tombstone keeps what the chain and the replay need, and nothing that could identify a person.
@@ -69,8 +80,9 @@ A row that only destroyed content supports MUST appear as a destroyed row.
 That row gives its kind, its id and its filing.
 A register MUST NOT guess the values of such a row.
 
-In the fixture, a lawful order destroys the first filing, an issue that a correction had replaced.
-The chain verifies, because the second filing points to the commitment that the tombstone keeps.
+In the fixture, a lawful order targets an identity document that the issue and its first correction both held.
+The destruction filing destroys both, and a second correction, without the document, restates the issue.
+The chain verifies, because the second and fourth filings point to the commitments that the tombstones keep.
 As of 20 June 2026, recorded on 30 June, the craft shows as a destroyed row.
 
 [[REG-096]]
@@ -85,8 +97,8 @@ A record of that copy shows what left the register before the rest disappeared.
 
 === Informative
 
-* link:https://openparliament.ca/bills/41-1/C-19/[Bill C-19, Ending the Long-gun Registry Act], 41st Parliament, openparliament.ca, secondary source. link:https://web.archive.org/web/20260510140105/https://openparliament.ca/bills/41-1/C-19/[Archived copy]
-* link:https://www.laws-lois.justice.gc.ca/fra/lois/F-11.6/rpdc.html[Loi sur les armes à feu, dispositions connexes], Justice Laws Website, French version, read only in part. link:https://web.archive.org/web/20251113064859/https://laws-lois.justice.gc.ca/fra/lois/F-11.6/rpdc.html[Archived copy]
+* link:https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/[Ending the Long-gun Registry Act, S.C. 2012, c. 6], Justice Laws Website, annual statutes. link:https://web.archive.org/web/20260309192405/https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/[Archived copy]
+* link:https://laws-lois.justice.gc.ca/eng/acts/F-11.6/rpdc.html[Firearms Act, related provisions], Justice Laws Website, read only in part. link:https://web.archive.org/web/20260809074237/https://laws-lois.justice.gc.ca/eng/acts/F-11.6/rpdc.html[Archived copy]
 
 == Document history
 

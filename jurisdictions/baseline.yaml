@@ -3,7 +3,7 @@
 # which bind no Canadian body. ISO 19152 is paywalled and was read only through a draft, so its
 # rows are to be verified. This file is informational and not legal advice.
 topics:
-  filings: {en: Filings, fr: Dépôts}
+  filings: {en: Filings, fr: Déclarations}
   history: {en: Derived state and history, fr: État dérivé et historique}
   legal-effect: {en: Legal effect and publicity, fr: Effet juridique et publicité}
   rights: {en: "Assets, rights and encumbrances", fr: "Biens, droits et charges"}
@@ -24,16 +24,16 @@ rows:
     fpsot: {en: "Four regimes as data: public, public with exceptions, gated and closed. A closed register shows no field in public.", fr: "Quatre régimes sous forme de données : public, public avec exceptions, restreint et fermé. Un registre fermé ne montre aucun champ au public."}
   - id: REG-022
     topic: filings
-    requirement: {en: "Never change a filing once received. A change in the facts is a new filing.", fr: "Ne jamais changer un dépôt une fois reçu. Un changement des faits est un nouveau dépôt."}
+    requirement: {en: "Never change a filing once received. A change in the facts is a new filing.", fr: "Ne jamais changer une déclaration une fois reçue. Un changement des faits est une nouvelle déclaration."}
     international: {en: "The beneficial ownership standard publishes statements that never change, and builds records from them.", fr: "La norme sur la propriété effective publie des déclarations qui ne changent jamais, et en tire des enregistrements."}
     international_source: {title: "Beneficial Ownership Data Standard, schema reference", version: "0.4", url: "https://standard.openownership.org/en/0.4.0/standard/reference.html", archive: "https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html"}
-    fpsot: {en: "Immutable filings, sealed and chained by sequence and previous commitment. Corrections and orders are filings.", fr: "Dépôts immuables, cachetés et enchaînés par numéro d’ordre et condensé salé précédent. Les corrections et les ordonnances sont des dépôts."}
+    fpsot: {en: "Immutable filings, sealed and chained by sequence and previous commitment. Corrections and orders are filings.", fr: "Déclarations immuables, cachetées et enchaînées par numéro d’ordre et condensé salé précédent. Les corrections et les ordonnances sont des déclarations."}
   - id: REG-042
     topic: history
     requirement: {en: "Answer each query as of a valid instant, as recorded at a record instant.", fr: "Répondre à chaque requête à un instant de validité, tel qu’enregistré à un autre instant."}
     international: {en: "The 2024 edition of the land administration model adds a real-world lifespan beside the system lifespan. The final text is to be verified.", fr: "L’édition 2024 du modèle d’administration foncière ajoute une durée de vie réelle à côté de la durée de vie dans le système. Le texte final est à vérifier."}
     international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
-    fpsot: {en: "Bitemporal snapshots rebuilt by replaying the filings, with the filing that opened and ended each row.", fr: "Instantanés bitemporels reconstruits par le rejeu des dépôts, avec le dépôt qui a ouvert et fermé chaque ligne."}
+    fpsot: {en: "Bitemporal snapshots rebuilt by replaying the filings, with the filing that opened and ended each row.", fr: "Instantanés bitemporels reconstruits par le rejeu des déclarations, avec la déclaration qui a ouvert et fermé chaque ligne."}
   - id: REG-058
     topic: rights
     requirement: {en: "Keep the term of each entitlement class in the profile, and count each validity from the effective date.", fr: "Garder la durée de chaque classe de droit dans le profil, et compter chaque validité depuis la date d’effet."}
@@ -42,7 +42,7 @@ rows:
     fpsot: {en: "Terms and fixed end dates are dated profile data. The pack holds none of them.", fr: "Les durées et les dates de fin fixes sont des données datées du profil. Le module n’en contient aucune."}
   - id: REG-059
     topic: rights
-    requirement: {en: "Keep liens, seizures, stop orders and flags as encumbrances, with their own filings.", fr: "Tenir les privilèges, les saisies, les interdictions et les signalements comme des charges, avec leurs propres dépôts."}
+    requirement: {en: "Keep liens, seizures, stop orders and flags as encumbrances, with their own filings.", fr: "Tenir les sûretés, les saisies, les interdictions et les signalements comme des charges, avec leurs propres déclarations."}
     international: {en: "The land administration model treats restrictions as a kind of right, beside rights and responsibilities. The text is to be verified.", fr: "Le modèle d’administration foncière traite les restrictions comme une sorte de droit, à côté des droits et des responsabilités. Le texte est à vérifier."}
     international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
     fpsot: {en: "An optional family in the core, a SHOULD.", fr: "Une famille facultative du moteur, une recommandation."}
@@ -66,16 +66,16 @@ rows:
     fpsot: {en: "Two flags per field, set by the profile, never derived from each other.", fr: "Deux marques par champ, fixées par le profil, jamais dérivées l’une de l’autre."}
   - id: REG-090
     topic: retention
-    requirement: {en: "Give each filing type and each evidence type a retention class that names its schedule rule.", fr: "Donner à chaque type de dépôt et de pièce une catégorie de conservation qui nomme sa règle de calendrier."}
+    requirement: {en: "Give each filing type and each evidence type a retention class that names its schedule rule.", fr: "Donner à chaque type de déclaration et de pièce une catégorie de conservation qui nomme sa règle de calendrier."}
     international: {en: "The GovStack registry block keeps the logical record unless a law requires deletion, and leaves retention periods to the adopter.", fr: "Le bloc de registre de GovStack garde l’enregistrement logique sauf si une loi exige la suppression, et laisse les durées de conservation à l’adoptant."}
     international_source: {title: "Digital Registries Building Block, cross-functional requirements, GovStack", version: "3.0-alpha", date: "2026-06", url: "https://registries.govstack.global/5-cross-cutting-requirements.md", archive: "https://web.archive.org/web/20260715201050/https://registries.govstack.global/5-cross-cutting-requirements.md"}
     fpsot: {en: "Retention classes as profile data, apart from the retention of audit events.", fr: "Des catégories de conservation comme données du profil, à part de la conservation des événements d’audit."}
   - id: REG-092
     topic: retention
-    requirement: {en: "Hold only references to evidence in a filing, each with the hash of the document.", fr: "Ne garder dans un dépôt que des renvois aux pièces, chacun avec le condensé du document."}
+    requirement: {en: "Hold only references to evidence in a filing, each with the salted hash of the document.", fr: "Ne garder dans une déclaration que des renvois aux pièces, chacun avec le condensé salé du document."}
     international: {en: "A verifiable credential may point to the evidence behind it instead of holding it.", fr: "Une attestation vérifiable peut renvoyer à la preuve qui la fonde au lieu de la contenir."}
     international_source: {title: "Verifiable Credentials Data Model v2.0, W3C Recommendation", version: "2.0", date: "2025-05-15", url: "https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/", archive: "https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/"}
-    fpsot: {en: "References with a SHA-256 hash and a retention class. Evidence can go while the filing stays whole.", fr: "Des renvois avec un condensé SHA-256 et une catégorie de conservation. Une pièce peut disparaître sans toucher au dépôt."}
+    fpsot: {en: "References with a salted SHA-256 hash and a retention class. Evidence can go while the filing stays whole.", fr: "Des renvois avec un condensé SHA-256 salé et une catégorie de conservation. Une pièce peut disparaître sans toucher à la déclaration."}
   - id: REG-076
     topic: visibility
     requirement: {en: "Record each read of personal information as an audit event, with the access policy as its purpose.", fr: "Consigner chaque lecture de renseignements personnels comme événement d’audit, avec la politique d’accès comme fin."}
@@ -84,7 +84,7 @@ rows:
     fpsot: {en: "A MUST for the audit event, and a SHOULD for the list of reads that a data subject can obtain.", fr: "Une obligation pour l’événement d’audit, et une recommandation pour la liste des lectures qu’une personne concernée peut obtenir."}
   - id: REG-093
     topic: retention
-    requirement: {en: "Destroy a filing only through a destruction filing that deletes its content and salt and leaves a tombstone.", fr: "Ne détruire un dépôt que par un dépôt de destruction qui supprime son contenu et son sel et laisse un témoin."}
+    requirement: {en: "Destroy a filing only through a destruction filing that deletes its content and salt and leaves a tombstone.", fr: "Ne détruire une déclaration que par une déclaration de destruction qui supprime son contenu et son sel et laisse une trace de destruction."}
     international: {en: "Since 3.0-alpha, the GovStack registry block requires keeping the logical record on deletion, unless a law requires hard deletion.", fr: "Depuis la version 3.0-alpha, le bloc de registre de GovStack exige de garder l’enregistrement logique lors d’une suppression, sauf si une loi exige une suppression physique."}
     international_source: {title: "Digital Registries Building Block, cross-functional requirements, GovStack", version: "3.0-alpha", date: "2026-06", url: "https://registries.govstack.global/5-cross-cutting-requirements.md", archive: "https://web.archive.org/web/20260715201050/https://registries.govstack.global/5-cross-cutting-requirements.md"}
-    fpsot: {en: "A destruction filing with basis, authority and legal hold check. The light chain and the log still verify.", fr: "Un dépôt de destruction avec base juridique, autorité et vérification de la préservation de la preuve. La chaîne légère et le journal se vérifient encore."}
+    fpsot: {en: "A destruction filing with basis, authority, targeted values and legal hold check. It also covers the corrections that repeat a targeted value. The light chain and the log still verify.", fr: "Une déclaration de destruction avec base juridique, autorité, valeurs visées et vérification de la préservation de la preuve. Elle vise aussi les corrections qui répètent une valeur visée. La chaîne légère et le journal se vérifient encore."}

@@ -4,7 +4,7 @@ include::_fpsot-terms.adoc[]
 Cette spécification fixe ce qu’un logiciel doit consigner et prouver pour chaque {term-registry} qu’une loi établit.
 Elle vise les registres de biens, de propriété et de droits.
 Les permis, les immatriculations de véhicules et de bateaux, les autorisations et les registres d’entreprises en sont des exemples.
-Elle normalise le dépôt et ce qu’un logiciel peut en dériver.
+Elle normalise la déclaration et ce qu’un logiciel peut en dériver.
 Elle laisse aux profils juridictionnels tout ce qui varie selon la loi.
 
 La recherche pour cette spécification a comparé des registres du Canada, du Québec et de la France.
@@ -12,13 +12,13 @@ Ils divergent sur presque toutes les propriétés juridiques d’un registre.
 Certains publient les propriétaires, d’autres les gardent fermés.
 Certains rendent un droit inscrit opposable à tous, d’autres disent que l’inscription ne prouve rien quant au titre.
 Ils partagent toutefois la même mécanique.
-Chaque acte juridique est un dépôt qui ne change jamais, et une correction est un nouveau dépôt.
+Chaque acte juridique est une déclaration qui ne change jamais, et une correction est une nouvelle déclaration.
 
 Les règles reposent donc sur cinq éléments qui fonctionnent sous toute loi.
 
-* Le dépôt : un événement juridique immuable, avec trois dates, trois états et le pouvoir de son auteur.
-Chaque dépôt prend aussi place dans une chaîne légère.
-* L’état dérivé : l’état actuel et passé, que n’importe qui peut reconstruire en rejouant les dépôts.
+* La déclaration : un événement juridique immuable, avec trois dates, trois statuts et le pouvoir de son auteur.
+Chaque déclaration prend aussi place dans une chaîne légère.
+* L’état dérivé : l’état actuel et passé, que n’importe qui peut reconstruire en rejouant les déclarations.
 Une requête le lit à un instant donné, tel qu’enregistré à un autre instant.
 * Les lignes du registre : le {term-asset}, les groupes de propriétaires de sa {term-ownership}, le {term-entitlement} et la charge.
 * Les vues : la visibilité et l’opposabilité de chaque champ, les modes de recherche déclarés et les extraits cachetés.
@@ -36,7 +36,7 @@ Les cachets, les horodatages et le {term-transparency-log} viennent de la spéci
 Le stockage n’y change rien.
 Un registre consigne des biens, leurs propriétaires et les droits que la loi accorde à des parties.
 Un système DOIT appliquer ces règles à chaque registre de ce genre qu’il tient.
-La réception d’une demande, les frais d’un dépôt et le travail sur un dossier sont hors de portée.
+La réception d’une demande, les frais d’une déclaration et le travail sur un dossier sont hors de portée.
 De futures spécifications de la {abbr-fpsot} les traiteront, et la spécification sur les décisions traite l’admissibilité.
 
 Un registre en ce sens tient des faits juridiques sur lesquels des tiers peuvent compter.
@@ -51,9 +51,9 @@ Une partie peut en déclarer plus d’une.
 [cols="1,2,3",options="header"]
 |===
 |Classe |Qui la déclare |Règles
-|`core` |Un moteur de base, qui tient les dépôts et dérive l’état pour tout domaine |Les règles de chaque page, sauf celles qui ne visent qu’un module, un profil ou un exploitant
+|`core` |Un moteur de base, qui tient les déclarations et dérive l’état pour tout domaine |Les règles de chaque page, sauf celles qui ne visent qu’un module, un profil ou un exploitant
 |`pack` |L’auteur d’un module de domaine, comme les embarcations de plaisance ou les drones |REG-021, REG-045, REG-050 à REG-052, REG-058, REG-100, REG-101 et REG-105
-|`profile` |L’auteur d’un profil juridictionnel |REG-010 à REG-016, REG-033, REG-060, REG-070 à REG-074, REG-080, REG-085 et REG-090
+|`profile` |L’auteur d’un profil juridictionnel |REG-010 à REG-016, REG-033, REG-046, REG-053, REG-058, REG-060, REG-070 à REG-074, REG-080, REG-085 et REG-090
 |`publication` |Un exploitant de registre, qui tient un registre et sert ses vues et ses extraits |REG-012, REG-031, REG-074 à REG-077, REG-082 à REG-086 et REG-093 à REG-096
 |===
 
@@ -87,12 +87,16 @@ Elle NE DOIT PAS définir le sien.
 |Qui a agi pour qui, et le contrôle de chaque requête |Identité : IAM-050, IAM-061 à IAM-064, IAM-091
 |Identifiants, instants, dates, intervalles, montants, géométrie |Types de données : DAT-010, DAT-014, DAT-023, DAT-050, DAT-060 à DAT-066, DAT-081
 |Admissibilité, frais, exemptions et pénalités comme décisions |Décisions : DEC-030 à DEC-047
-|Listes de codes, comme les types de dépôts et les codes de motif |Vocabulaires : VOC-001 à VOC-065
+|Listes de codes, comme les types de déclarations et les codes de motif |Vocabulaires : VOC-001 à VOC-065
 |Cachets, horodatages, journal de transparence, preuves, destruction des documents cachetés |Documents signés : LOG-002, LOG-010 à LOG-031, LOG-081
 |Événements d’audit, événements d’affaires, journalisation des lectures et conservation des événements |Observabilité : OBS-042, OBS-070, OBS-100 à OBS-104
 |Méthodes, erreurs, pagination, idempotence et événements |API RESTful : API-030, API-049, API-060, API-100 à API-103
 |Scénarios, suites de conformité et données synthétiques |Essais : TST-020 à TST-036, TST-044, TST-050
 |===
+
+Dans cette version, les schémas d’identifiants, les types de déclarations et les autres listes de codes sont des données.
+Le module les tient dans des fichiers YAML et des énumérations LinkML.
+Un schéma publié exige aussi ses fichiers Turtle et JSON-LD, selon VOC-050.
 
 Une spécification de domaine repose sur les autres.
 Si elle définissait sa propre partie ou son propre cachet, deux modèles du même fait finiraient par diverger.
@@ -102,12 +106,12 @@ Si elle définissait sa propre partie ou son propre cachet, deux modèles du mê
 [[REG-005]]
 *REG-005.* Une mise en œuvre DOIT suivre les versions des normes externes que cette page énumère sous Normes.
 Elle PEUT suivre une version plus récente de la même norme quand les éléments qu’elle utilise gardent leur sens.
-Un dépôt doit rester lisible tant que le registre le conserve.
+Une déclaration doit rester lisible tant que le registre la conserve.
 Chaque lecteur doit alors savoir quel texte s’appliquait.
 
 [[REG-006]]
 *REG-006.* Une suite de conformité de cette spécification DOIT vérifier la production d’une mise en œuvre, selon TST-044.
-La production comprend les dépôts, la chaîne, les instantanés, les extraits, les enregistrements de recherche et les événements.
+La production comprend les déclarations, la chaîne, les instantanés, les extraits, les enregistrements de recherche et les événements.
 La suite NE DOIT PAS avoir besoin du code source de la mise en œuvre.
 Les dossiers `model/`, `packs/`, `profiles/`, `registry/` et `examples/` contiennent les premiers jeux d’essai.
 Le script `examples/check-examples.py` les vérifie.
@@ -116,13 +120,13 @@ Le script `examples/check-examples.py` les vérifie.
 
 Les règles se divisent en neuf parties, suivies de deux pages informatives.
 
-* xref:profiles.adoc[Profils juridictionnels] fixe la déclaration d’un registre, son effet juridique, son régime de publicité et les fichiers de profil.
-* xref:filings.adoc[Dépôts] fixe le dépôt, ses dates, ses états et son pouvoir, les corrections, les ordonnances et la chaîne légère.
+* xref:profiles.adoc[Profils juridictionnels] fixe la fiche d’un registre, son effet juridique, son régime de publicité et les fichiers de profil.
+* xref:filings.adoc[Déclarations] fixe la déclaration, ses dates, ses statuts et son pouvoir, les corrections, les ordonnances et la chaîne légère.
 * xref:history.adoc[État dérivé et historique] fixe le rejeu, les lignes d’historique, les requêtes bitemporelles et les cycles de vie.
 * xref:assets-rights.adoc[Biens, propriété, droits et charges] fixe les lignes d’un registre.
 * xref:visibility.adoc[Visibilité, opposabilité et accès] fixe qui peut voir chaque champ, quels champs sont opposables et qui peut accéder à plus.
 * xref:search-extracts.adoc[Recherche, extraits et attestations] fixe les modes de recherche, leurs enregistrements, les extraits et les attestations vérifiables.
-* xref:retention.adoc[Conservation et destruction] fixe les catégories de conservation, les dépôts de destruction et les témoins de destruction.
+* xref:retention.adoc[Conservation et destruction] fixe les catégories de conservation, les déclarations de destruction et les traces de destruction.
 * xref:conformance.adoc[Modules, événements et conformité] fixe les modules de domaine, les événements, les interfaces et les jeux d’essai de rejeu.
 * xref:alignment.adoc[Alignement sur d’autres normes] est informative.
 Elle rattache le modèle à LADM, BODS, SEMIC, GovStack, aux attestations vérifiables et au système « une fois pour toutes ».
@@ -156,14 +160,17 @@ Le dossier `examples/pleasure-craft/` contient un registre synthétique de permi
 Chaque personne, numéro et ordonnance y est fictif.
 
 * `parties.json` contient les parties, sous la forme de la spécification sur les modèles de données.
-* `filings/` contient quatre dépôts : un transfert dans les 30 jours, une correction, une ordonnance de destruction et un renouvellement.
-* `chain.json` contient la chaîne légère de cinq dépôts et le témoin de destruction du premier.
-Ce premier dépôt était une délivrance, et une ordonnance légale l’a détruit.
-* `salts.json` tient lieu des sels que le registre conserve avec ses dépôts cachetés.
-* `snapshots.json` contient six instantanés bitemporels, que le rejeu des dépôts doit redonner.
+* `filings/` contient quatre déclarations : un transfert dans les 30 jours, une ordonnance de destruction, une correction et un renouvellement.
+* `chain.json` contient la chaîne légère de six déclarations et deux traces de destruction.
+Une ordonnance légale a détruit la première déclaration, une délivrance, et la déclaration qui l’a corrigée en premier.
+* `log.json` tient lieu de la série de journal du registre.
+Il en donne les feuilles et les points de contrôle, en deux tranches annuelles.
+* `salts.json` tient lieu des sels que le registre conserve avec ses déclarations cachetées.
+* `snapshots.json` contient sept instantanés bitemporels, que le rejeu des déclarations doit redonner.
 * `views.json` contient un extrait pour les agents d’application de la loi et une vue publique du registre fermé.
 Il contient aussi un enregistrement de recherche.
 * `events/` contient les deux événements du transfert.
+* `../ca-qc/beneficiary-views.json` contient une vue publique d’un bénéficiaire québécois, pour la visibilité conditionnelle de REG-071.
 * `examples/features/` contient les scénarios en anglais et en français.
 
 Le script `examples/test-examples.sh` vérifie que `examples/check-examples.py` rejette des copies altérées de ces fichiers.
@@ -185,7 +192,7 @@ Elles citent ces versions.
 
 * Modèles : link:https://linkml.io/linkml/[LinkML], à la version que fixe la spécification sur les modèles de données.
 * Attestations vérifiables : link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], recommandation du {abbr-w3c-first}, 15 mai 2025.
-* Listes d’états : link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], recommandation du {abbr-w3c}, 15 mai 2025.
+* Listes de statuts : link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], recommandation du {abbr-w3c}, 15 mai 2025.
 * Propriété effective : link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4].
 * Données d’entreprise : link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] de SEMIC.
 * Schémas de concepts, événements, scénarios et modèles : les versions que fixent les spécifications qui en sont responsables.

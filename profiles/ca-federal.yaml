@@ -85,14 +85,16 @@ registers:
         scheduleRule: "Disposition authority of Library and Archives Canada for the supporting documents, to be verified"
         sourceId: lac-act
     terms:
-      # Section 105: five years from the day of issue, transfer or renewal.
-      - {entitlementClass: pleasure-craft-license, startsWith: [license-issue, ownership-transfer, license-renewal], term: P5Y, validity: {start: "2025-12-31"}, sourceId: sor-2025-272}
+      # Section 105: five years from the day of issue, transfer or renewal. Whether "the day on
+      # which it is transferred" is the day of the sale or the day the register completes the
+      # transfer is to be verified; this release counts from the effective date.
+      - {entitlementClass: pleasure-craft-license, startsWith: [license-issue, ownership-transfer, license-renewal], term: P5Y, countFrom: effective-date, validity: {start: "2025-12-31"}, sourceId: sor-2025-272}
     deadlines:
       # Section 103: a craft may run without a transferred license until the 30th day after the
       # transfer. The impact analysis statement reads it as 30 days to apply. It bars nothing.
-      - {filingType: ownership-transfer, within: P30D, validity: {start: "2025-12-31"}, lateFilingBarred: false, sourceId: sor-2025-272}
+      - {filingType: ownership-transfer, within: P30D, countFrom: effective-date, validity: {start: "2025-12-31"}, lateFilingBarred: false, sourceId: sor-2025-272}
       # Section 104: 30 days after a change of name or address.
-      - {filingType: particulars-change, within: P30D, validity: {start: "2025-12-31"}, lateFilingBarred: false, sourceId: sor-2025-272}
+      - {filingType: particulars-change, within: P30D, countFrom: effective-date, validity: {start: "2025-12-31"}, lateFilingBarred: false, sourceId: sor-2025-272}
     scheduledExpiries:
       # Section 106: licenses issued before 29 April 2010 end on fixed dates. The start of the
       # first period is 1962, the year licenses began according to the impact analysis statement.

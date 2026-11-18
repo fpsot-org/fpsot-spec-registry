@@ -35,6 +35,7 @@ At completion, state the rows that the filing opens and ends, under REG-029.
 
 Seal and log each completed filing under the signed records specification, under REG-031.
 Give it the next sequence number and the commitment that the filing before it got, under REG-030.
+Log it in the log series of your register alone, under REG-031.
 
 == Derive the state
 
@@ -51,7 +52,9 @@ Record each search, and seal each extract that you issue, under REG-082 and REG-
 == Correct and destroy
 
 Correct a filing with a new filing that replaces it, under REG-027.
+When it takes effect before a version already opened, restate that version, under REG-034.
 When a law or an order requires a destruction, file a destruction filing, under REG-093.
+Name every filing that holds a targeted value, corrections included.
 Destroy the content and the salt together, and keep the tombstone, under REG-094.
 
 == Check the result
@@ -64,7 +67,7 @@ pip install --require-hashes -r examples/requirements.txt
 python3 examples/check-examples.py path/to/your/copy
 ----
 
-A pass shows that your filings, your chain and your snapshots hold together under the structural rules.
+A pass shows that the filings, the chain, the log and the snapshots hold together under the structural rules.
 The same holds for your extracts, your events and your scenarios.
 It does not test your engine, which the replay fixtures of REG-105 will do.
 

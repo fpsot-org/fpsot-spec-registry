@@ -64,7 +64,7 @@ filingTypes:
     retroactive: true
   - code: filing-correction
     category: correction
-    title: {en: Correction of a filing, fr: Correction d’un dépôt}
+    title: {en: Correction of a filing, fr: Correction d’une déclaration}
     retroactive: true
   - code: destruction-order
     category: destruction

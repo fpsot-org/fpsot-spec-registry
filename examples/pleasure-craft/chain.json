@@ -16,19 +16,25 @@
       "registerCode": "pleasure-craft-licenses",
       "sequence": 3,
       "filingId": "019a1b2c-3d4e-7f05-8a05-000000000503",
-      "commitment": "98c5492599a524fd426c3b462daff83835791ac6e480b024a66233d9338fe1fb"
+      "commitment": "83cd71718c65ae0b5769e2d1875fe4088290f1f248128335c960525e627f9ef3"
     },
     {
       "registerCode": "pleasure-craft-licenses",
       "sequence": 4,
       "filingId": "019a1b2c-3d4e-7f05-8a05-000000000504",
-      "commitment": "9d5ca8ce7b514c0b0d9750d669159c1bbac9fdecf620a0f0aebe9d666f5db35d"
+      "commitment": "907eccf55b436c4232326abe8e2ef26649d01f17ccb932784a94655d3c345135"
     },
     {
       "registerCode": "pleasure-craft-licenses",
       "sequence": 5,
       "filingId": "019a1b2c-3d4e-7f05-8a05-000000000505",
-      "commitment": "1bafeaa7b6b3b958acd64e75de32dad7850e75a5687078cb3018ec7d077f38c9"
+      "commitment": "9d2f3bf0f87926b81ce2c28ec7e08a1db2b29a097a224a008b2f721003b8d0d0"
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 6,
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000506",
+      "commitment": "41e2aa3075cf8625014f837f3ca535b401dbf3b0d7fa82236d457355fddb9ed4"
     }
   ],
   "tombstones": [
@@ -51,6 +57,40 @@
           "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301"
         },
         {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+        }
+      ],
+      "destroyedByFiling": "019a1b2c-3d4e-7f05-8a05-000000000504"
+    },
+    {
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000503",
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 3,
+      "filingType": "filing-correction",
+      "category": "correction",
+      "effectiveAt": "2026-05-04T16:00:00Z",
+      "completedAt": "2026-07-15T15:00:00Z",
+      "commitment": "83cd71718c65ae0b5769e2d1875fe4088290f1f248128335c960525e627f9ef3",
+      "previousCommitment": "55f6fb4989f25f18f4c2d27e59b042301e9268e93caf7bdf0c0a446220869525",
+      "corrects": "019a1b2c-3d4e-7f05-8a05-000000000501",
+      "opened": [
+        {
+          "kind": "asset",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201"
+        },
+        {
+          "kind": "owner-group",
+          "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301"
+        },
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+        }
+      ],
+      "restated": [
+        {
+          "filingId": "019a1b2c-3d4e-7f05-8a05-000000000502",
           "kind": "entitlement",
           "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
         }

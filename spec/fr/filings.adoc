@@ -1,24 +1,24 @@
-= Dépôts
+= Déclarations
 include::_fpsot-terms.adoc[]
 
-Un dépôt est un événement juridique dans un registre.
+Une déclaration est un événement juridique dans un registre.
 Ce peut être une demande qu’une partie présente, ou un acte du registraire.
 Ce peut aussi être une correction, une ordonnance d’un tribunal ou une destruction légale.
 
 Les registres que la recherche a étudiés fonctionnent déjà ainsi.
-link:https://github.com/bcgov/lear[LEAR], le registre des entreprises de la Colombie-Britannique, conserve chaque dépôt en entier.
+link:https://github.com/bcgov/lear[LEAR], le registre des entreprises de la Colombie-Britannique, conserve chaque déclaration en entier.
 Il en garde la date de dépôt, la date d’effet et la date d’achèvement.
-Il consigne une correction comme un nouveau dépôt qui renvoie à l’original.
+Il consigne une correction comme une nouvelle déclaration qui renvoie à l’originale.
 Le link:https://github.com/bcgov/ppr[registre des biens personnels] de la même province fait de chaque acte une inscription d’une catégorie de changement.
 La modification, l’ordonnance d’un tribunal, le renouvellement et la mainlevée sont de telles catégories.
 
-Cette page fixe le dépôt que tient chaque registre.
+Cette page fixe la déclaration que tient chaque registre.
 Elle fixe aussi la chaîne légère, qui rend visible un trou ou un changement d’ordre.
 
-== Un dépôt pour chaque changement
+== Une déclaration pour chaque changement
 
 [[REG-020]]
-*REG-020.* Chaque changement de l’état d’un registre DOIT venir d’un seul dépôt achevé.
+*REG-020.* Chaque changement de l’état d’un registre DOIT venir d’une seule déclaration achevée.
 Cela vaut pour les actions du personnel, pour les migrations et pour les corrections.
 Cela vaut aussi pour les ordonnances et pour les destructions.
 Un système NE DOIT PAS écrire l’état du registre d’une autre façon.
@@ -27,13 +27,13 @@ Une écriture directe ne laisse aucun événement juridique derrière elle.
 Personne ne peut alors dire qui a changé quoi, quand et en vertu de quel pouvoir.
 
 [[REG-021]]
-*REG-021.* Chaque dépôt DOIT être un enregistrement de la classe `Filing` de `model/registry.yaml`.
-Son type de dépôt DOIT venir du catalogue du module de domaine de son registre.
-Chaque type de dépôt DOIT appartenir à l’une de trois catégories, qui disent au rejeu comment l’appliquer.
+*REG-021.* Chaque déclaration DOIT être un enregistrement de la classe `Filing` de `model/registry.yaml`.
+Son type DOIT venir du catalogue du module de domaine de son registre.
+Chaque type de déclaration DOIT appartenir à l’une de trois catégories, qui disent au rejeu comment l’appliquer.
 
 * `change` ouvre et ferme des lignes de l’état dérivé.
-* `correction` remplace un dépôt antérieur, selon REG-027.
-* `destruction` détruit le contenu de dépôts antérieurs, selon REG-093, et ne change aucune ligne.
+* `correction` remplace une déclaration antérieure, selon REG-027.
+* `destruction` détruit le contenu de déclarations antérieures, selon REG-093, et ne change aucune ligne.
 
 Le catalogue du module des embarcations de plaisance compte huit types.
 La délivrance, le transfert, le renouvellement, le changement de renseignements et l’annulation sont de la catégorie `change`.
@@ -42,58 +42,64 @@ La migration aussi, alors que la correction et la destruction ont leur propre ca
 == Immuabilité
 
 [[REG-022]]
-*REG-022.* Un registre NE DOIT PAS changer le contenu d’un dépôt une fois qu’il l’a reçu.
-Avant un état de traitement final, le registre PEUT changer seulement ses trois états, `completedAt`, `sequence` et `previousCommitment`.
-Après un état final, le registre NE DOIT rien changer au dépôt.
-Un changement ultérieur des faits DOIT être un nouveau dépôt.
+*REG-022.* Un registre NE DOIT PAS changer le contenu d’une déclaration une fois qu’il l’a reçue.
+Avant un statut de traitement final, le registre PEUT fixer seulement ces champs.
 
-Le registre des entreprises du Québec traite une correction comme un type de dépôt à part, la déclaration corrective.
-Un dépôt modifiable sur place permettrait au registre de réécrire la preuve de ce qu’une partie a déclaré.
+* Les trois statuts de REG-024, `completedAt` et `updatedAt`.
+* `sequence` et `previousCommitment`, selon REG-030.
+* `changes`, selon REG-029 et REG-034, et `deadlineStatus`, selon REG-033.
+* `decisionIds`, selon REG-026.
+
+Après un statut final, le registre NE DOIT plus la changer, sauf pour détruire contenu et sel selon REG-093.
+Un changement ultérieur des faits DOIT être une nouvelle déclaration.
+
+Le registre des entreprises du Québec traite une correction comme un type de déclaration à part, la déclaration corrective.
+Une déclaration modifiable sur place permettrait au registre de réécrire la preuve de ce qu’une partie a déclaré.
 
 == Trois dates
 
 [[REG-023]]
-*REG-023.* Chaque dépôt DOIT porter trois instants selon DAT-010.
+*REG-023.* Chaque déclaration DOIT porter trois instants selon DAT-010.
 
-* `submittedAt` : quand le registre a reçu le dépôt.
+* `submittedAt` : quand le registre a reçu la déclaration.
 * `effectiveAt` : quand l’acte juridique prend effet dans le monde, comme le jour d’une vente.
-* `completedAt` : quand le dépôt a atteint un état de traitement final.
+* `completedAt` : quand la déclaration a atteint un statut de traitement final.
 
-Un dépôt dont l’`effectiveAt` suit le `completedAt` NE DOIT rien changer avant son `effectiveAt`.
-Seul un type de dépôt que le catalogue marque comme rétroactif peut avoir un `effectiveAt` antérieur à son `submittedAt`.
-Le transfert et la correction sont de tels types.
+Une déclaration dont l’`effectiveAt` suit le `completedAt` NE DOIT rien changer avant son `effectiveAt`.
+Seul un type de déclaration que le catalogue marque comme rétroactif peut avoir un `effectiveAt` antérieur à son `submittedAt`.
 
-Un acheteur dépose souvent quelques jours après une vente.
-La vente et le dépôt ont alors des dates différentes.
-LEAR retient un dépôt à effet futur jusqu’à sa date d’effet.
+Dans le module des embarcations de plaisance, le transfert et la correction sont des types rétroactifs.
+Un acheteur dépose souvent sa déclaration quelques jours après une vente.
+La vente et la déclaration ont alors des dates différentes.
+LEAR retient une déclaration à effet futur jusqu’à sa date d’effet.
 Les deux dates comptent en droit, et la date d’achèvement dit quand le registre a su.
 
-== Trois états
+== Trois statuts
 
 [[REG-024]]
-*REG-024.* Chaque dépôt DOIT porter trois états distincts : le paiement, l’examen et le traitement.
-Les valeurs des états du paiement et de l’examen DOIVENT venir des listes du module de domaine.
-L’état du traitement DOIT être `received`, `in-progress`, `completed`, `rejected` ou `withdrawn`.
+*REG-024.* Chaque déclaration DOIT porter trois statuts distincts : le paiement, l’examen et le traitement.
+Les valeurs des statuts du paiement et de l’examen DOIVENT venir des listes du module de domaine.
+Le statut du traitement DOIT être `received`, `in-progress`, `completed`, `rejected` ou `withdrawn`.
 Les trois derniers sont finaux.
 Seul `completed` change l’état du registre.
-Un état du paiement ou de l’examen NE DOIT PAS tenir lieu d’état du traitement.
+Un statut du paiement ou de l’examen NE DOIT PAS tenir lieu de statut du traitement.
 
-Un dépôt payé peut encore échouer à l’examen, et un dépôt exempté doit quand même être traité.
-Un seul état pour les trois cacherait l’étape qui retient un dépôt.
+Une déclaration payée peut encore échouer à l’examen, et une déclaration exemptée doit quand même être traitée.
+Un seul statut pour les trois cacherait l’étape qui retient une déclaration.
 
-== Qui a déposé, pour qui et en vertu de quel pouvoir
+== Qui a déclaré, pour qui et en vertu de quel pouvoir
 
 [[REG-025]]
-*REG-025.* Chaque dépôt DOIT consigner l’acteur qui l’a présenté, par un identifiant opaque selon IAM-091.
-Il DOIT consigner la partie pour laquelle l’acteur a agi, une `Party` selon DMO-040, et le pouvoir du dépôt.
+*REG-025.* Chaque déclaration DOIT consigner l’acteur qui l’a présentée, par un identifiant opaque selon IAM-091.
+Elle DOIT consigner la partie pour laquelle l’acteur a agi, une `Party` selon DMO-040, et le pouvoir de la déclaration.
 Le pouvoir est de l’une de ces sortes.
 
 * `own-behalf` : l’acteur a agi pour sa propre partie.
-* `representation` : une relation de représentation selon IAM-061, que le dépôt nomme par son identifiant.
-* `statutory-power` : un pouvoir qu’une disposition donne à l’acteur, et que le dépôt cite.
-* `order` : une ordonnance d’un tribunal ou d’une autre autorité, que le dépôt cite avec son numéro de dossier.
+* `representation` : une relation de représentation selon IAM-061, que la déclaration nomme par son identifiant.
+* `statutory-power` : un pouvoir qu’une disposition donne à l’acteur, et que la déclaration cite.
+* `order` : une ordonnance d’un tribunal ou d’une autre autorité, que la déclaration cite avec son numéro de dossier.
 
-À la réception, le registre DOIT vérifier selon IAM-050 et IAM-064 que le pouvoir couvre le type de dépôt.
+À la réception, le registre DOIT vérifier selon IAM-050 et IAM-064 que le pouvoir couvre le type de déclaration.
 La spécification sur l’identité est responsable de la représentation, et cette règle consigne seulement celle qui s’appliquait.
 
 Un registraire qui exécute une ordonnance et un mandataire qui agit pour un propriétaire laissent des traces différentes.
@@ -103,7 +109,7 @@ Un litige ultérieur doit savoir lequel a agi, et sur quelle base.
 
 [[REG-026]]
 *REG-026.* L’admissibilité, les frais, les exemptions et les pénalités DOIVENT être des décisions selon la spécification sur les décisions.
-Un dépôt DOIT nommer les enregistrements de décision sur lesquels il repose, selon DEC-040.
+Une déclaration DOIT nommer les enregistrements de décision sur lesquels elle repose, selon DEC-040.
 Un registre NE DOIT PAS calculer des frais, une exemption ou une admissibilité hors d’un enregistrement de décision.
 
 Selon l’article 113, les frais de 24 $ suivent l’indice des prix à la consommation chaque 1^er^ avril.
@@ -113,10 +119,10 @@ Ces deux règles relèvent d’un type de décision à paramètres datés, selon
 == Corrections
 
 [[REG-027]]
-*REG-027.* Une correction DOIT nommer le dépôt qu’elle corrige, qui DOIT avoir un numéro d’ordre inférieur.
+*REG-027.* Une correction DOIT nommer la déclaration qu’elle corrige, qui DOIT avoir un numéro d’ordre inférieur.
 Elle DOIT porter les changements corrigés au complet et l’instant d’effet corrigé.
-Le dépôt corrigé DOIT rester récupérable, selon DMO-051.
-Une fois la correction achevée, le rejeu DOIT l’employer à la place du dépôt corrigé pour chaque moment d’enregistrement ultérieur.
+La déclaration corrigée DOIT rester récupérable, selon DMO-051.
+Une fois la correction achevée, le rejeu DOIT l’employer au lieu de la déclaration corrigée, pour chaque moment d’enregistrement suivant.
 
 Une correction qui porterait seulement l’écart forcerait chaque lecteur à reconstruire d’abord l’original.
 Un remplacement complet garde le rejeu simple.
@@ -125,83 +131,102 @@ Il donne aussi les deux versions à quiconque demande à quoi ressemblait le reg
 == Ordonnances
 
 [[REG-028]]
-*REG-028.* Une ordonnance d’un tribunal ou du registraire DOIT être un dépôt, avec la sorte de pouvoir `order` ou `statutory-power`.
+*REG-028.* Une ordonnance d’un tribunal ou du registraire DOIT être une déclaration, avec la sorte de pouvoir `order` ou `statutory-power`.
 Elle DOIT citer l’ordonnance ou la disposition.
 Elle PEUT prendre effet avant sa réception quand son entrée du catalogue le permet.
 Un registre NE DOIT PAS exécuter une ordonnance par un autre moyen.
 
 Le registre des biens personnels de la Colombie-Britannique donne aux ordonnances des tribunaux leur propre catégorie de changement.
-Une ordonnance qui contournerait les dépôts laisserait le registre sans trace de ses changements les plus délicats.
+Une ordonnance qui contournerait les déclarations laisserait le registre sans trace de ses changements les plus délicats.
 
 == Changements déclarés
 
 [[REG-029]]
-*REG-029.* Quand un dépôt est achevé, le registre DOIT y déclarer chaque ligne qu’il ouvre et qu’il ferme.
+*REG-029.* Quand une déclaration est achevée, le registre DOIT y indiquer chaque ligne qu’elle ouvre et qu’elle ferme.
 Une ligne ouverte DOIT porter toutes ses valeurs.
 Une ligne fermée DOIT nommer sa sorte et l’identifiant de son entité.
-L’entrée du catalogue du type de dépôt DOIT énumérer les sortes de lignes que le type peut ouvrir et fermer.
+L’entrée du catalogue du type de déclaration DOIT énumérer les sortes de lignes que le type peut ouvrir et fermer.
 Le rejeu DOIT appliquer les changements déclarés, et NE DOIT PAS exécuter de nouveau les règles du registre.
 
-Une règle peut changer après l’achèvement d’un dépôt, et un rejeu qui l’exécuterait de nouveau réécrirait l’histoire.
+Une règle peut changer après l’achèvement d’une déclaration, et un rejeu qui l’exécuterait de nouveau réécrirait l’histoire.
 Les changements déclarés figent ce que le registre a décidé à l’achèvement.
 
 == La chaîne légère
 
 [[REG-030]]
-*REG-030.* Quand un dépôt atteint un état de traitement final, le registre DOIT lui donner le numéro d’ordre suivant.
+*REG-030.* Quand une déclaration atteint un statut de traitement final, le registre DOIT lui donner le numéro d’ordre suivant.
 Les numéros d’ordre DOIVENT commencer à 1 et ne laisser aucun trou.
-À partir du numéro 2, chaque dépôt DOIT porter dans `previousCommitment` le condensé salé du dépôt précédent, selon REG-031.
-Le registre DOIT achever ses dépôts un à la fois, pour que chacun connaisse le condensé salé qui le précède.
+À partir du numéro 2, chaque déclaration DOIT porter dans `previousCommitment` le condensé salé de la déclaration précédente, selon REG-031.
+Le registre DOIT achever ses déclarations une à la fois, pour que chacune connaisse le condensé salé qui la précède.
 
 Un trou ou une inversion dans les numéros se voit alors tout de suite, dans le registre même.
 La chaîne n’a besoin ni de sa propre clé, ni de ses propres points de contrôle ou témoins.
 
 [[REG-031]]
-*REG-031.* Le registre DOIT apposer un cachet sur chaque dépôt qui atteint un état final.
-Il DOIT le journaliser selon la spécification sur les documents signés.
-Le condensé salé d’un dépôt DOIT être son entrée dans le journal de transparence, selon LOG-031.
-Chaque registre DOIT déclarer au moins le profil `seal-log` de LOG-002.
-Il DOIT déclarer `seal-log-preserve` quand il conserve ses dépôts sans limite de temps.
-Un registre NE DOIT PAS doter la chaîne d’une signature, d’un point de contrôle ou d’un témoin propres.
+*REG-031.* Le registre DOIT apposer un cachet sur chaque déclaration qui atteint un statut final.
+Il DOIT la journaliser selon la spécification sur les documents signés.
+Le condensé salé d’une déclaration DOIT être son entrée dans le journal de transparence, selon LOG-031.
+Chaque registre DOIT journaliser ses déclarations dans une série de journal propre, qui ne contient aucune autre entrée.
+La série se divise en tranches annuelles selon LOG-035, et l’origine de chaque point de contrôle la nomme selon LOG-032.
+Chaque registre DOIT déclarer au moins le profil `seal-log` de LOG-002, et `seal-log-preserve` s’il conserve ses déclarations sans limite.
 
+Un registre NE DOIT PAS doter la chaîne d’une signature, d’un point de contrôle ou d’un témoin propres.
 La spécification sur les documents signés fournit déjà les cachets, les horodatages de confiance, un journal attesté et des preuves.
 Un second mécanisme dans le registre exigerait ses propres clés, sa propre surveillance et son propre vérificateur.
 La chaîne légère repère les trous à peu de frais, et le journal prouve le reste.
 Un registre peut rendre un droit opposable dès son inscription.
-L’horodatage du cachet prouve alors cet instant.
+L’horodatage du cachet en fait alors foi.
 
 [[REG-032]]
 *REG-032.* Un outil de vérification d’un registre DOIT contrôler chacun de ces points et en rapporter chaque résultat à part.
 
 * Les numéros d’ordre vont de 1 sans trou.
-* Chaque `previousCommitment` égale le condensé salé du dépôt précédent.
-* Chaque dépôt qui garde son contenu redonne son condensé salé, à partir de son sel et de ses octets cachetés.
-* Chaque dépôt détruit a un témoin de destruction qui garde son condensé salé, selon REG-094.
-* Chaque condensé salé figure dans le journal de transparence, selon LOG-054.
+* Chaque `previousCommitment` égale le condensé salé de la déclaration précédente.
+* Chaque déclaration qui garde son contenu redonne son condensé salé, à partir de son sel et de ses octets cachetés.
+* Chaque déclaration détruite a une trace de destruction qui garde son condensé salé, selon REG-094.
+* Chaque condensé salé figure dans la série de journal du registre, avec sa preuve d’inclusion, selon LOG-054.
+* Les feuilles de cette série correspondent une à une aux entrées de la chaîne et aux traces de destruction.
+* Les index du journal croissent avec le numéro d’ordre, d’une tranche à la suivante.
+* Le condensé salé de la déclaration la plus récente est la dernière feuille du point de contrôle le plus récent.
+* Chaque point de contrôle prolonge le précédent, selon LOG-061 et OBS-115.
 
-Une vérification qui s’arrête au premier échec cache les autres.
-LOG-054 demande le même rapport séparé.
+La chaîne seule ne peut montrer ni une fin retranchée ou réécrite, ni une chaîne reconstruite depuis le début.
+Les témoins de LOG-041 et les miroirs de LOG-037 détiennent déjà les points de contrôle de la série.
+Une déclaration retranchée, réécrite ou déplacée rompt alors la correspondance entre la chaîne et le journal.
+Une vérification qui s’arrête au premier échec cache les autres, et LOG-054 demande le même rapport séparé.
 
 == Délais
 
 [[REG-033]]
-*REG-033.* Un profil PEUT fixer des délais pour des types de dépôts.
-Chaque délai court à partir de la date d’effet et porte ses dates selon REG-014.
-Quand un délai s’applique, le registre DOIT consigner dans `deadlineStatus` si le dépôt l’a respecté.
-Un registre NE DOIT PAS rejeter un dépôt pour la seule raison qu’il est en retard.
-L’exception est un profil qui cite une disposition qui interdit le dépôt tardif.
+*REG-033.* Un profil PEUT fixer des délais pour des types de déclarations, chacun daté selon REG-014.
+Chaque délai court à partir de la date de l’instant que nomme son `countFrom`.
+S’il n’en nomme aucun, le délai court à partir de la date d’effet.
+Quand un délai s’applique, le registre DOIT consigner dans `deadlineStatus` si la déclaration l’a respecté.
+Un registre NE DOIT PAS rejeter une déclaration pour la seule raison qu’elle est en retard.
+L’exception est un profil qui cite une disposition qui interdit la déclaration tardive.
 
 L’article 103 permet à une embarcation de circuler sans permis transféré jusqu’au 30^e^ jour après un transfert.
 Le résumé de l’étude d’impact y lit un délai de 30 jours pour présenter la demande.
 Rien n’y interdit une demande tardive.
 Un registre qui refuserait les transferts tardifs laisserait le mauvais propriétaire inscrit.
 
+== Achèvement hors d’ordre
+
+[[REG-034]]
+*REG-034.* Une déclaration peut prendre effet avant une version qu’une déclaration déjà achevée a ouverte pour la même entité.
+Elle DOIT alors réénoncer au complet cette version ultérieure, dans la partie `restates` de ses changements déclarés.
+Dès son achèvement, le rejeu DOIT employer les valeurs réénoncées à la place de la version ultérieure.
+
+Une correction qui rectifie une délivrance peut changer une valeur qu’un transfert ultérieur a reprise.
+Sans le réénoncé, le rejeu devrait exécuter de nouveau les règles pour reporter la nouvelle valeur.
+Dans le jeu d’essai, chaque correction de la délivrance réénonce la version du permis qu’a ouverte le transfert.
+
 == Références
 
 === Références informatives
 
-* link:https://github.com/bcgov/lear[LEAR, Legal Entity Active Records], Province de la Colombie-Britannique, code source. link:https://web.archive.org/web/20241012195815/https://github.com/bcgov/lear[Copie archivée]
-* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province de la Colombie-Britannique, code source. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Copie archivée]
+* link:https://github.com/bcgov/lear[LEAR, Legal Entity Active Records], Province de la Colombie-Britannique, dépôt de code source. link:https://web.archive.org/web/20241012195815/https://github.com/bcgov/lear[Copie archivée]
+* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province de la Colombie-Britannique, dépôt de code source. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Copie archivée]
 
 == Historique du document
 

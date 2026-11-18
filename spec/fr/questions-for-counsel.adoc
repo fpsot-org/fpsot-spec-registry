@@ -16,7 +16,7 @@ Il ne vient pas de la loi elle-même.
 1. *Effet juridique.* Pour chaque registre visé, que fait l’inscription en droit ?
 Elle peut identifier un bien pour l’administration, donner avis ou opposabilité, ou créer ou prouver le titre.
 Un registre canadien, québécois ou français visé est-il source de titre ?
-REG-011 ne permet à aucun profil de cette version de déclarer `title` avant qu’une ou un juriste en nomme un.
+Selon REG-011, aucun profil de cette version ne peut déclarer `title` avant que des juristes nomment un tel registre.
 
 2. *Valeur d’un extrait.* Quelle valeur ces documents ont-ils en droit ?
 Ce sont l’état des renseignements du registre des entreprises du Québec et l’état certifié du RDPRM.
@@ -57,20 +57,22 @@ Un organisme peut-il taire les lectures de la police ou d’autres organismes, e
 
 == Intégrité, conservation et destruction
 
-10. *Intégrité d’un journal de dépôts cachetés.* Comment les règles québécoises sur l’intégrité et la signature s’appliquent-elles ici ?
+10. *Intégrité d’un journal de déclarations cachetées.* Comment les règles québécoises sur l’intégrité et la signature s’appliquent-elles ici ?
 Elles se trouvent dans la Loi concernant le cadre juridique des technologies de l’information.
 Des sources secondaires renvoient aux articles 5 à 7 et 39, _à vérifier_.
-Un journal de dépôts cachetés, en ajout seul, y satisfait-il quand il sert de document juridique ?
+Un journal de déclarations cachetées, en ajout seul, y satisfait-il quand il sert de document juridique ?
 
-11. *Destruction et chaîne.* En 2012, le projet de loi C-19 a ordonné de détruire les données sur les armes d’épaule.
-Supprimer le contenu et le sel, avec un témoin de destruction qui garde un condensé, satisfait-il une telle ordonnance ?
-Le témoin de destruction de REG-094 garde-t-il trop, ou trop peu ?
+11. *Destruction et chaîne.* En 2012, la Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6, en a ordonné la destruction.
+Supprimer le contenu et le sel, avec une trace de destruction qui garde un condensé, satisfait-il une telle ordonnance ?
+La trace de destruction de REG-094 garde-t-elle trop, ou trop peu ?
+Un registre doit-il aussi détruire les corrections et les déclarations ultérieures qui répètent une valeur visée, comme le demande REG-093 ?
+Que doit-il faire quand il ne peut pas détruire l’une d’elles ?
 
-12. *Instruments de conservation.* Quels instruments régissent les dépôts, et lesquels régissent les événements d’audit ?
+12. *Instruments de conservation.* Quels instruments régissent les déclarations, et lesquels régissent les événements d’audit ?
 Les candidats sont les calendriers de conservation selon la Loi sur les archives du Québec.
 S’y ajoutent les autorisations de disposition de Bibliothèque et Archives Canada.
 En France, le candidat est le Code du patrimoine, le tout _à vérifier_.
-Combien de temps un registre doit-il garder le témoin d’un dépôt détruit ?
+Combien de temps un registre doit-il garder la trace d’une déclaration détruite ?
 
 == Permis d’embarcation de plaisance
 

@@ -35,8 +35,8 @@ The declaration MUST cite its source.
 * `notice-opposability`: registration makes a right known to third parties, or opposable to them.
 * `title`: registration creates or proves title.
 
-The profiles of this release declare no register with `title`.
-A profile that declares `title` MUST cite the provision that makes registration create or prove title.
+A profile of this release MUST NOT declare `title`.
+A later release may allow it once counsel names a register in scope whose registration creates or proves title.
 
 Transport Canada states in link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular 202-002] that an aircraft certificate of registration is not a certificate of title.
 The link:https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[questions and answers of the RDPRM] say that the law treats a registered right as known to everyone.
@@ -52,6 +52,7 @@ The field policies, access policies and search modes of the register MUST agree 
 A `closed` register MUST NOT make a field public, nor open a search mode to the public.
 A public view of a `closed` register MUST show no field.
 It MUST give a reason for each field that it leaves out.
+It MUST NOT confirm or deny that a record exists, so it gives the same answer to every query.
 
 France alone shows three regimes.
 Its national business register shows most fields to the public, with exceptions.

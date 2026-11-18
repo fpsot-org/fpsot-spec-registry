@@ -14,7 +14,7 @@ Each requirement has an ID from `REG-001` to `REG-108`.
 
 * State your conformance classes, and never claim that a register meets a law (REG-001 to REG-006).
 * Declare each register in a profile with its legal effect and publicity regime, and keep every legal value in the profile (REG-010 to REG-016). The profiles are data files in `profiles/`.
-* Keep each legal act as an immutable filing with three dates, three statuses, its authority and its stated changes, sealed and chained (REG-020 to REG-033).
+* Keep each legal act as an immutable filing with three dates, three statuses, its authority and its stated changes, sealed, chained and logged in a log series of the register's own (REG-020 to REG-034).
 * Derive every view by replaying the filings, with history rows and bitemporal queries (REG-040 to REG-046).
 * Model assets, owner groups, entitlements and encumbrances, with declared identifier schemes (REG-050 to REG-061). The pack data is in `packs/`.
 * Set the visibility and opposability of each field, give a reason for each omission and log each read (REG-070 to REG-077).
