@@ -1,0 +1,104 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+# Jurisdiction profile of the FPSOT registry specification (REG-010 to REG-016), in the form of
+# the class Profile of model/registry.yaml. Released apart from the core rules (REG-014).
+# Federal registers of Canada. This release declares one register: pleasure craft licenses under
+# the Small Vessel Regulations, as SOR/2025-272 amends them. The amending text and its regulatory
+# impact analysis statement were read at the source. The consolidated regulations, the Privacy Act
+# and the Library and Archives of Canada Act were not, and are marked to-be-verified.
+# The $24 fee, its exemption and its indexation are a decision type of the decisions
+# specification (REG-026), not data of this profile. The time zone is a choice of the operator,
+# not a value of the law. Not legal advice.
+code: ca-federal
+version: 0.1.0
+title: {en: Canada federal profile, fr: Profil fédéral canadien}
+jurisdiction: CA
+sources:
+  - id: sor-2025-272
+    title: "Regulations Amending the Small Vessel Regulations, SOR/2025-272, Canada Gazette, Part II"
+    url: "https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"
+    date: "2025-12-31"
+    archive: "https://web.archive.org/web/20260412123703/https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"
+    verification: read
+  - id: sor-2025-272-rias
+    title: "Regulatory Impact Analysis Statement of SOR/2025-272, Canada Gazette, Part II"
+    url: "https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"
+    date: "2025-12-31"
+    archive: "https://web.archive.org/web/20260412123703/https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"
+    verification: read
+  - id: small-vessel-regulations
+    title: "Small Vessel Regulations, SOR/2010-91, consolidated text"
+    url: "https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-91/"
+    archive: "https://web.archive.org/web/20260720134826/https://laws-lois.justice.gc.ca/eng/regulations/SOR-2010-91/"
+    verification: to-be-verified
+  - id: privacy-act
+    title: "Privacy Act, R.S.C. 1985, c. P-21"
+    url: "https://laws-lois.justice.gc.ca/eng/acts/P-21/"
+    archive: "https://web.archive.org/web/20261117152402/https://laws-lois.justice.gc.ca/eng/acts/p-21/"
+    verification: to-be-verified
+  - id: lac-act
+    title: "Library and Archives of Canada Act, S.C. 2004, c. 11"
+    url: "https://laws-lois.justice.gc.ca/eng/acts/L-7.7/"
+    archive: "https://web.archive.org/web/20261105144050/https://laws-lois.justice.gc.ca/eng/acts/L-7.7/"
+    verification: to-be-verified
+registers:
+  - code: pleasure-craft-licenses
+    title: {en: Pleasure craft licenses, fr: Permis d’embarcation de plaisance}
+    pack: {code: pleasure-craft, version: 0.1.0, status: published}
+    legalInstruments: [small-vessel-regulations, sor-2025-272]
+    # The impact analysis statement describes the license database as the way to identify owners
+    # for enforcement and search and rescue. Whether a license proves anything about title is
+    # question 1 of the page Questions for counsel.
+    legalEffect: administrative-identification
+    legalEffectSources: [sor-2025-272-rias]
+    # The statement says that license information is private and that Transport Canada may not
+    # publish license holder data.
+    publicityRegime: closed
+    publicitySources: [sor-2025-272-rias]
+    sealProfile: seal-log
+    timeZone: America/Toronto
+    fieldPolicies:
+      - {path: OwnerGroup.members.partyId, visibility: parties, opposable: false, omissionReason: not-public-by-law, sourceId: sor-2025-272-rias}
+      - {path: Entitlement.parties.partyId, visibility: parties, opposable: false, omissionReason: not-public-by-law, sourceId: sor-2025-272-rias}
+      - {path: Entitlement.number.value, visibility: agency, opposable: false, omissionReason: not-public-by-law, sourceId: sor-2025-272-rias}
+      - {path: Entitlement.validity, visibility: agency, opposable: false, omissionReason: not-public-by-law, sourceId: sor-2025-272-rias}
+    # The statement names designated enforcement officers, search and rescue agencies and the
+    # Coast Guard as users of the database. The provision that allows each disclosure is to be
+    # verified, so each policy also cites the Privacy Act.
+    accessPolicies:
+      - {code: enforcement-officers, recipientCategory: enforcement-officer, purpose: enforcement, grants: agency, legalBasisSourceIds: [sor-2025-272-rias, privacy-act], loggingDuty: true}
+      - {code: search-and-rescue, recipientCategory: search-and-rescue-agency, purpose: emergency-response, grants: agency, legalBasisSourceIds: [sor-2025-272-rias, privacy-act], loggingDuty: true}
+      - {code: coast-guard, recipientCategory: coast-guard, purpose: wrecked-vessel-enforcement, grants: agency, legalBasisSourceIds: [sor-2025-272-rias, privacy-act], loggingDuty: true}
+    searchModes:
+      - {code: by-license-number, keys: [pleasure-craft-license-number], matching: normalized, openTo: [agency]}
+      - {code: by-hull-serial-number, keys: [hull-serial-number], matching: normalized, openTo: [agency]}
+    retentionClasses:
+      - code: license-filings
+        appliesTo: filing-type
+        types: [license-issue, ownership-transfer, license-renewal, particulars-change, license-cancellation, license-migration, filing-correction, destruction-order]
+        trigger: entitlement-ended
+        scheduleRule: "Disposition authority of Library and Archives Canada for the license records, to be verified"
+        sourceId: lac-act
+      - code: license-evidence
+        appliesTo: evidence-type
+        types: [bill-of-sale, proof-of-ownership, identity-document, order-copy]
+        trigger: filing-completed
+        scheduleRule: "Disposition authority of Library and Archives Canada for the supporting documents, to be verified"
+        sourceId: lac-act
+    terms:
+      # Section 105: five years from the day of issue, transfer or renewal.
+      - {entitlementClass: pleasure-craft-license, startsWith: [license-issue, ownership-transfer, license-renewal], term: P5Y, validity: {start: "2025-12-31"}, sourceId: sor-2025-272}
+    deadlines:
+      # Section 103: a craft may run without a transferred license until the 30th day after the
+      # transfer. The impact analysis statement reads it as 30 days to apply. It bars nothing.
+      - {filingType: ownership-transfer, within: P30D, validity: {start: "2025-12-31"}, lateFilingBarred: false, sourceId: sor-2025-272}
+      # Section 104: 30 days after a change of name or address.
+      - {filingType: particulars-change, within: P30D, validity: {start: "2025-12-31"}, lateFilingBarred: false, sourceId: sor-2025-272}
+    scheduledExpiries:
+      # Section 106: licenses issued before 29 April 2010 end on fixed dates. The start of the
+      # first period is 1962, the year licenses began according to the impact analysis statement.
+      - {entitlementClass: pleasure-craft-license, issuedWithin: {start: "1962-01-01", end: "1975-01-01"}, endsOn: "2026-03-31", sourceId: sor-2025-272}
+      - {entitlementClass: pleasure-craft-license, issuedWithin: {start: "1975-01-01", end: "1986-01-01"}, endsOn: "2026-12-31", sourceId: sor-2025-272}
+      - {entitlementClass: pleasure-craft-license, issuedWithin: {start: "1986-01-01", end: "1996-01-01"}, endsOn: "2027-12-31", sourceId: sor-2025-272}
+      - {entitlementClass: pleasure-craft-license, issuedWithin: {start: "1996-01-01", end: "2000-01-01"}, endsOn: "2028-12-31", sourceId: sor-2025-272}
+      - {entitlementClass: pleasure-craft-license, issuedWithin: {start: "2000-01-01", end: "2006-01-01"}, endsOn: "2029-12-31", sourceId: sor-2025-272}
+      - {entitlementClass: pleasure-craft-license, issuedWithin: {start: "2006-01-01", end: "2010-04-29"}, endsOn: "2030-12-31", sourceId: sor-2025-272}

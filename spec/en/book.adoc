@@ -4,4 +4,24 @@
 
 include::index.adoc[leveloffset=+1]
 
+include::profiles.adoc[leveloffset=+1]
+
+include::filings.adoc[leveloffset=+1]
+
+include::history.adoc[leveloffset=+1]
+
+include::assets-rights.adoc[leveloffset=+1]
+
+include::visibility.adoc[leveloffset=+1]
+
+include::search-extracts.adoc[leveloffset=+1]
+
+include::retention.adoc[leveloffset=+1]
+
+include::conformance.adoc[leveloffset=+1]
+
+include::alignment.adoc[leveloffset=+1]
+
+include::questions-for-counsel.adoc[leveloffset=+1]
+
 include::glossary.adoc[leveloffset=+1]

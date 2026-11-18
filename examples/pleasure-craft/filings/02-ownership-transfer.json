@@ -1,0 +1,99 @@
+{
+  "id": "019a1b2c-3d4e-7f05-8a05-000000000502",
+  "createdAt": "2026-06-25T15:00:00Z",
+  "updatedAt": "2026-06-26T15:00:00Z",
+  "registerCode": "pleasure-craft-licenses",
+  "filingType": "ownership-transfer",
+  "category": "change",
+  "sequence": 2,
+  "submittedAt": "2026-06-25T15:00:00Z",
+  "effectiveAt": "2026-06-10T16:00:00Z",
+  "completedAt": "2026-06-26T15:00:00Z",
+  "processingStatus": "completed",
+  "paymentStatus": "paid",
+  "reviewStatus": "approved",
+  "actorId": "acct-3e90b5",
+  "onBehalfOfPartyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+  "authority": {
+    "kind": "own-behalf"
+  },
+  "parties": [
+    {
+      "partyId": "019a1b2c-3d4e-7f01-8a01-000000000101",
+      "role": "owner"
+    },
+    {
+      "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+      "role": "new-owner"
+    }
+  ],
+  "transferCause": "sale",
+  "deadlineStatus": "met",
+  "decisionIds": [
+    "019a1b2c-3d4e-7f06-8a06-000000000602"
+  ],
+  "evidence": [
+    {
+      "evidenceType": "bill-of-sale",
+      "documentId": "019a1b2c-3d4e-7f07-8a07-000000000703",
+      "digest": "0baada590e467f9994feb4d532b241c7e6532578ca1c6bf476a2d03b67643653",
+      "retentionClass": "license-evidence"
+    }
+  ],
+  "changes": {
+    "ends": [
+      {
+        "kind": "owner-group",
+        "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301"
+      },
+      {
+        "kind": "entitlement",
+        "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+      }
+    ],
+    "opens": {
+      "ownerGroups": [
+        {
+          "id": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "assetId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "tenancy": "sole",
+          "interest": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "members": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102"
+            }
+          ]
+        }
+      ],
+      "entitlements": [
+        {
+          "id": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "entitlementClass": "pleasure-craft-license",
+          "number": {
+            "scheme": "pleasure-craft-license-number",
+            "value": "EX 000001",
+            "searchKey": "EX000001"
+          },
+          "validity": {
+            "start": "2026-06-10",
+            "end": "2031-06-10"
+          },
+          "lifecycleState": "active",
+          "parties": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+              "role": "holder"
+            }
+          ],
+          "assetIds": [
+            "019a1b2c-3d4e-7f02-8a02-000000000201"
+          ]
+        }
+      ]
+    }
+  },
+  "previousCommitment": "11f2e812169c94d599bdf6cc3408f293d5c4ed8379c476ae5d1fe6a5a9a32e2d"
+}

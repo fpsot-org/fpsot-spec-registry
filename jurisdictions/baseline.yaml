@@ -1,12 +1,90 @@
 # Comparison data. The format is defined by fpsot-spec-doc (model/jurisdiction.yaml).
-# This example row compares requirement TPL-001. Replace it with the rows of this specification.
-# Add one file per jurisdiction, such as ca.yaml or ca/qc.yaml, only when a source exists.
+# The international column draws on international standards and on European Union case law,
+# which bind no Canadian body. ISO 19152 is paywalled and was read only through a draft, so its
+# rows are to be verified. This file is informational and not legal advice.
 topics:
-  keywords: {en: Requirement keywords, fr: Mots clés des exigences}
+  filings: {en: Filings, fr: Dépôts}
+  history: {en: Derived state and history, fr: État dérivé et historique}
+  legal-effect: {en: Legal effect and publicity, fr: Effet juridique et publicité}
+  rights: {en: "Assets, rights and encumbrances", fr: "Biens, droits et charges"}
+  visibility: {en: Visibility and access, fr: Visibilité et accès}
+  retention: {en: Retention and destruction, fr: Conservation et destruction}
 rows:
-  - id: TPL-001
-    topic: keywords
-    requirement: {en: Use the BCP 14 keywords., fr: Utiliser les mots clés du BCP 14.}
-    international: {en: "BCP 14 defines MUST, SHOULD and MAY. Only the capital forms carry that meaning.", fr: "Le BCP 14 définit MUST, SHOULD et MAY. Seules les majuscules ont ce sens."}
-    international_source: {title: "RFC 8174, Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words (BCP 14)", version: "BCP 14", date: "2017-05", url: "https://www.rfc-editor.org/info/rfc8174", archive: "https://web.archive.org/web/20261103005743/https://www.rfc-editor.org/info/rfc8174/"}
-    fpsot: {en: "Keywords in capitals, with a fixed French mapping.", fr: "Mots clés en majuscules, avec une correspondance française fixe."}
+  - id: REG-011
+    topic: legal-effect
+    requirement: {en: "Declare the legal effect of each register: administrative identification, notice or opposability, or title.", fr: "Déclarer l’effet juridique de chaque registre : identification administrative, avis ou opposabilité, ou titre."}
+    international: {en: "The land administration model separates rights, restrictions and responsibilities from the source documents behind them. It leaves their legal effect to national law. The text is to be verified.", fr: "Le modèle d’administration foncière distingue les droits, les restrictions et les responsabilités des documents sources qui les fondent. Il laisse leur effet juridique au droit national. Le texte est à vérifier."}
+    international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
+    fpsot: {en: "Three values, set per register in the profile with a source. No profile of this release declares title.", fr: "Trois valeurs, fixées pour chaque registre dans le profil avec une source. Aucun profil de cette version ne déclare le titre."}
+  - id: REG-012
+    topic: legal-effect
+    requirement: {en: "Declare the publicity regime of each register, and make every view agree with it.", fr: "Déclarer le régime de publicité de chaque registre, et y accorder chaque vue."}
+    international: {en: "The Court of Justice of the European Union held in 2022 that general public access to beneficial owner data went too far. The judgment itself was not read.", fr: "La Cour de justice de l’Union européenne a jugé en 2022 que l’accès général du public aux données des bénéficiaires effectifs allait trop loin. L’arrêt lui-même n’a pas été lu."}
+    international_source: {title: "CJEU: No Unrestricted Access to Data of Beneficial Owners, eucrim, secondary source", date: "2022-11-22", url: "https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/", archive: "https://web.archive.org/web/20260517174819/https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/"}
+    fpsot: {en: "Four regimes as data: public, public with exceptions, gated and closed. A closed register shows no field in public.", fr: "Quatre régimes sous forme de données : public, public avec exceptions, restreint et fermé. Un registre fermé ne montre aucun champ au public."}
+  - id: REG-022
+    topic: filings
+    requirement: {en: "Never change a filing once received. A change in the facts is a new filing.", fr: "Ne jamais changer un dépôt une fois reçu. Un changement des faits est un nouveau dépôt."}
+    international: {en: "The beneficial ownership standard publishes statements that never change, and builds records from them.", fr: "La norme sur la propriété effective publie des déclarations qui ne changent jamais, et en tire des enregistrements."}
+    international_source: {title: "Beneficial Ownership Data Standard, schema reference", version: "0.4", url: "https://standard.openownership.org/en/0.4.0/standard/reference.html", archive: "https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html"}
+    fpsot: {en: "Immutable filings, sealed and chained by sequence and previous commitment. Corrections and orders are filings.", fr: "Dépôts immuables, cachetés et enchaînés par numéro d’ordre et condensé salé précédent. Les corrections et les ordonnances sont des dépôts."}
+  - id: REG-042
+    topic: history
+    requirement: {en: "Answer each query as of a valid instant, as recorded at a record instant.", fr: "Répondre à chaque requête à un instant de validité, tel qu’enregistré à un autre instant."}
+    international: {en: "The 2024 edition of the land administration model adds a real-world lifespan beside the system lifespan. The final text is to be verified.", fr: "L’édition 2024 du modèle d’administration foncière ajoute une durée de vie réelle à côté de la durée de vie dans le système. Le texte final est à vérifier."}
+    international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
+    fpsot: {en: "Bitemporal snapshots rebuilt by replaying the filings, with the filing that opened and ended each row.", fr: "Instantanés bitemporels reconstruits par le rejeu des dépôts, avec le dépôt qui a ouvert et fermé chaque ligne."}
+  - id: REG-058
+    topic: rights
+    requirement: {en: "Keep the term of each entitlement class in the profile, and count each validity from the effective date.", fr: "Garder la durée de chaque classe de droit dans le profil, et compter chaque validité depuis la date d’effet."}
+    international: {en: "A verifiable credential states its own validity with a start and an end, whatever law sets them.", fr: "Une attestation vérifiable indique sa propre validité par un début et une fin, quelle que soit la loi qui les fixe."}
+    international_source: {title: "Verifiable Credentials Data Model v2.0, W3C Recommendation", version: "2.0", date: "2025-05-15", url: "https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/", archive: "https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/"}
+    fpsot: {en: "Terms and fixed end dates are dated profile data. The pack holds none of them.", fr: "Les durées et les dates de fin fixes sont des données datées du profil. Le module n’en contient aucune."}
+  - id: REG-059
+    topic: rights
+    requirement: {en: "Keep liens, seizures, stop orders and flags as encumbrances, with their own filings.", fr: "Tenir les privilèges, les saisies, les interdictions et les signalements comme des charges, avec leurs propres dépôts."}
+    international: {en: "The land administration model treats restrictions as a kind of right, beside rights and responsibilities. The text is to be verified.", fr: "Le modèle d’administration foncière traite les restrictions comme une sorte de droit, à côté des droits et des responsabilités. Le texte est à vérifier."}
+    international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
+    fpsot: {en: "An optional family in the core, a SHOULD.", fr: "Une famille facultative du moteur, une recommandation."}
+  - id: REG-060
+    topic: rights
+    requirement: {en: "Declare another register that holds rights over the assets, and never copy its rights.", fr: "Déclarer un autre registre qui contient des droits sur les biens, et ne jamais copier ses droits."}
+    international: {en: "The land administration model links each right to its source, and sets no rule on rights kept in another register. The text is to be verified.", fr: "Le modèle d’administration foncière rattache chaque droit à sa source, et ne fixe aucune règle sur les droits tenus dans un autre registre. Le texte est à vérifier."}
+    international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
+    fpsot: {en: "The profile names the other register, its kinds of rights and its search keys.", fr: "Le profil nomme l’autre registre, ses sortes de droits et ses clés de recherche."}
+  - id: REG-071
+    topic: visibility
+    requirement: {en: "Let the visibility of a field depend on another field of the same record.", fr: "Permettre que la visibilité d’un champ dépende d’un autre champ du même enregistrement."}
+    international: {en: "The beneficial ownership standard lets a publisher mark a subject as exempt from disclosure.", fr: "La norme sur la propriété effective permet à l’éditeur de marquer un sujet comme exempté de divulgation."}
+    international_source: {title: "Beneficial Ownership Data Standard, schema reference", version: "0.4", url: "https://standard.openownership.org/en/0.4.0/standard/reference.html", archive: "https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html"}
+    fpsot: {en: "Conditional policies with a class while the condition holds and another while it does not.", fr: "Des politiques conditionnelles, avec une catégorie quand la condition est remplie et une autre sinon."}
+  - id: REG-072
+    topic: visibility
+    requirement: {en: "Keep opposability as its own flag on each field, apart from visibility.", fr: "Garder l’opposabilité comme marque propre à chaque champ, à part de la visibilité."}
+    international: {en: "The land administration model leaves the legal effect of a right to national law. The text is to be verified.", fr: "Le modèle d’administration foncière laisse l’effet juridique d’un droit au droit national. Le texte est à vérifier."}
+    international_source: {title: "ISO 19152-1:2024, Land Administration Domain Model, Part 1: Generic conceptual model", version: "2024", url: "https://www.iso.org/standard/81263.html", archive: "https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html"}
+    fpsot: {en: "Two flags per field, set by the profile, never derived from each other.", fr: "Deux marques par champ, fixées par le profil, jamais dérivées l’une de l’autre."}
+  - id: REG-090
+    topic: retention
+    requirement: {en: "Give each filing type and each evidence type a retention class that names its schedule rule.", fr: "Donner à chaque type de dépôt et de pièce une catégorie de conservation qui nomme sa règle de calendrier."}
+    international: {en: "The GovStack registry block keeps the logical record unless a law requires deletion, and leaves retention periods to the adopter.", fr: "Le bloc de registre de GovStack garde l’enregistrement logique sauf si une loi exige la suppression, et laisse les durées de conservation à l’adoptant."}
+    international_source: {title: "Digital Registries Building Block, cross-functional requirements, GovStack", version: "3.0-alpha", date: "2026-06", url: "https://registries.govstack.global/5-cross-cutting-requirements.md", archive: "https://web.archive.org/web/20260715201050/https://registries.govstack.global/5-cross-cutting-requirements.md"}
+    fpsot: {en: "Retention classes as profile data, apart from the retention of audit events.", fr: "Des catégories de conservation comme données du profil, à part de la conservation des événements d’audit."}
+  - id: REG-092
+    topic: retention
+    requirement: {en: "Hold only references to evidence in a filing, each with the hash of the document.", fr: "Ne garder dans un dépôt que des renvois aux pièces, chacun avec le condensé du document."}
+    international: {en: "A verifiable credential may point to the evidence behind it instead of holding it.", fr: "Une attestation vérifiable peut renvoyer à la preuve qui la fonde au lieu de la contenir."}
+    international_source: {title: "Verifiable Credentials Data Model v2.0, W3C Recommendation", version: "2.0", date: "2025-05-15", url: "https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/", archive: "https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/"}
+    fpsot: {en: "References with a SHA-256 hash and a retention class. Evidence can go while the filing stays whole.", fr: "Des renvois avec un condensé SHA-256 et une catégorie de conservation. Une pièce peut disparaître sans toucher au dépôt."}
+  - id: REG-076
+    topic: visibility
+    requirement: {en: "Record each read of personal information as an audit event, with the access policy as its purpose.", fr: "Consigner chaque lecture de renseignements personnels comme événement d’audit, avec la politique d’accès comme fin."}
+    international: {en: "The GovStack registry block requires logging every read of personal data, and letting the data owner see who read it.", fr: "Le bloc de registre de GovStack exige de journaliser chaque lecture de données personnelles, et de laisser la personne concernée voir qui les a lues."}
+    international_source: {title: "Digital Registries Building Block, functional requirements, GovStack", version: "3.0-alpha", date: "2026-06", url: "https://registries.govstack.global/6-functional-requirements.md", archive: "https://web.archive.org/web/20260715201724/https://registries.govstack.global/6-functional-requirements.md"}
+    fpsot: {en: "A MUST for the audit event, and a SHOULD for the list of reads that a data subject can obtain.", fr: "Une obligation pour l’événement d’audit, et une recommandation pour la liste des lectures qu’une personne concernée peut obtenir."}
+  - id: REG-093
+    topic: retention
+    requirement: {en: "Destroy a filing only through a destruction filing that deletes its content and salt and leaves a tombstone.", fr: "Ne détruire un dépôt que par un dépôt de destruction qui supprime son contenu et son sel et laisse un témoin."}
+    international: {en: "Since 3.0-alpha, the GovStack registry block requires keeping the logical record on deletion, unless a law requires hard deletion.", fr: "Depuis la version 3.0-alpha, le bloc de registre de GovStack exige de garder l’enregistrement logique lors d’une suppression, sauf si une loi exige une suppression physique."}
+    international_source: {title: "Digital Registries Building Block, cross-functional requirements, GovStack", version: "3.0-alpha", date: "2026-06", url: "https://registries.govstack.global/5-cross-cutting-requirements.md", archive: "https://web.archive.org/web/20260715201050/https://registries.govstack.global/5-cross-cutting-requirements.md"}
+    fpsot: {en: "A destruction filing with basis, authority and legal hold check. The light chain and the log still verify.", fr: "Un dépôt de destruction avec base juridique, autorité et vérification de la préservation de la preuve. La chaîne légère et le journal se vérifient encore."}

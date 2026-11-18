@@ -1,0 +1,33 @@
+# FPSOT registry specification
+
+> What software must record and prove about each register of assets, ownership and entitlements that a law establishes, whatever the domain: immutable filings with three dates, three statuses, the filer's authority and a light chain sealed under the signed records specification; state derived by replaying filings, as of one instant and as recorded at another; assets, owner groups, entitlements and encumbrances; field visibility and opposability as separate data; declared search modes and sealed extracts; retention classes and lawful destruction with tombstones; and the law of each jurisdiction kept in versioned profiles.
+
+## Specification
+
+- [Overview](spec/en/index.adoc): scope, conformance classes, legal status, owners of the parts and conformance; REG-001 to REG-006.
+- [Jurisdiction profiles](spec/en/profiles.adoc): REG-010 to REG-016.
+- [Filings](spec/en/filings.adoc): REG-020 to REG-033.
+- [Derived state and history](spec/en/history.adoc): REG-040 to REG-046.
+- [Assets, ownership, entitlements and encumbrances](spec/en/assets-rights.adoc): REG-050 to REG-061.
+- [Visibility, opposability and access](spec/en/visibility.adoc): REG-070 to REG-077.
+- [Search, extracts and credentials](spec/en/search-extracts.adoc): REG-080 to REG-087.
+- [Retention and destruction](spec/en/retention.adoc): REG-090 to REG-096.
+- [Packs, events and conformance](spec/en/conformance.adoc): REG-100 to REG-108.
+- [Alignment with other standards](spec/en/alignment.adoc): informative.
+- [Questions for counsel](spec/en/questions-for-counsel.adoc): informative, not legal advice.
+
+## Model, packs, profiles and examples
+
+- [LinkML model](model/registry.yaml) and [pleasure craft pack schema](model/pleasure-craft.yaml)
+- [Pleasure craft pack](packs/pleasure-craft.yaml)
+- [Profiles](profiles/)
+- [Event schemas](registry/events/)
+- [Filings](examples/pleasure-craft/filings/), [light chain and tombstone](examples/pleasure-craft/chain.json) and [expected snapshots](examples/pleasure-craft/snapshots.json)
+- [Extracts and search record](examples/pleasure-craft/views.json)
+- [Scenario](examples/features/en/pleasure-craft-license.feature)
+- [How-to guide: put a register under the specification](docs/modules/en/pages/index.adoc)
+
+## Optional
+
+- [Agent skill](skill/SKILL.md)
+- [Français](spec/fr/index.adoc)

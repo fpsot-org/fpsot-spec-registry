@@ -1,0 +1,107 @@
+= Search, extracts and credentials
+include::_fpsot-terms.adoc[]
+
+Search is a regulated choice in a register.
+Québec opened the search of its enterprise register by the name of a person on a set date.
+The Québec register of movable rights charges fees by search criterion.
+A missed registration under an exact or a similar match can change who has priority.
+This page therefore treats each search mode as data of the profile, and each result as a record.
+
+An extract or a certificate is what a third party relies on.
+It must say which register, which subject, which instant and which last filing it reflects.
+It must carry a seal under the signed records specification, which already covers register extracts.
+
+== Search modes
+
+[[REG-080]]
+*REG-080.* Each register MUST declare its search modes in its profile.
+Each mode MUST give its keys, its matching rule and the views that may use it.
+A mode that the law opens on a date MUST give that date, under REG-014.
+A register MUST NOT offer a search that its profile does not declare.
+
+[[REG-081]]
+*REG-081.* The matching rule of a mode MUST be `exact`, `normalized` or `similar`.
+A `normalized` mode MUST compare search keys under the normalization steps of the scheme, under REG-051.
+A `similar` mode MUST state its algorithm and its threshold.
+
+Two registers that search one name with two algorithms can give two answers.
+A stated algorithm lets a court see why a search missed a registration.
+
+== Search records
+
+[[REG-082]]
+*REG-082.* A register MUST keep a record of each search, in the class `SearchRecord` of `model/registry.yaml`.
+The record MUST give the mode, the keys, the instant and the highest sequence that the result reflects.
+A register that certifies a result MUST issue it as an extract under REG-084.
+The record MUST name that extract.
+
+The personal property register of British Columbia keeps its search results as records of their own.
+The last filing in the record tells a late filing apart from a search that missed one.
+
+[[REG-083]]
+*REG-083.* A search on personal information MUST use `POST` on the `searches` sub-resource of its collection, under API-049.
+Each result MUST respect the visibility of REG-070 for the view of the caller.
+
+A name or an address in a query string ends up in server logs and in browser history.
+
+== Extracts and certificates
+
+[[REG-084]]
+*REG-084.* An extract or a certificate MUST be a record of the class `Extract` of `model/registry.yaml`.
+It MUST state the register, the subject, the valid instant, the record instant and the last filing that it reflects.
+It MUST also state the view that it applies, the access policy behind it and each omission with its reason.
+Each value MUST equal the replay of REG-042 for those instants.
+The register MUST seal and log each extract under the signed records specification, at the seal profile of its register.
+
+The fixture holds an extract for an enforcement officer and a public view of the closed register.
+The check of the fixture rebuilds each value of the extract from the filings.
+
+[[REG-085]]
+*REG-085.* The layout of an extract SHOULD be data of the profile, apart from the record of REG-084.
+The legal weight of an extract MUST NOT appear in a rule.
+A profile MAY describe it in a note.
+
+The EU Company Certificate of link:https://eur-lex.europa.eu/eli/dir/2025/25/oj/eng[Directive 2025/25 of the European Union] is a target worth naming.
+It must apply from 31 July 2028, and other member states must accept it without an apostille.
+Whether a Québec statement of information or a French Kbis proves anything in law is a question for counsel.
+
+== Verifiable credentials
+
+[[REG-086]]
+*REG-086.* A register SHOULD also issue each entitlement as a verifiable credential under the link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0].
+The status of the credential SHOULD follow the lifecycle filings, through a link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0].
+A register MAY issue an extract as a verifiable credential too.
+This version sets no wallet protocol.
+
+Wallets are out of scope in the first version of the identity specification, and in this version too.
+A credential with `validFrom`, `validUntil` and a status list works with the wallets that may come later.
+Whether a closed register may issue a public credential is a question for counsel.
+
+== Business registers
+
+[[REG-087]]
+*REG-087.* A domain pack for business registers SHOULD export the link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4].
+It SHOULD also map its fields to the link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] of SEMIC.
+The party stays a `Party` of DMO-040.
+
+The Core Business Vocabulary gives a legal name, an identifier, an address, a type and a status, but no history.
+The filings of this specification supply that history.
+BODS splits statements from records, which mirrors the split between filings and derived state.
+
+== References
+
+=== Informative
+
+* link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Archived copy]
+* link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261014182736/https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Archived copy]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Archived copy]
+* link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary], SEMIC, European Commission, version 2.2.0. link:https://web.archive.org/web/20250601165122/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Archived copy]
+* link:https://eur-lex.europa.eu/eli/dir/2025/25/oj/eng[Directive (EU) 2025/25 as regards further expanding and upgrading the use of digital tools and processes in company law], European Union, 2025. link:https://web.archive.org/web/20260830153003/https://eur-lex.europa.eu/eli/dir/2025/25/oj/eng[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

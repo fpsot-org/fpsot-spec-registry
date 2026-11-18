@@ -1,0 +1,117 @@
+= Derived state and history
+include::_fpsot-terms.adoc[]
+
+The state of a register is what its filings say, taken in order.
+Who owns a craft today, and which license it holds, follow from the filings that the register completed.
+A register that stores that state apart from its filings can drift from them.
+Nobody then knows which one is right.
+
+Two clocks matter.
+The valid time tells when a fact holds in the world, such as the day of a sale.
+The record time tells when the register knew it.
+A retroactive correction changes the past as the register knows it today.
+The register must still show what it knew before.
+The decisions specification keeps the same two clocks for rule versions, under DEC-035.
+
+== Replay
+
+[[REG-040]]
+*REG-040.* Each view of register state MUST equal a replay of the completed filings of the register.
+The replay MUST apply the stated changes of REG-029 in order of effective instant, then of sequence.
+For each record time at or after a correction, it MUST apply the correction in place of the corrected filing.
+A filing that has no `completed` status MUST NOT change the replay.
+
+The fixture `examples/pleasure-craft/snapshots.json` holds six snapshots, and `examples/check-examples.py` rebuilds each one from the filings.
+A register that passes this test can rebuild itself after any failure of its stores.
+
+== History rows
+
+[[REG-041]]
+*REG-041.* Each row of derived state MUST be one version of an entity, with its history slots.
+
+* `createdByFiling` and `validFrom`: the filing that opened the version and its effective instant.
+* `endedByFiling` and `validTo`: the filing that ended the version and its effective instant, once one has.
+
+An ended version MUST stay retrievable, under DMO-051.
+The changes inside a filing MUST NOT hold history slots, which only the replay adds.
+
+A row that names its filings answers the question that every registry dispute asks.
+The question is which legal act made this fact true, and which one ended it.
+The link:https://github.com/bcgov/ppr[personal property register] of British Columbia ties each change to the registration that made it.
+
+== Bitemporal queries
+
+[[REG-042]]
+*REG-042.* A register MUST answer each query as of a valid instant V, as recorded at a record instant T.
+The answer MUST count only the filings completed at or before T.
+It MUST hold the rows whose valid time covers V, and the highest sequence among the filings that count.
+The answer MUST follow the class `StateSnapshot` of `model/registry.yaml`.
+
+A court may ask who held a license on the day of an accident.
+It may ask for that answer as the register showed it on the day of a search.
+The fixture asks about 20 June 2026, as recorded on 30 June.
+The answer shows the craft as a destroyed row.
+The same day recorded on 10 August shows the corrected hull serial number.
+
+== Stored views
+
+[[REG-043]]
+*REG-043.* A register MAY keep stored views of its state, such as tables or search indexes, to answer queries fast.
+A stored view MUST be a projection that the register can rebuild from the filings at any time.
+When a stored view differs from the replay, the replay wins.
+The register MUST then treat the difference as an incident.
+
+A projection is a cache, not a second source of truth.
+The incident record tells the operator that some write bypassed the filings, against REG-020.
+
+== No deletion outside a filing
+
+[[REG-044]]
+*REG-044.* A register MUST NOT delete a filing, a row or a version except through a destruction filing, under REG-093.
+It MUST NOT delete a record only because its period has ended, under DMO-052.
+
+Since version 3.0-alpha, the link:https://registries.govstack.global/5-cross-cutting-requirements.md[GovStack Digital Registries] specification requires the same.
+A register keeps the logical record on deletion unless a law requires hard deletion.
+The destruction filing is the form that a lawful hard deletion takes here.
+
+== Time-driven and act-driven states
+
+[[REG-045]]
+*REG-045.* The lifecycle of each entitlement class MUST be data of its domain pack, with its states and transitions.
+Each transition MUST name the filing type or the scheduled event that causes it.
+A time-driven state, such as `expired` or `lapsed`, MUST follow from the dates at query time.
+It MUST NOT come from a filing.
+An act-driven state, such as `suspended`, `revoked`, `cancelled` or `surrendered`, MUST come only from a filing.
+
+Registers of legal entity identifiers tell a lapsed record from a retired one.
+A lapsed record is one that nobody renewed in time.
+In the fixture, the renewed license reads `expired` on 1 June 2036 with no filing after its renewal.
+A register that wrote expiries as filings would need a batch job whose failure would change the law.
+
+== Migration and scheduled expiries
+
+[[REG-046]]
+*REG-046.* A register that takes over records from a legacy system MUST bring each one in through a migration filing.
+The migration filing MUST name the legacy system and the record that it comes from.
+An end date that a law sets for a whole group of entitlements MUST be profile data, under REG-014.
+A migration filing MUST open each such entitlement with the end date that the profile gives.
+
+Section 106 of the amended Small Vessel Regulations ends licenses issued before 29 April 2010 on fixed dates.
+The dates run in six steps, from 31 March 2026 to 31 December 2030.
+The `ca-federal` profile holds that table as `scheduledExpiries`.
+A migration filing brings each legacy license in with its end date, and the license then expires with no filing.
+
+== References
+
+=== Informative
+
+* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province of British Columbia, source repository. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Archived copy]
+* link:https://registries.govstack.global/5-cross-cutting-requirements.md[Digital Registries Building Block, cross-functional requirements], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260715201050/https://registries.govstack.global/5-cross-cutting-requirements.md[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

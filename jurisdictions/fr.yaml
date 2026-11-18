@@ -1,0 +1,22 @@
+# Comparison data. The format is defined by fpsot-spec-doc (model/jurisdiction.yaml).
+# Légifrance refused automated readers, so no French code was read. The rows rest on the page of
+# the CNIL on the vehicle register, read on 2026-11-18. France has no normative profile in this
+# release. This file is informational and not legal advice.
+code: FR
+name: {en: France, fr: France}
+rows:
+  - id: REG-059
+    text: {en: "The vehicle register holds, for each vehicle, objections to a transfer, declarations of seizure, pledges and suspensions.", fr: "Le système d’immatriculation des véhicules contient, pour chaque véhicule, les oppositions au transfert, les déclarations valant saisie, les gages et les suspensions."}
+    status: same
+    source: {title: "CNIL, SIV : système d’immatriculation des véhicules", url: "https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules", archive: "https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules"}
+    last_checked: "2026-11-18"
+  - id: REG-076
+    text: {en: "The system traces every action of its users, and access to those traces is regulated.", fr: "Le système trace toutes les actions de ses utilisateurs, et l’accès à ces traces est réglementé."}
+    status: same
+    source: {title: "CNIL, SIV : système d’immatriculation des véhicules", url: "https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules", archive: "https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules"}
+    last_checked: "2026-11-18"
+  - id: REG-090
+    text: {en: "Data on the holder and the vehicle stay five years from the physical destruction of the vehicle.", fr: "Les données sur le titulaire et le véhicule sont conservées cinq ans à compter de la destruction physique du véhicule."}
+    status: same
+    source: {title: "CNIL, SIV : système d’immatriculation des véhicules", url: "https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules", archive: "https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules"}
+    last_checked: "2026-11-18"

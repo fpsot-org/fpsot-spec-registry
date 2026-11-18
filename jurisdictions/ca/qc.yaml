@@ -1,0 +1,32 @@
+# Comparison data. The format is defined by fpsot-spec-doc (model/jurisdiction.yaml).
+# LégisQuébec refused automated readers, so no statute was read. The rows rest on government
+# pages and documents of the enterprise registrar, the RDPRM and the SAAQ, which were read.
+# This file is informational and not legal advice.
+code: CA-QC
+name: {en: Québec, fr: Québec}
+rows:
+  - id: REG-072
+    text: {en: "The name and the domicile of an ultimate beneficiary are opposable to third parties. Other names are not.", fr: "Le nom et le domicile d’un bénéficiaire ultime sont opposables aux tiers. Les autres noms ne le sont pas."}
+    status: same
+    source: {title: "Gouvernement du Québec, Renseignements sur les bénéficiaires ultimes", url: "https://www.quebec.ca/entreprises-et-travailleurs-autonomes/demarrer-entreprise/immatriculer-constituer-entreprise/nouvelles-obligations-transparence/declarer-beneficiaire-ultime/renseignements", archive: "https://web.archive.org/web/20240229024335/https://www.quebec.ca/entreprises-et-travailleurs-autonomes/demarrer-entreprise/immatriculer-constituer-entreprise/nouvelles-obligations-transparence/declarer-beneficiaire-ultime/renseignements"}
+    last_checked: "2026-11-17"
+  - id: REG-071
+    text: {en: "The date of birth of an ultimate beneficiary is never public. The home address is public only when no professional address is on file.", fr: "La date de naissance d’un bénéficiaire ultime n’est jamais publique. L’adresse personnelle n’est publique qu’en l’absence d’adresse professionnelle."}
+    status: same
+    source: {title: "Registraire des entreprises, Tableau synthèse de la loi visant principalement à améliorer la transparence des entreprises", url: "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/emploi-solidarite-sociale/registraire_entreprises/TABSYN_loi-ameliorant-transparence-entreprises_REQ.pdf", archive: "https://web.archive.org/web/20260706215738/https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/emploi-solidarite-sociale/registraire_entreprises/TABSYN_loi-ameliorant-transparence-entreprises_REQ.pdf"}
+    last_checked: "2026-11-17"
+  - id: REG-092
+    text: {en: "The registrar destroys the copy of the identity document of a director once the declaration is on file.", fr: "Le registraire détruit la copie de la pièce d’identité d’un administrateur une fois la déclaration déposée."}
+    status: same
+    source: {title: "Registraire des entreprises, Tableau synthèse de la loi visant principalement à améliorer la transparence des entreprises", url: "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/emploi-solidarite-sociale/registraire_entreprises/TABSYN_loi-ameliorant-transparence-entreprises_REQ.pdf", archive: "https://web.archive.org/web/20260706215738/https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/emploi-solidarite-sociale/registraire_entreprises/TABSYN_loi-ameliorant-transparence-entreprises_REQ.pdf"}
+    last_checked: "2026-11-17"
+  - id: REG-060
+    text: {en: "Rights over vehicles live in a separate register, the RDPRM, which takes a search by vehicle identification number. A registered right is deemed known to everyone.", fr: "Les droits sur les véhicules se trouvent dans un registre distinct, le RDPRM, qui accepte une recherche par numéro d’identification du véhicule. Un droit inscrit est réputé connu de tous."}
+    status: same
+    source: {title: "Registre des droits personnels et réels mobiliers, Questions et réponses", url: "https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf", archive: "https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf"}
+    last_checked: "2026-11-17"
+  - id: REG-076
+    text: {en: "The SAAQ discloses vehicle data under listed articles of the Highway Safety Code and publishes a register of its disclosures. The articles are to be verified.", fr: "La SAAQ communique des données sur les véhicules selon des articles énumérés du Code de la sécurité routière et publie un registre de ses communications. Les articles sont à vérifier."}
+    status: stricter
+    source: {title: "Société de l’assurance automobile du Québec, Registre des communications de renseignements personnels", url: "https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf", archive: "https://web.archive.org/web/20260520071052/https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf"}
+    last_checked: "2026-11-17"

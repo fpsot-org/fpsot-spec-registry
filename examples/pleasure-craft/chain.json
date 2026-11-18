@@ -1,0 +1,61 @@
+{
+  "chainEntries": [
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 1,
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000501",
+      "commitment": "11f2e812169c94d599bdf6cc3408f293d5c4ed8379c476ae5d1fe6a5a9a32e2d"
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 2,
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000502",
+      "commitment": "55f6fb4989f25f18f4c2d27e59b042301e9268e93caf7bdf0c0a446220869525"
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 3,
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000503",
+      "commitment": "98c5492599a524fd426c3b462daff83835791ac6e480b024a66233d9338fe1fb"
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 4,
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000504",
+      "commitment": "9d5ca8ce7b514c0b0d9750d669159c1bbac9fdecf620a0f0aebe9d666f5db35d"
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 5,
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000505",
+      "commitment": "1bafeaa7b6b3b958acd64e75de32dad7850e75a5687078cb3018ec7d077f38c9"
+    }
+  ],
+  "tombstones": [
+    {
+      "filingId": "019a1b2c-3d4e-7f05-8a05-000000000501",
+      "registerCode": "pleasure-craft-licenses",
+      "sequence": 1,
+      "filingType": "license-issue",
+      "category": "change",
+      "effectiveAt": "2026-05-04T16:00:00Z",
+      "completedAt": "2026-05-04T16:00:00Z",
+      "commitment": "11f2e812169c94d599bdf6cc3408f293d5c4ed8379c476ae5d1fe6a5a9a32e2d",
+      "opened": [
+        {
+          "kind": "asset",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201"
+        },
+        {
+          "kind": "owner-group",
+          "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301"
+        },
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+        }
+      ],
+      "destroyedByFiling": "019a1b2c-3d4e-7f05-8a05-000000000504"
+    }
+  ]
+}

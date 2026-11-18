@@ -1,0 +1,98 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+# Domain pack of the FPSOT registry specification (REG-100), in the form of the class DomainPack
+# of model/registry.yaml. It holds the mechanics of a pleasure craft license register: asset
+# kinds, identifier schemes, filing types, the entitlement lifecycle, statuses, party roles and
+# visibility defaults. It holds no value of a law: terms, deadlines, publicity and retention come
+# from the jurisdiction profile (REG-015). The formats of the Canadian license number and hull
+# serial number were not read at the source, so formatVerified is false and no format is given.
+code: pleasure-craft
+version: 0.1.0
+title: {en: Pleasure craft pack, fr: Module des embarcations de plaisance}
+schema: model/pleasure-craft.yaml
+assetKinds:
+  - {code: pleasure-craft, schemaClass: PleasureCraft}
+identifierSchemes:
+  - code: hull-serial-number
+    title: {en: Hull serial number, fr: Numéro de série de la coque}
+    issuer: manufacturer
+    formatVerified: false
+    checkDigit: none
+    uniquenessScope: issuer-global
+    normalization: [upper-case, remove-spaces, remove-hyphens]
+  - code: pleasure-craft-license-number
+    title: {en: Pleasure craft license number, fr: Numéro de permis d’embarcation de plaisance}
+    issuer: register
+    formatVerified: false
+    checkDigit: none
+    uniquenessScope: register-forever
+    normalization: [upper-case, remove-spaces, remove-hyphens]
+filingTypes:
+  - code: license-issue
+    category: change
+    title: {en: Issue of a license, fr: Délivrance d’un permis}
+    mayOpen: [asset, owner-group, entitlement]
+    retroactive: false
+  - code: ownership-transfer
+    category: change
+    title: {en: Transfer of ownership and of the license, fr: Transfert de propriété et du permis}
+    mayOpen: [owner-group, entitlement]
+    mayEnd: [owner-group, entitlement]
+    transferCauses: [sale, death, court-order, operation-of-law]
+    retroactive: true
+  - code: license-renewal
+    category: change
+    title: {en: Renewal of a license, fr: Renouvellement d’un permis}
+    mayOpen: [entitlement]
+    mayEnd: [entitlement]
+    retroactive: false
+  - code: particulars-change
+    category: change
+    title: {en: Change of name or address, fr: Changement de nom ou d’adresse}
+    mayOpen: [entitlement]
+    mayEnd: [entitlement]
+    retroactive: true
+  - code: license-cancellation
+    category: change
+    title: {en: Cancellation of a license, fr: Annulation d’un permis}
+    mayOpen: [entitlement]
+    mayEnd: [entitlement]
+    retroactive: false
+  - code: license-migration
+    category: change
+    title: {en: Migration of a legacy license, fr: Migration d’un permis existant}
+    mayOpen: [asset, owner-group, entitlement]
+    retroactive: true
+  - code: filing-correction
+    category: correction
+    title: {en: Correction of a filing, fr: Correction d’un dépôt}
+    retroactive: true
+  - code: destruction-order
+    category: destruction
+    title: {en: Destruction under an order or a schedule, fr: Destruction en vertu d’une ordonnance ou d’un calendrier}
+    retroactive: false
+entitlementClasses:
+  - code: pleasure-craft-license
+    title: {en: Pleasure craft license, fr: Permis d’embarcation de plaisance}
+    numberScheme: pleasure-craft-license-number
+    actStates: [active, cancelled]
+    timeStates: [expired]
+    transitions:
+      - {from: active, to: active, filingType: ownership-transfer}
+      - {from: active, to: active, filingType: license-renewal}
+      - {from: expired, to: active, filingType: license-renewal}
+      - {from: active, to: active, filingType: particulars-change}
+      - {from: active, to: cancelled, filingType: license-cancellation}
+      - {from: active, to: expired, scheduledEvent: validity-ended}
+paymentStatuses: [not-required, pending, paid, exempt]
+reviewStatuses: [not-required, pending, approved, refused]
+partyRoles: [applicant, owner, new-owner, holder]
+evidenceTypes: [bill-of-sale, proof-of-ownership, identity-document, order-copy]
+linkTypes: [engine-fitted]
+fieldDefaults:
+  - {path: PleasureCraft.identifiers.value, visibility: agency, opposable: false, omissionReason: not-public-by-law}
+  - {path: PleasureCraft.propulsion, visibility: agency, opposable: false, omissionReason: not-public-by-law}
+  - {path: OwnerGroup.members.partyId, visibility: parties, opposable: false, omissionReason: not-public-by-law}
+  - {path: Entitlement.number.value, visibility: agency, opposable: false, omissionReason: not-public-by-law}
+  - {path: Entitlement.validity, visibility: agency, opposable: false, omissionReason: not-public-by-law}
+  - {path: Entitlement.parties.partyId, visibility: parties, opposable: false, omissionReason: not-public-by-law}
+  - {path: Filing.evidence.documentId, visibility: restricted, opposable: false, omissionReason: not-public-by-law}

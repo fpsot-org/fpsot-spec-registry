@@ -1,0 +1,65 @@
+{
+  "id": "019a1b2c-3d4e-7f05-8a05-000000000505",
+  "createdAt": "2031-05-20T14:00:00Z",
+  "updatedAt": "2031-05-20T16:00:00Z",
+  "registerCode": "pleasure-craft-licenses",
+  "filingType": "license-renewal",
+  "category": "change",
+  "sequence": 5,
+  "submittedAt": "2031-05-20T14:00:00Z",
+  "effectiveAt": "2031-05-20T16:00:00Z",
+  "completedAt": "2031-05-20T16:00:00Z",
+  "processingStatus": "completed",
+  "paymentStatus": "paid",
+  "reviewStatus": "not-required",
+  "actorId": "acct-3e90b5",
+  "onBehalfOfPartyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+  "authority": {
+    "kind": "own-behalf"
+  },
+  "parties": [
+    {
+      "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+      "role": "applicant"
+    }
+  ],
+  "decisionIds": [
+    "019a1b2c-3d4e-7f06-8a06-000000000605"
+  ],
+  "changes": {
+    "ends": [
+      {
+        "kind": "entitlement",
+        "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+      }
+    ],
+    "opens": {
+      "entitlements": [
+        {
+          "id": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "entitlementClass": "pleasure-craft-license",
+          "number": {
+            "scheme": "pleasure-craft-license-number",
+            "value": "EX 000001",
+            "searchKey": "EX000001"
+          },
+          "validity": {
+            "start": "2031-05-20",
+            "end": "2036-05-20"
+          },
+          "lifecycleState": "active",
+          "parties": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+              "role": "holder"
+            }
+          ],
+          "assetIds": [
+            "019a1b2c-3d4e-7f02-8a02-000000000201"
+          ]
+        }
+      ]
+    }
+  },
+  "previousCommitment": "9d5ca8ce7b514c0b0d9750d669159c1bbac9fdecf620a0f0aebe9d666f5db35d"
+}

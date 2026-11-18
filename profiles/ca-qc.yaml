@@ -1,0 +1,121 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+# Jurisdiction profile of the FPSOT registry specification (REG-010 to REG-016), in the form of
+# the class Profile of model/registry.yaml. Released apart from the core rules (REG-014).
+# Québec registers. This release declares two registers whose packs are planned, not published:
+# the enterprise register, to show conditional visibility and opposability apart from visibility,
+# and the road vehicle register, to show rights that live in another register. LégisQuébec
+# refused automated readers, so every statute here is to-be-verified. The government pages and
+# the RDPRM and SAAQ documents were read. Not legal advice.
+code: ca-qc
+version: 0.1.0
+title: {en: Québec profile, fr: Profil du Québec}
+jurisdiction: CA-QC
+sources:
+  - id: lple
+    title: "Loi sur la publicité légale des entreprises, RLRQ, c. P-44.1"
+    url: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-44.1"
+    archive: "https://web.archive.org/web/20251217042402/https://www.legisquebec.gouv.qc.ca/fr/document/lc/P-44.1"
+    verification: to-be-verified
+  - id: req-transparency
+    title: "Nouvelles obligations de transparence, Québec.ca"
+    url: "https://www.quebec.ca/entreprises-et-travailleurs-autonomes/demarrer-entreprise/immatriculer-constituer-entreprise/nouvelles-obligations-transparence"
+    archive: "https://web.archive.org/web/20260403220011/https://www.quebec.ca/entreprises-et-travailleurs-autonomes/demarrer-entreprise/immatriculer-constituer-entreprise/nouvelles-obligations-transparence"
+    verification: read
+  - id: req-beneficiary-information
+    title: "Renseignements sur les bénéficiaires ultimes, Québec.ca"
+    url: "https://www.quebec.ca/entreprises-et-travailleurs-autonomes/demarrer-entreprise/immatriculer-constituer-entreprise/nouvelles-obligations-transparence/declarer-beneficiaire-ultime/renseignements"
+    archive: "https://web.archive.org/web/20240229024335/https://www.quebec.ca/entreprises-et-travailleurs-autonomes/demarrer-entreprise/immatriculer-constituer-entreprise/nouvelles-obligations-transparence/declarer-beneficiaire-ultime/renseignements"
+    verification: read
+  - id: req-summary-table
+    title: "Tableau synthèse, Loi visant principalement à améliorer la transparence des entreprises, Registraire des entreprises"
+    url: "https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/emploi-solidarite-sociale/registraire_entreprises/TABSYN_loi-ameliorant-transparence-entreprises_REQ.pdf"
+    archive: "https://web.archive.org/web/20260706215738/https://cdn-contenu.quebec.ca/cdn-contenu/adm/min/emploi-solidarite-sociale/registraire_entreprises/TABSYN_loi-ameliorant-transparence-entreprises_REQ.pdf"
+    verification: read
+  - id: highway-safety-code
+    title: "Code de la sécurité routière, RLRQ, c. C-24.2"
+    url: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-24.2"
+    archive: "https://web.archive.org/web/20260216075116/https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-24.2"
+    verification: to-be-verified
+  - id: saaq-disclosure-register
+    title: "Registre des communications de renseignements personnels, SAAQ"
+    url: "https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf"
+    archive: "https://web.archive.org/web/20260520071052/https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf"
+    verification: read
+  - id: rdprm-questions
+    title: "Questions et réponses, Registre des droits personnels et réels mobiliers"
+    url: "https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf"
+    archive: "https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf"
+    verification: read
+  - id: civil-code
+    title: "Code civil du Québec, RLRQ, c. CCQ-1991"
+    url: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/CCQ-1991"
+    archive: "https://web.archive.org/web/20260310143204/https://www.legisquebec.gouv.qc.ca/fr/document/lc/ccq-1991"
+    verification: to-be-verified
+  - id: archives-act
+    title: "Loi sur les archives, RLRQ, c. A-21.1"
+    url: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/A-21.1"
+    archive: "https://web.archive.org/web/20260421034248/https://www.legisquebec.gouv.qc.ca/fr/document/lc/A-21.1"
+    verification: to-be-verified
+registers:
+  - code: enterprise-register
+    title: {en: Enterprise register, fr: Registre des entreprises}
+    pack: {code: business, status: planned}
+    legalInstruments: [lple]
+    # The government page says that the name and the domicile of an ultimate beneficiary are
+    # opposable to third parties, and that other names are not.
+    legalEffect: notice-opposability
+    legalEffectSources: [req-beneficiary-information, lple]
+    publicityRegime: public-with-exceptions
+    publicitySources: [req-transparency, req-summary-table]
+    sealProfile: seal-log-preserve
+    timeZone: America/Toronto
+    fieldPolicies:
+      - {path: UltimateBeneficiary.fullName, visibility: public, opposable: true, omissionReason: not-public-by-law, sourceId: req-beneficiary-information}
+      - {path: UltimateBeneficiary.otherNames, visibility: public, opposable: false, omissionReason: not-public-by-law, sourceId: req-beneficiary-information}
+      - {path: UltimateBeneficiary.birthDate, visibility: agency, opposable: false, omissionReason: not-public-by-law, sourceId: req-summary-table}
+      # The home address is public only when the beneficiary declares no professional address.
+      - path: UltimateBeneficiary.homeAddress
+        visibility: public
+        when: {field: UltimateBeneficiary.professionalAddress, test: absent}
+        otherwise: agency
+        opposable: true
+        omissionReason: withheld-on-application
+        sourceId: req-summary-table
+    searchModes:
+      # The government page dates the search by the name of a person from 31 July 2024.
+      - {code: by-person-name, keys: [person-name], matching: normalized, openTo: [public], validity: {start: "2024-07-31"}, sourceId: req-transparency}
+    retentionClasses:
+      - code: enterprise-filings
+        appliesTo: filing-type
+        types: [registration, annual-update, update-declaration, correction-declaration]
+        trigger: enterprise-struck-off
+        scheduleRule: "Calendrier de conservation of the registrar, to be verified"
+        sourceId: archives-act
+      # The summary table says that the copy of an identity document is destroyed once the
+      # declaration is filed.
+      - code: identity-copies
+        appliesTo: evidence-type
+        types: [identity-document]
+        period: P0D
+        trigger: filing-completed
+        scheduleRule: "Destruction of the identity copy once the declaration is filed"
+        sourceId: req-summary-table
+  - code: road-vehicle-register
+    title: {en: Road vehicle register, fr: Registre des véhicules routiers}
+    pack: {code: road-vehicle, status: planned}
+    legalInstruments: [highway-safety-code]
+    legalEffect: administrative-identification
+    legalEffectSources: [highway-safety-code]
+    # The SAAQ discloses under listed articles of the Highway Safety Code and publishes a register
+    # of those disclosures. The articles are to be verified.
+    publicityRegime: gated
+    publicitySources: [highway-safety-code, saaq-disclosure-register]
+    sealProfile: seal-log
+    timeZone: America/Toronto
+    # Rights over vehicles live in the RDPRM, searchable by the vehicle identification number.
+    externalRightsRegisters:
+      - code: rdprm
+        title: {en: Register of personal and movable real rights, fr: Registre des droits personnels et réels mobiliers}
+        rightsKinds: [personal-and-movable-real-rights]
+        searchKeys: [vehicle-identification-number]
+        sourceId: rdprm-questions

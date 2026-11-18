@@ -1,0 +1,124 @@
+{
+  "extracts": [
+    {
+      "id": "019a1b2c-3d4e-7f08-8a08-000000000801",
+      "createdAt": "2026-08-10T15:00:00Z",
+      "updatedAt": "2026-08-10T15:00:00Z",
+      "registerCode": "pleasure-craft-licenses",
+      "extractType": "certified-extract",
+      "subjects": [
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+        }
+      ],
+      "view": "agency",
+      "accessPolicy": "enforcement-officers",
+      "validAt": "2026-08-10T15:00:00Z",
+      "recordedAt": "2026-08-10T15:00:00Z",
+      "lastFilingSequence": 4,
+      "lastFilingId": "019a1b2c-3d4e-7f05-8a05-000000000504",
+      "fields": [
+        {
+          "path": "Entitlement.number.value",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "value": "EX 000001"
+        },
+        {
+          "path": "Entitlement.validity",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "value": {
+            "start": "2026-06-10",
+            "end": "2031-06-10"
+          }
+        },
+        {
+          "path": "Entitlement.parties.partyId",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "value": "019a1b2c-3d4e-7f01-8a01-000000000102"
+        },
+        {
+          "path": "OwnerGroup.members.partyId",
+          "entityId": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "value": "019a1b2c-3d4e-7f01-8a01-000000000102"
+        },
+        {
+          "path": "PleasureCraft.identifiers.value",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "value": "EXA 12354 B626"
+        }
+      ],
+      "omissions": [
+        {
+          "path": "Filing.evidence.documentId",
+          "reason": "not-public-by-law"
+        }
+      ],
+      "issuedAt": "2026-08-10T15:00:00Z"
+    },
+    {
+      "id": "019a1b2c-3d4e-7f08-8a08-000000000802",
+      "createdAt": "2026-08-10T15:00:00Z",
+      "updatedAt": "2026-08-10T15:00:00Z",
+      "registerCode": "pleasure-craft-licenses",
+      "extractType": "public-view",
+      "subjects": [
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401"
+        }
+      ],
+      "view": "public",
+      "validAt": "2026-08-10T15:00:00Z",
+      "recordedAt": "2026-08-10T15:00:00Z",
+      "lastFilingSequence": 4,
+      "lastFilingId": "019a1b2c-3d4e-7f05-8a05-000000000504",
+      "omissions": [
+        {
+          "path": "Entitlement.number.value",
+          "reason": "not-public-by-law"
+        },
+        {
+          "path": "Entitlement.validity",
+          "reason": "not-public-by-law"
+        },
+        {
+          "path": "Entitlement.parties.partyId",
+          "reason": "not-public-by-law"
+        },
+        {
+          "path": "OwnerGroup.members.partyId",
+          "reason": "not-public-by-law"
+        },
+        {
+          "path": "PleasureCraft.identifiers.value",
+          "reason": "not-public-by-law"
+        }
+      ],
+      "issuedAt": "2026-08-10T15:00:00Z"
+    }
+  ],
+  "searchRecords": [
+    {
+      "id": "019a1b2c-3d4e-7f08-8a08-000000000803",
+      "createdAt": "2026-08-10T14:59:00Z",
+      "updatedAt": "2026-08-10T14:59:00Z",
+      "registerCode": "pleasure-craft-licenses",
+      "mode": "by-license-number",
+      "keys": [
+        {
+          "scheme": "pleasure-craft-license-number",
+          "value": "ex-000001",
+          "searchKey": "EX000001"
+        }
+      ],
+      "executedAt": "2026-08-10T14:59:00Z",
+      "lastFilingSequence": 4,
+      "resultIds": [
+        "019a1b2c-3d4e-7f04-8a04-000000000401"
+      ],
+      "certified": true,
+      "extractId": "019a1b2c-3d4e-7f08-8a08-000000000801"
+    }
+  ]
+}

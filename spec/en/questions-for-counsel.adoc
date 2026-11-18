@@ -1,0 +1,89 @@
+= Questions for counsel
+include::_fpsot-terms.adoc[]
+
+This page is informative.
+It sets no rule, and it is not legal advice.
+It lists the legal questions that this specification raises but cannot answer.
+A lawyer must answer each one before {abbr-fpsot-first} or a body that keeps a register relies on it.
+
+LégisQuébec, CanLII, Légifrance and the ISO store refused automated readers.
+The research therefore read no Québec statute and no French code.
+An article number marked _to be verified_ comes from a secondary source or a government page.
+It does not come from the law itself.
+
+== Legal effect and evidence
+
+1. *Legal effect.* For each register in scope, what does registration do in law?
+It may identify an asset for the administration, give notice or opposability, or create or prove title.
+Is any Canadian, Québec or French register in scope a source of title?
+REG-011 lets no profile of this release declare `title` until counsel names one.
+
+2. *Weight of an extract.* What weight in law do these documents carry?
+They are the statement of the Québec enterprise register and the certified statement of the RDPRM.
+They also include a certificate under the Canada Business Corporations Act, believed to be section 263, _to be verified_.
+The last ones are a Transport Canada certificate, the French Kbis and an extract of the French business register.
+REG-085 keeps that weight out of the rules until counsel answers.
+
+3. *Priority and the time stamp.* When does priority run under the Civil Code of Québec?
+The articles at stake are 2934, 2969 and 2980, _to be verified_.
+Does priority run from the entry in the register, or from the moment the application arrives?
+Which instant must the system time-stamp: `submittedAt`, `completedAt` or another one?
+
+== Publicity and privacy
+
+4. *Publicly available information.* Does a public Canadian or Québec register of personal information fall under an exclusion for public information?
+The provisions at stake are section 69 of the Privacy Act and section 55 of the Québec Access Act.
+Both are _to be verified_.
+
+5. *Access to the French beneficial owner register.* Secondary sources report a decree numbered 2026-310, _to be verified_.
+What are its criteria of legitimate interest?
+Is the access certificate, reported as valid three years, an administrative act that a person can appeal?
+
+6. *Carve-outs for minors.* According to law firms, Bill C-42 carves out minors and incapable persons, _to be verified_.
+Do those carve-outs apply on their own, or only on application?
+Which other prescribed circumstances exist?
+
+7. *Register of disclosures.* The SAAQ discloses under listed articles of the Highway Safety Code, _to be verified_.
+It publishes a register of those disclosures.
+Must a register then log the article of law that allows each disclosure?
+
+8. *A credential from a closed register.* The pleasure craft license register is closed to the public.
+Can it lawfully issue a verifiable credential that the holder shows to anyone?
+REG-086 makes that credential a SHOULD, pending the answer.
+
+9. *Reads hidden from the data subject.* REG-077 lets a data subject see who read their data.
+May a body hold back the reads of the police or of other bodies, and under which provision?
+
+== Integrity, retention and destruction
+
+10. *Integrity of a sealed filing log.* How do the Québec rules on integrity and signatures apply here?
+They sit in the Act to establish a legal framework for information technology.
+Secondary sources point to sections 5 to 7 and 39, _to be verified_.
+Does an append-only log of sealed filings meet them when it serves as the legal record?
+
+11. *Destruction and the chain.* In 2012, Bill C-19 ordered the federal government to destroy its long-gun records.
+Does a deletion of the content and the salt, with a tombstone that keeps a hash, satisfy such an order?
+Does the tombstone of REG-094 keep too much, or too little?
+
+12. *Retention instruments.* Which instruments govern filings, and which govern audit events?
+The candidates are the retention schedules under the Québec Archives Act and the disposition authorities of Library and Archives Canada.
+In France, the candidate is the Code du patrimoine, all _to be verified_.
+How long must a register keep the tombstone of a destroyed filing?
+
+== Pleasure craft licenses
+
+13. *Transfer of the license number.* The impact analysis statement of SOR/2025-272 says that a renewal keeps the license number.
+Does a transfer keep it too, as the fixture of this specification assumes?
+
+14. *Legal basis of each access policy.* The impact analysis statement names three kinds of users.
+They are the enforcement officers, the search and rescue agencies and the Coast Guard.
+Which provision allows each disclosure to them?
+The `ca-federal` profile cites the Privacy Act for each one, _to be verified_.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

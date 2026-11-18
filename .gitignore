@@ -2,3 +2,7 @@
 _fpsot-terms.adoc
 spec/*/glossary.adoc
 docs/modules/*/pages/jurisdictions/
+
+# Python bytecode from the example check.
+__pycache__/
+*.pyc

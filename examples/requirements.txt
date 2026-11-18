@@ -1,0 +1,6 @@
+# SPDX-License-Identifier: Apache-2.0
+# The only package that examples/check-examples.py needs. Pinned with hashes;
+# CI installs with --require-hashes. The wheel hash is for CPython 3.14 on Linux x86-64.
+PyYAML==6.0.3 \
+    --hash=sha256:c458b6d084f9b935061bc36216e8a69a7e293a2f1e68bf956dcd9e6cbcd143f5 \
+    --hash=sha256:d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f

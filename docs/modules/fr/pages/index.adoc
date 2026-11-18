@@ -1,15 +1,79 @@
-= Guide
-:page-type: explanation
+= Soumettre un registre à la spécification sur les registres
+:page-type: how-to
 include::_fpsot-terms.adoc[]
 
-Cette page explique la spécification aux personnes qui l’adoptent.
-Chaque page de guide a un seul type.
-C’est un tutoriel, un guide pratique, une référence ou une explication.
+Ce guide mène un organisme public d’un registre à un registre conforme.
+Chaque étape cite la règle qu’elle respecte.
+Ce guide ne constitue pas un avis juridique.
+La page des questions pour les juristes énumère les points qu’une ou un juriste doit régler.
+Les fichiers de `examples/pleasure-craft/` suivent un registre synthétique de permis d’embarcation de plaisance à chaque étape.
+
+== Déclarer le registre
+
+Trouvez la loi qui établit le registre, et lisez ce que l’inscription y produit.
+Rédigez la déclaration dans votre profil, selon REG-010.
+Donnez l’effet juridique et le régime de publicité, chacun avec sa source, selon REG-011 et REG-012.
+Marquez `to-be-verified` chaque source que personne n’a lue à l’origine, selon REG-013.
+
+Placez chaque valeur juridique dans le profil, comme les durées, les délais et les catégories de conservation, selon REG-015.
+Le fichier `profiles/ca-federal.yaml` déclare le registre des embarcations de plaisance, avec la durée de cinq ans de l’article 105.
+
+== Choisir ou rédiger le module
+
+Employez un module publié quand il convient à votre domaine, comme `packs/pleasure-craft.yaml`.
+Sinon, rédigez un module selon REG-100.
+Il lui faut un schéma LinkML pour vos biens et un catalogue de types de dépôts.
+Il lui faut aussi le cycle de vie de chaque classe de droit.
+Il lui faut enfin vos schémas d’identifiants et la visibilité par défaut de chaque champ.
+Gardez le droit hors du module, selon REG-101.
+
+== Tenir les dépôts
+
+Écrivez chaque changement comme un dépôt, jamais comme une mise à jour directe, selon REG-020.
+Donnez à chaque dépôt ses trois instants, ses trois états et son pouvoir, selon REG-023 à REG-025.
+Confiez les frais et l’admissibilité à la spécification sur les décisions, selon REG-026.
+Gardez dans le dépôt les identifiants des enregistrements de décision.
+À l’achèvement, déclarez les lignes que le dépôt ouvre et ferme, selon REG-029.
+
+Apposez un cachet sur chaque dépôt achevé et journalisez-le selon la spécification sur les documents signés, selon REG-031.
+Donnez-lui le numéro d’ordre suivant et le condensé salé du dépôt précédent, selon REG-030.
+
+== Dériver l’état
+
+Construisez chaque vue par le rejeu des dépôts, selon REG-040.
+Répondez à chaque requête à un instant de validité, tel qu’enregistré à un autre instant, selon REG-042.
+Une table gardée pour la vitesse doit rester une projection que le rejeu peut reconstruire, selon REG-043.
+
+== Servir les vues et les extraits
+
+Donnez à chaque vue une catégorie de visibilité, et une politique d’accès au besoin, selon REG-070 et REG-074.
+Journalisez chaque lecture de renseignements personnels comme événement d’audit, selon REG-076.
+Consignez chaque recherche, et apposez un cachet sur chaque extrait délivré, selon REG-082 et REG-084.
+
+== Corriger et détruire
+
+Corrigez un dépôt par un nouveau dépôt qui le remplace, selon REG-027.
+Quand une loi ou une ordonnance exige une destruction, présentez un dépôt de destruction, selon REG-093.
+Détruisez ensemble le contenu et le sel, et gardez le témoin de destruction, selon REG-094.
+
+== Vérifier le résultat
+
+Lancez la vérification des exemples sur une copie du dépôt de code qui contient vos fichiers sous les mêmes noms.
+
+[source,text]
+----
+pip install --require-hashes -r examples/requirements.txt
+python3 examples/check-examples.py chemin/vers/votre/copie
+----
+
+Une réussite montre que vos dépôts, votre chaîne et vos instantanés tiennent ensemble selon les règles structurelles.
+Il en va de même pour vos extraits, vos événements et vos scénarios.
+Elle ne vérifie pas votre moteur, ce que feront les jeux d’essai de rejeu de REG-105.
 
 == Historique du document
 
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Changement
-|0.1.0 |2026-11-03 |Première version.
+|0.1.0 |2026-11-18 |Première version.
 |===

@@ -9,22 +9,51 @@ developmentStatus: concept
 softwareType: "standalone/other"
 description:
   en:
-    shortDescription: Template for FPSOT specification repositories.
+    shortDescription: Rules that make each government register of assets, ownership and entitlements replayable, verifiable and lawful to publish or destroy.
     longDescription: >
-      Starting point for an FPSOT specification repository. It holds the
-      layout, the Community Specification License files, and the CI that
-      checks requirement IDs, links, languages and prose.
+      Rules for software that keeps a register of assets, ownership and
+      entitlements under a law, such as licenses, vehicle and vessel
+      registrations, permits and business registers. The specification
+      standardizes the filing and what can be derived from it, and leaves
+      everything that varies by law to versioned jurisdiction profiles. Each
+      legal act is one immutable filing with three dates, three statuses and
+      the authority of its filer, in a light chain that the signed records
+      specification seals and logs. Current and past state come from
+      replaying the filings, as of one instant and as recorded at another.
+      Visibility and opposability are separate data per field, and a lawful
+      destruction deletes content and salt while the chain still verifies.
     features:
-      - Specification repository layout
+      - Immutable filings with three dates, three statuses and the filer's authority
+      - Light chain of sequence numbers and previous commitments, sealed and logged
+      - Bitemporal state rebuilt by replaying filings
+      - Assets, owner groups, entitlements and encumbrances
+      - Field visibility and opposability as separate profile data
+      - Lawful destruction with tombstones that keep the chain verifiable
+      - Jurisdiction profiles for Canada and Québec, and a pleasure craft pack
   fr:
-    shortDescription: Gabarit des dépôts de spécification de FPSOT.
+    shortDescription: Règles pour que chaque registre public de biens, de propriété et de droits soit rejouable, vérifiable, et publié ou détruit selon la loi.
     longDescription: >
-      Point de départ d'un dépôt de spécification de FPSOT. Il contient la
-      structure, les fichiers de la Community Specification License, et
-      l'intégration continue qui vérifie les identifiants, les liens, les
-      langues et la rédaction.
+      Règles pour les logiciels qui tiennent un registre de biens, de
+      propriété et de droits en vertu d’une loi, comme les permis, les
+      immatriculations de véhicules et de bateaux, les autorisations et les
+      registres d’entreprises. La spécification normalise le dépôt et ce qu’on
+      peut en dériver, et laisse aux profils juridictionnels versionnés tout ce
+      qui varie selon la loi. Chaque acte juridique est un dépôt immuable avec
+      trois dates, trois états et le pouvoir de son auteur, dans une chaîne
+      légère que la spécification sur les documents signés cachette et
+      journalise. L’état actuel et passé vient du rejeu des dépôts, à un
+      instant donné, tel qu’enregistré à un autre. La visibilité et
+      l’opposabilité sont des données distinctes pour chaque champ, et une
+      destruction légale supprime le contenu et le sel tout en gardant la
+      chaîne vérifiable.
     features:
-      - Structure d'un dépôt de spécification
+      - Dépôts immuables avec trois dates, trois états et le pouvoir de leur auteur
+      - Chaîne légère de numéros d’ordre et de condensés salés précédents, cachetée et journalisée
+      - État bitemporel reconstruit par le rejeu des dépôts
+      - Biens, groupes de propriétaires, droits et charges
+      - Visibilité et opposabilité des champs comme données distinctes du profil
+      - Destruction légale avec témoins qui gardent la chaîne vérifiable
+      - Profils juridictionnels pour le Canada et le Québec, et un module des embarcations de plaisance
 legal:
   license: Community-Spec-1.0
 maintenance:

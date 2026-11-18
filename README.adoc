@@ -1,33 +1,36 @@
-= FPSOT specification template
+= FPSOT registry specification
 
-This repository is the starting point for an FPSOT specification.
-Create a new repository from it, then replace this text.
-
-== Start a specification
-
-. Set `SPEC_PREFIX` in `.github/workflows/ci.yml` to the three-letter prefix of the requirement IDs.
-. Replace the titles in `spec/`, `docs/antora.yml`, `publiccode.yml`, `AGENTS.md`, `NOTICE` and `skill/SKILL.md`.
-. Replace the example requirement TPL-001 and the example row in `jurisdictions/baseline.yaml`.
-. List each spec page in `spec/<lang>/book.adoc`. The glossary stays the last include.
-
-Each page ends with a document history.
-Each guide page sets `:page-type:` to tutorial, how-to, reference or explanation.
-Write abbreviations and defined terms as `{abbr-…}` and `{term-…}` from the term base of `fpsot-spec-writing`.
-Write English in US spelling.
-Each page that cites outside sources ends with a References section, right before its document history.
-Each code block names its language, such as `[source,text]` or `[source,plantuml]`.
-The continuous integration writes `_fpsot-terms.adoc`, the glossaries and the comparison pages. Git ignores them.
+Rules for software that keeps a register of assets, ownership and entitlements under a law, such as licenses, vehicle and vessel registrations, permits and business registers.
+The specification standardizes the filing and what can be derived from it, and leaves everything that varies by law to jurisdiction profiles.
+Each legal act is one immutable filing with three dates, three statuses and the authority of its filer, in a light chain that the FPSOT signed records specification seals and logs.
+Current and past state come from replaying the filings, as of one instant and as recorded at another.
+Visibility and opposability are separate data per field, and a lawful destruction deletes content and salt while the chain still verifies.
+Version 0.1 is a draft.
 
 == Implement this spec
 
 Read the normative text in `spec/en/` or `spec/fr/`.
-Each requirement has an ID, such as `XYZ-001`.
-Check your implementation against every requirement.
+Each requirement has an ID from `REG-001` to `REG-108`.
+
+* State your conformance classes, and never claim that a register meets a law (REG-001 to REG-006).
+* Declare each register in a profile with its legal effect and publicity regime, and keep every legal value in the profile (REG-010 to REG-016). The profiles are data files in `profiles/`.
+* Keep each legal act as an immutable filing with three dates, three statuses, its authority and its stated changes, sealed and chained (REG-020 to REG-033).
+* Derive every view by replaying the filings, with history rows and bitemporal queries (REG-040 to REG-046).
+* Model assets, owner groups, entitlements and encumbrances, with declared identifier schemes (REG-050 to REG-061). The pack data is in `packs/`.
+* Set the visibility and opposability of each field, give a reason for each omission and log each read (REG-070 to REG-077).
+* Declare search modes, record each search, and seal each extract (REG-080 to REG-087).
+* Give each filing type a retention class, and destroy filings only through destruction filings that leave tombstones (REG-090 to REG-096).
+* Write packs, emit events without personal values and test with replay fixtures (REG-100 to REG-108). The event schemas are in `registry/events/`.
+* Run `bash examples/test-examples.sh` to check the example files, after `pip install --require-hashes -r examples/requirements.txt`.
 
 == Adopt this spec
 
-Read the guides in `docs/modules/en/pages/` or `docs/modules/fr/pages/`.
-They explain what the spec gives your organization and how to require it.
+Read the guide in `docs/modules/en/pages/index.adoc` or `docs/modules/fr/pages/index.adoc`.
+It takes one register through every step, with a synthetic pleasure craft license register as the example.
+A request for proposals can require a core engine, a pack, a profile or a register operator to meet the conformance classes of REG-002, and to pass the replay fixtures of REG-105.
+The comparison data in `jurisdictions/` shows how Canada, Québec and France handle the same topics.
+The pages `alignment.adoc` and `questions-for-counsel.adoc` are informative, and the latter lists the legal questions that a lawyer must settle.
+This specification is not legal advice.
 
 == Layout
 
@@ -36,10 +39,25 @@ They explain what the spec gives your organization and how to require it.
 | Folder | Content
 
 | `spec/`
-| Normative text, in English and French. `book.adoc` joins the pages into one book.
+| Normative text, in English and French. `book.adoc` joins the pages into one book, published as PDF with each release.
 
 | `docs/`
 | Guides, in the Antora folder layout.
+
+| `model/`
+| The LinkML model of the registry, the schema of the pleasure craft pack, and unchanged copies of the data types and party models.
+
+| `packs/`
+| The data of each domain pack: asset kinds, identifier schemes, filing types, lifecycles and visibility defaults.
+
+| `profiles/`
+| The jurisdiction profiles, each released apart from the core rules.
+
+| `registry/`
+| The JSON Schemas of the data of each event type.
+
+| `examples/`
+| A synthetic pleasure craft license register, with its replay check, its test and scenarios in English and French.
 
 | `skill/`
 | The agent skill: a short summary that cites requirement IDs.
@@ -51,7 +69,7 @@ They explain what the spec gives your organization and how to require it.
 | PlantUML sources and their rendered SVG files.
 
 | `jurisdictions/`
-| Comparison data per jurisdiction. `baseline.yaml` lists the compared requirements.
+| Comparison data: how each government handles the same topics.
 |===
 
 == License

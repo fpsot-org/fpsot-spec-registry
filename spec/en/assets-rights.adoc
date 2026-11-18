@@ -1,0 +1,154 @@
+= Assets, ownership, entitlements and encumbrances
+include::_fpsot-terms.adoc[]
+
+A register keeps four kinds of rows.
+An {term-asset} is a thing that the register identifies, such as a vessel, a vehicle, a drone or a firearm.
+Its {term-ownership} is a set of owner groups.
+An {term-entitlement} is a right that the register grants to parties, such as a license, a permit or a registration.
+An encumbrance weighs on an asset or on an entitlement.
+A lien, a seizure, a stop order and a flag are encumbrances.
+
+Ownership and entitlement stay apart.
+The owner of an aircraft may differ from its registered operator.
+A leased vehicle has an owner and a holder.
+A firearm license belongs to a person, whatever firearms that person owns.
+
+== Assets
+
+[[REG-050]]
+*REG-050.* Each asset MUST be a record of the class `Asset` of `model/registry.yaml`, or of a subclass of it.
+Each domain pack MUST define one subclass for each kind of asset that it registers, in its own LinkML schema.
+That schema MUST import `model/registry.yaml`, and each asset MUST name its kind in `assetKind`.
+
+The pleasure craft pack defines `PleasureCraft` in `model/pleasure-craft.yaml`.
+It holds the propulsion, the engine power and the length, which decide whether a craft needs a license.
+A pack schema keeps typed fields, so a register needs no store of free keys and values.
+
+== Identifiers
+
+[[REG-051]]
+*REG-051.* Each domain pack MUST declare each identifier scheme that it uses.
+Each scheme MUST be a concept under VOC-001.
+The declaration MUST give the issuer, the check digit method or none, the uniqueness scope and the normalization steps.
+It MUST give the format when the pack read it at the source.
+Each identifier MUST keep its value in the exact form of its issuer, under DAT-066.
+It MUST also hold its search key, which the normalization steps give.
+
+Registration marks come back into use after a deregistration.
+A uniqueness scope tells the register whether a new asset may take a mark that an old one held.
+The pleasure craft pack declares the license number and the hull serial number, and does not yet state their formats.
+
+[[REG-052]]
+*REG-052.* A link between two assets MUST be a typed link, with a link type from the domain pack.
+It MUST NOT be free text.
+
+An engine on a hull and a trailer under a craft are links that a search may need to follow.
+
+== Ownership
+
+[[REG-053]]
+*REG-053.* The ownership of an asset MUST be the set of its current owner groups.
+Each group MUST be a record of the class `OwnerGroup`.
+It MUST state its tenancy and the interest that it holds, as a fraction.
+
+* `sole`: one member, who holds the whole asset.
+* `joint`: two or more members, who hold the whole asset together.
+* `in-common`: a group that holds a fraction of the asset, beside other groups.
+
+At each instant, the interests of the current groups of an asset MUST add up to exactly one.
+
+Fractions as two integers never round.
+Whether joint owners have a right of survivorship depends on the law of the jurisdiction, and the profile says so.
+
+[[REG-054]]
+*REG-054.* A transfer MUST end the owner groups that it replaces and open new ones.
+It MUST NOT change the members of a current group in place.
+
+The manufactured home register of British Columbia closes owner groups on a transfer and opens new ones.
+Its code sits in the link:https://github.com/bcgov/ppr[same repository] as the personal property register.
+Each group then keeps the filing that opened it and the one that ended it.
+Together they give the chain of title.
+
+[[REG-055]]
+*REG-055.* Each transfer filing type MUST list the causes that it accepts, such as `sale`, `death`, `court-order` and `operation-of-law`.
+Each transfer filing MUST state its cause.
+The evidence of a transfer, such as a bill of sale or a will, MUST be `restricted`.
+A profile MAY widen it.
+
+A transfer on death and a sale need different evidence and different checks.
+The evidence often names people who are not parties to the register.
+
+== Entitlements
+
+[[REG-056]]
+*REG-056.* An entitlement MUST NOT imply ownership, and an owner group MUST NOT imply an entitlement.
+A filing that changes both MUST state each change apart, under REG-029.
+
+[[REG-057]]
+*REG-057.* Each entitlement MUST be a record of the class `Entitlement`.
+It MUST hold its class, its number and its validity as dates.
+It MUST also hold the role of each party, the covered assets, if any, and its conditions as codes.
+The validity MUST follow DAT-023.
+The register MUST turn the effective instant into a date in the time zone of its declaration.
+The number MUST follow REG-051.
+
+[[REG-058]]
+*REG-058.* The lifecycle of each entitlement class MUST be data of its pack, under REG-045.
+The term of a class MUST be data of the profile, with its source.
+The profile MUST also list the filing types that start a new term.
+The validity that a filing opens MUST equal the term in force, counted from the date of its effective instant.
+
+Under section 105 of the amended Small Vessel Regulations, a license runs five years from its issue, transfer or renewal.
+The `ca-federal` profile holds that rule as data, and the pack holds none of it.
+
+== Encumbrances
+
+[[REG-059]]
+*REG-059.* A register SHOULD keep each lien, seizure, stop order or flag as a record of the class `Encumbrance`.
+Each one SHOULD have a filing that opens it and filings that change or end it.
+It SHOULD have a term when the law gives one.
+
+The French vehicle register holds the liens, the objections and the suspensions of each vehicle.
+The link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[CNIL describes it] that way.
+Québec keeps those rights in a separate register.
+Transport Canada records no aircraft liens at all, under link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular 202-002].
+Only an optional family in the core, with a profile flag, covers all three.
+The model follows the restrictions of link:https://www.iso.org/standard/81263.html[ISO 19152-1], the Land Administration Domain Model.
+
+[[REG-060]]
+*REG-060.* The rights over the assets of a register may live in another register.
+The profile MUST then declare that other register.
+It MUST also state the kinds of rights there and the identifier schemes that search them.
+The register MUST NOT copy those rights as its own encumbrances.
+
+The link:https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Québec register of movable rights], the RDPRM, takes a search by the vehicle identification number.
+The `ca-qc` profile declares it for the road vehicle register.
+A copy of another body's rights would soon differ from the original and mislead a buyer.
+
+== Parties
+
+[[REG-061]]
+*REG-061.* Each party of a filing or of a row MUST be a `Party` under DMO-040, named by its id.
+A register MUST NOT keep its own records of persons or organizations.
+The role of a party MUST be a code from the domain pack.
+
+The data models specification owns the person, the organization, their names and their addresses.
+A register that kept its own copy would hold two truths about one person.
+
+== References
+
+=== Informative
+
+* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province of British Columbia, source repository. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Archived copy]
+* link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024, Geographic information, Land Administration Domain Model, Part 1: Generic conceptual model], ISO, 2024, paywalled, not read. link:https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html[Archived copy]
+* link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular AC No. 202-002], Transport Canada. link:https://web.archive.org/web/20261101053933/https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Archived copy]
+* link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[SIV, système d’immatriculation des véhicules], Commission nationale de l’informatique et des libertés. link:https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[Archived copy]
+* link:https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Questions et réponses], Registre des droits personnels et réels mobiliers, Gouvernement du Québec. link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===
