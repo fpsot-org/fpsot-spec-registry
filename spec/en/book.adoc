@@ -1,4 +1,4 @@
-= Specification title
+= FPSOT registry specification
 :doctype: book
 :toc:
 
