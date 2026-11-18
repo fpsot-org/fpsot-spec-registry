@@ -13,62 +13,64 @@ Il ne vient pas de la loi elle-même.
 
 == Effet juridique et preuve
 
-1. *Effet juridique.* Pour chaque registre visé, que fait l’inscription en droit ?
+. *Effet juridique.* Pour chaque registre visé, que fait l’inscription en droit ?
 Elle peut identifier un bien pour l’administration, donner avis ou opposabilité, ou créer ou prouver le titre.
 Un registre canadien, québécois ou français visé est-il source de titre ?
 Selon REG-011, aucun profil de cette version ne peut déclarer `title` avant que des juristes nomment un tel registre.
 
-2. *Valeur d’un extrait.* Quelle valeur ces documents ont-ils en droit ?
+. *Valeur d’un extrait.* Quelle valeur ces documents ont-ils en droit ?
 Ce sont l’état des renseignements du registre des entreprises du Québec et l’état certifié du RDPRM.
 S’y ajoute un certificat selon la Loi canadienne sur les sociétés par actions, qu’on croit être l’article 263, _à vérifier_.
 Les derniers sont un certificat de Transports Canada, l’extrait Kbis français et un extrait du registre français des entreprises.
 REG-085 garde cette valeur hors des règles en attendant une réponse.
 
-3. *Priorité et horodatage.* À partir de quand la priorité court-elle selon le Code civil du Québec ?
+. *Priorité et horodatage.* À partir de quand la priorité court-elle selon le Code civil du Québec ?
 Les articles en cause sont 2934, 2969 et 2980, _à vérifier_.
 La priorité court-elle à partir de l’inscription au registre, ou de la présentation de la réquisition ?
 Quel instant le système doit-il horodater : `submittedAt`, `completedAt` ou un autre ?
 
 == Publicité et vie privée
 
-4. *Renseignements accessibles au public.* Un registre public canadien ou québécois de renseignements personnels tombe-t-il sous une exclusion ?
+[start=4]
+. *Renseignements accessibles au public.* Un registre public canadien ou québécois de renseignements personnels tombe-t-il sous une exclusion ?
 Les dispositions en cause sont l’article 69 de la loi fédérale sur la vie privée.
 S’y ajoute l’article 55 de la Loi sur l’accès du Québec.
 Les deux sont _à vérifier_.
 
-5. *Accès au registre français des bénéficiaires effectifs.* Des sources secondaires signalent un décret numéroté 2026-310, _à vérifier_.
+. *Accès au registre français des bénéficiaires effectifs.* Des sources secondaires signalent un décret numéroté 2026-310, _à vérifier_.
 Quels sont ses critères d’intérêt légitime ?
 L’attestation d’accès, qu’on dit valide trois ans, est-elle un acte administratif qu’une personne peut contester ?
 
-6. *Exceptions pour les mineurs.* Selon des cabinets, le projet de loi C-42 exempte les mineurs et les inaptes, _à vérifier_.
+. *Exceptions pour les mineurs.* Selon des cabinets, le projet de loi C-42 exempte les mineurs et les inaptes, _à vérifier_.
 Ces exceptions s’appliquent-elles d’office, ou seulement sur demande ?
 Quelles autres circonstances prévues par règlement existent ?
 
-7. *Registre des communications.* La SAAQ communique des renseignements selon des articles du Code de la sécurité routière, _à vérifier_.
+. *Registre des communications.* La SAAQ communique des renseignements selon des articles du Code de la sécurité routière, _à vérifier_.
 Elle publie un registre de ces communications.
 Un registre doit-il alors journaliser l’article de loi qui permet chaque communication ?
 
-8. *Une attestation tirée d’un registre fermé.* Le registre des permis d’embarcation de plaisance est fermé au public.
+. *Une attestation tirée d’un registre fermé.* Le registre des permis d’embarcation de plaisance est fermé au public.
 Peut-il légalement délivrer une attestation vérifiable que le titulaire montre à quiconque ?
 REG-086 en fait une recommandation, en attendant la réponse.
 
-9. *Lectures cachées à la personne concernée.* REG-077 permet à une personne concernée de voir qui a lu ses données.
+. *Lectures cachées à la personne concernée.* REG-077 permet à une personne concernée de voir qui a lu ses données.
 Un organisme peut-il taire les lectures de la police ou d’autres organismes, et en vertu de quelle disposition ?
 
 == Intégrité, conservation et destruction
 
-10. *Intégrité d’un journal de déclarations cachetées.* Comment les règles québécoises sur l’intégrité et la signature s’appliquent-elles ici ?
+[start=10]
+. *Intégrité d’un journal de déclarations cachetées.* Comment les règles québécoises sur l’intégrité et la signature s’appliquent-elles ici ?
 Elles se trouvent dans la Loi concernant le cadre juridique des technologies de l’information.
 Des sources secondaires renvoient aux articles 5 à 7 et 39, _à vérifier_.
 Un journal de déclarations cachetées, en ajout seul, y satisfait-il quand il sert de document juridique ?
 
-11. *Destruction et chaîne.* En 2012, la Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6, en a ordonné la destruction.
+. *Destruction et chaîne.* En 2012, la Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6, en a ordonné la destruction.
 Supprimer le contenu et le sel, avec une trace de destruction qui garde un condensé, satisfait-il une telle ordonnance ?
 La trace de destruction de REG-094 garde-t-elle trop, ou trop peu ?
 Un registre doit-il aussi détruire les corrections et les déclarations ultérieures qui répètent une valeur visée, comme le demande REG-093 ?
 Que doit-il faire quand il ne peut pas détruire l’une d’elles ?
 
-12. *Instruments de conservation.* Quels instruments régissent les déclarations, et lesquels régissent les événements d’audit ?
+. *Instruments de conservation.* Quels instruments régissent les déclarations, et lesquels régissent les événements d’audit ?
 Les candidats sont les calendriers de conservation selon la Loi sur les archives du Québec.
 S’y ajoutent les autorisations de disposition de Bibliothèque et Archives Canada.
 En France, le candidat est le Code du patrimoine, le tout _à vérifier_.
@@ -76,10 +78,11 @@ Combien de temps un registre doit-il garder la trace d’une déclaration détru
 
 == Permis d’embarcation de plaisance
 
-13. *Transfert du numéro de permis.* Selon le résumé de l’étude d’impact du DORS/2025-272, un renouvellement garde le numéro.
+[start=13]
+. *Transfert du numéro de permis.* Selon le résumé de l’étude d’impact du DORS/2025-272, un renouvellement garde le numéro.
 Un transfert le garde-t-il aussi, comme le suppose le jeu d’essai de cette spécification ?
 
-14. *Base juridique de chaque politique d’accès.* Le résumé de l’étude d’impact nomme trois sortes d’utilisateurs.
+. *Base juridique de chaque politique d’accès.* Le résumé de l’étude d’impact nomme trois sortes d’utilisateurs.
 Ce sont les agents d’application de la loi, les organismes de recherche et sauvetage et la Garde côtière.
 Quelle disposition permet chaque communication à ces utilisateurs ?
 Le profil `ca-federal` cite pour chacune la Loi sur la protection des renseignements personnels, _à vérifier_.
