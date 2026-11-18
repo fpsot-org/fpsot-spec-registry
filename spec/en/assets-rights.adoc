@@ -119,7 +119,7 @@ Each one SHOULD have a filing that opens it and filings that change or end it.
 It SHOULD have a term when the law gives one.
 
 The French vehicle register holds the liens, the objections and the suspensions of each vehicle.
-The link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[CNIL describes it] that way.
+The link:https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[CNIL describes it] that way.
 Québec keeps those rights in a separate register.
 Transport Canada records no aircraft liens at all, under link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular 202-002].
 Only an optional family in the core, with a profile flag, covers all three.
@@ -152,7 +152,7 @@ A register that kept its own copy would hold two truths about one person.
 * link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province of British Columbia, source repository. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Archived copy]
 * link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024, Geographic information, Land Administration Domain Model, Part 1: Generic conceptual model], ISO, 2024, paywalled, not read. link:https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html[Archived copy]
 * link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular AC No. 202-002], Transport Canada. link:https://web.archive.org/web/20261101053933/https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Archived copy]
-* link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[SIV, système d’immatriculation des véhicules], Commission nationale de l’informatique et des libertés. link:https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[Archived copy]
+* link:https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[SIV, système d’immatriculation des véhicules], Commission nationale de l’informatique et des libertés, archived copy.
 * link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Questions et réponses], Registre des droits personnels et réels mobiliers, Gouvernement du Québec, archived copy.
 
 == Document history
