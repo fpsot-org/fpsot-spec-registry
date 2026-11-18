@@ -1,15 +1,80 @@
-= Guide
-:page-type: explanation
+= Put a register under the registry specification
+:page-type: how-to
 include::_fpsot-terms.adoc[]
 
-This page explains the specification for the people who adopt it.
-Each guide page has one type.
-It is a tutorial, a how-to guide, a reference or an explanation.
+This guide takes a public body from one register to a conforming one.
+Each step cites the rule that it meets.
+It is not legal advice, and the page of questions for counsel lists the points that a lawyer must settle.
+The files in `examples/pleasure-craft/` follow a synthetic register of pleasure craft licenses through every step.
+
+== Declare the register
+
+Find the law that establishes the register, and read what registration does in it.
+Write the declaration in your profile, under REG-010.
+Give the legal effect and the publicity regime, each with its source, under REG-011 and REG-012.
+Mark each source that nobody read at its origin as `to-be-verified`, under REG-013.
+
+Put every legal value in the profile, such as terms, deadlines and retention classes, under REG-015.
+The file `profiles/ca-federal.yaml` declares the pleasure craft register, with the five-year term of section 105.
+
+== Pick or write the pack
+
+Use a published pack when one fits your domain, such as `packs/pleasure-craft.yaml`.
+Otherwise, write a pack under REG-100.
+It needs a LinkML schema for your assets, a catalog of filing types and a lifecycle for each entitlement class.
+It also needs your identifier schemes and the default visibility of each field.
+Keep the law out of the pack, under REG-101.
+
+== Keep the filings
+
+Write each change as a filing, and never as a direct update, under REG-020.
+Give each filing its three instants, its three statuses and its authority, under REG-023 to REG-025.
+Leave fees and eligibility to the decisions specification, under REG-026.
+Keep the ids of the decision records in the filing.
+At completion, state the rows that the filing opens and ends, under REG-029.
+
+Seal and log each completed filing under the signed records specification, under REG-031.
+Give it the next sequence number and the commitment that the filing before it got, under REG-030.
+Log it in the log series of your register alone, under REG-031.
+
+== Derive the state
+
+Build every view by replaying the filings, under REG-040.
+Answer each query as of a valid instant, as recorded at a record instant, under REG-042.
+A table that you keep for speed must stay a projection that the replay can rebuild, under REG-043.
+
+== Serve views and extracts
+
+Give each view a visibility class and an access policy where it needs one, under REG-070 and REG-074.
+Log each read of personal information as an audit event, under REG-076.
+Record each search, and seal each extract that you issue, under REG-082 and REG-084.
+
+== Correct and destroy
+
+Correct a filing with a new filing that replaces it, under REG-027.
+When it takes effect before a version already opened, restate that version, under REG-034.
+When a law or an order requires a destruction, file a destruction filing, under REG-093.
+Name every filing that holds a targeted value, corrections included.
+Destroy the content and the salt together, and keep the tombstone, under REG-094.
+
+== Check the result
+
+Run the example check on a copy of the repository that holds your files under the same names.
+
+[source,text]
+----
+pip install --require-hashes -r examples/requirements.txt
+python3 examples/check-examples.py path/to/your/copy
+----
+
+A pass shows that the filings, the chain, the log and the snapshots hold together under the structural rules.
+The same holds for your extracts, your events and your scenarios.
+It does not test your engine, which the replay fixtures of REG-105 will do.
 
 == Document history
 
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Change
-|0.1.0 |2026-11-03 |First version.
+|0.1.0 |2026-11-18 |First version.
 |===

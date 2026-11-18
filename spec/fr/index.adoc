@@ -1,8 +1,179 @@
 = Spécification FPSOT sur les registres
 include::_fpsot-terms.adoc[]
 
-Remplacez cette page par le texte normatif de la spécification.
-Commencez par la portée, puis les classes de conformité, puis les exigences.
+Cette spécification fixe ce qu’un logiciel doit consigner et prouver pour chaque {term-registry} qu’une loi établit.
+Elle vise les registres de biens, de propriété et de droits.
+Les permis, les immatriculations de véhicules et de bateaux, les autorisations et les registres d’entreprises en sont des exemples.
+Elle normalise la déclaration et ce qu’un logiciel peut en dériver.
+Elle laisse aux profils juridictionnels tout ce qui varie selon la loi.
+
+La recherche pour cette spécification a comparé des registres du Canada, du Québec et de la France.
+Ils divergent sur presque toutes les propriétés juridiques d’un registre.
+Certains publient les propriétaires, d’autres les gardent fermés.
+Certains rendent un droit inscrit opposable à tous, d’autres disent que l’inscription ne prouve rien quant au titre.
+Ils partagent toutefois la même mécanique.
+Chaque acte juridique est une déclaration qui ne change jamais, et une correction est une nouvelle déclaration.
+
+Les règles reposent donc sur cinq éléments qui fonctionnent sous toute loi.
+
+* La déclaration : un événement juridique immuable, avec trois dates, trois statuts et le pouvoir de son auteur.
+Chaque déclaration prend aussi place dans une chaîne légère.
+* L’état dérivé : l’état actuel et passé, que n’importe qui peut reconstruire en rejouant les déclarations.
+Une requête le lit à un instant donné, tel qu’enregistré à un autre instant.
+* Les lignes du registre : le {term-asset}, les groupes de propriétaires de sa {term-ownership}, le {term-entitlement} et la charge.
+* Les vues : la visibilité et l’opposabilité de chaque champ, les modes de recherche déclarés et les extraits cachetés.
+* Les profils et les modules : le droit d’une collectivité publique et la mécanique d’un domaine, publiés comme données.
+
+Les règles réutilisent les autres spécifications de la {abbr-fpsot-first} et n’en redéfinissent aucun élément.
+Une {term-party} vient de la spécification sur les modèles de données, et une représentation vient de la spécification sur l’identité.
+Les frais et l’admissibilité sont des décisions de la spécification sur les décisions.
+Les cachets, les horodatages et le {term-transparency-log} viennent de la spécification sur les documents signés.
+
+== Portée
+
+[[REG-001]]
+*REG-001.* Ces règles visent les logiciels qui tiennent un registre en vertu d’une loi, quel que soit le domaine.
+Le stockage n’y change rien.
+Un registre consigne des biens, leurs propriétaires et les droits que la loi accorde à des parties.
+Un système DOIT appliquer ces règles à chaque registre de ce genre qu’il tient.
+La réception d’une demande, les frais d’une déclaration et le travail sur un dossier sont hors de portée.
+De futures spécifications de la {abbr-fpsot} les traiteront, et la spécification sur les décisions traite l’admissibilité.
+
+Un registre en ce sens tient des faits juridiques sur lesquels des tiers peuvent compter.
+Une simple liste de contacts ou un inventaire d’équipement est hors de portée.
+
+== Rôles et classes de conformité
+
+[[REG-002]]
+*REG-002.* Chaque partie qui déclare sa conformité DOIT indiquer chaque {term-conformance-class} qu’elle déclare, parmi les quatre de ce tableau.
+Une partie peut en déclarer plus d’une.
+
+[cols="1,2,3",options="header"]
+|===
+|Classe |Qui la déclare |Règles
+|`core` |Un moteur de base, qui tient les déclarations et dérive l’état pour tout domaine |Les règles de chaque page, sauf celles qui ne visent qu’un module, un profil ou un exploitant
+|`pack` |L’auteur d’un module de domaine, comme les embarcations de plaisance ou les drones |REG-021, REG-045, REG-050 à REG-052, REG-058, REG-100, REG-101 et REG-105
+|`profile` |L’auteur d’un profil juridictionnel |REG-010 à REG-016, REG-033, REG-046, REG-053, REG-058, REG-060, REG-070 à REG-074, REG-080, REG-085 et REG-090
+|`publication` |Un exploitant de registre, qui tient un registre et sert ses vues et ses extraits |REG-012, REG-031, REG-074 à REG-077, REG-082 à REG-086 et REG-093 à REG-096
+|===
+
+Chaque règle nomme le rôle qu’elle vise.
+Un acheteur sait alors quoi exiger de chaque fournisseur, et une personne qui teste sait quoi vérifier.
+
+== Statut juridique
+
+[[REG-003]]
+*REG-003.* Une déclaration de conformité NE DOIT PAS affirmer ni laisser entendre qu’un registre respecte une loi.
+Elle NE DOIT PAS laisser entendre que la conformité donne une présomption juridique à un extrait ou à une recherche.
+La conformité montre qu’un registre peut produire les documents que plusieurs lois demandent.
+Seul l’organisme qui tient le registre, avec ses juristes, peut dire ce que sa loi exige.
+
+Cette spécification énonce la pratique de la {abbr-fpsot}, et elle ne constitue pas un avis juridique.
+Les faits propres à une collectivité publique figurent dans les profils et les données de comparaison, jamais dans une règle.
+Les questions juridiques se trouvent à la page xref:questions-for-counsel.adoc[Questions pour les juristes].
+Un texte juridique que la recherche n’a pas lu à la source porte la mention _à vérifier_.
+LégisQuébec, CanLII et Légifrance ont refusé les lecteurs automatisés, donc chaque article québécois ou français est ici _à vérifier_.
+
+== Responsables des éléments
+
+[[REG-004]]
+*REG-004.* Une mise en œuvre DOIT prendre chaque élément de ce tableau dans la spécification qui en est responsable.
+Elle NE DOIT PAS définir le sien.
+
+[cols="2,3",options="header"]
+|===
+|Élément |Responsable et règles
+|Partie, personne, organisation, rôles et relations des parties, extensions |Modèles de données : DMO-040 à DMO-047, DMO-053 à DMO-057
+|Qui a agi pour qui, et le contrôle de chaque requête |Identité : IAM-050, IAM-061 à IAM-064, IAM-091
+|Identifiants, instants, dates, intervalles, montants, géométrie |Types de données : DAT-010, DAT-014, DAT-023, DAT-050, DAT-060 à DAT-066, DAT-081
+|Admissibilité, frais, exemptions et pénalités comme décisions |Décisions : DEC-030 à DEC-047
+|Listes de codes, comme les types de déclarations et les codes de motif |Vocabulaires : VOC-001 à VOC-065
+|Cachets, horodatages, journal de transparence, preuves, destruction des documents cachetés |Documents signés : LOG-002, LOG-010 à LOG-031, LOG-081
+|Événements d’audit, événements d’affaires, journalisation des lectures et conservation des événements |Observabilité : OBS-042, OBS-070, OBS-100 à OBS-104
+|Méthodes, erreurs, pagination, idempotence et événements |API RESTful : API-030, API-049, API-060, API-100 à API-103
+|Scénarios, suites de conformité et données synthétiques |Essais : TST-020 à TST-036, TST-044, TST-050
+|===
+
+Dans cette version, les schémas d’identifiants, les types de déclarations et les autres listes de codes sont des données.
+Le module les tient dans des fichiers YAML et des énumérations LinkML.
+Un schéma publié exige aussi ses fichiers Turtle et JSON-LD, selon VOC-050.
+
+Une spécification de domaine repose sur les autres.
+Si elle définissait sa propre partie ou son propre cachet, deux modèles du même fait finiraient par diverger.
+
+== Versions et essais de conformité
+
+[[REG-005]]
+*REG-005.* Une mise en œuvre DOIT suivre les versions des normes externes que cette page énumère sous Normes.
+Elle PEUT suivre une version plus récente de la même norme quand les éléments qu’elle utilise gardent leur sens.
+Une déclaration doit rester lisible tant que le registre la conserve.
+Chaque lecteur doit alors savoir quel texte s’appliquait.
+
+[[REG-006]]
+*REG-006.* Une suite de conformité de cette spécification DOIT vérifier la production d’une mise en œuvre, selon TST-044.
+La production comprend les déclarations, la chaîne, les instantanés, les extraits, les enregistrements de recherche et les événements.
+La suite NE DOIT PAS avoir besoin du code source de la mise en œuvre.
+Les dossiers `model/`, `packs/`, `profiles/`, `registry/` et `examples/` contiennent les premiers jeux d’essai.
+Le script `examples/check-examples.py` les vérifie.
+
+== Parties de la spécification
+
+Les règles se divisent en neuf parties, suivies de deux pages informatives.
+
+* xref:profiles.adoc[Profils juridictionnels] fixe la fiche d’un registre, son effet juridique, son régime de publicité et les fichiers de profil.
+* xref:filings.adoc[Déclarations] fixe la déclaration, ses dates, ses statuts et son pouvoir, les corrections, les ordonnances et la chaîne légère.
+* xref:history.adoc[État dérivé et historique] fixe le rejeu, les lignes d’historique, les requêtes bitemporelles et les cycles de vie.
+* xref:assets-rights.adoc[Biens, propriété, droits et charges] fixe les lignes d’un registre.
+* xref:visibility.adoc[Visibilité, opposabilité et accès] fixe qui peut voir chaque champ, quels champs sont opposables et qui peut accéder à plus.
+* xref:search-extracts.adoc[Recherche, extraits et attestations] fixe les modes de recherche, leurs enregistrements, les extraits et les attestations vérifiables.
+* xref:retention.adoc[Conservation et destruction] fixe les catégories de conservation, les déclarations de destruction et les traces de destruction.
+* xref:conformance.adoc[Modules, événements et conformité] fixe les modules de domaine, les événements, les interfaces et les jeux d’essai de rejeu.
+* xref:alignment.adoc[Alignement sur d’autres normes] est informative.
+Elle rattache le modèle à LADM, BODS, SEMIC, GovStack, aux attestations vérifiables et au système « une fois pour toutes ».
+* xref:questions-for-counsel.adoc[Questions pour les juristes] est informative, et énumère les points juridiques qu’une ou un juriste doit trancher.
+
+== Spécifications liées
+
+Cette spécification s’appuie sur d’autres spécifications de la {abbr-fpsot}, et cite leurs règles par numéro.
+
+* La spécification sur les modèles de données fixe la partie, selon DMO-040 à DMO-047.
+Elle fixe aussi la forme d’un modèle LinkML, selon DMO-010 à DMO-024.
+* La spécification sur l’identité fixe la représentation, selon IAM-061 à IAM-064, et le contrôle de chaque requête, selon IAM-050.
+* La spécification sur les types de données fixe la forme des instants, dates, intervalles, montants et identifiants.
+Elle le fait selon DAT-010 à DAT-072.
+* La spécification sur les décisions fixe l’enregistrement de décision, selon DEC-040.
+Elle fixe aussi les versions de règles datées, selon DEC-030 à DEC-037.
+* La spécification sur les documents signés fixe les cachets, les profils et le journal de transparence.
+Elle le fait selon LOG-002, LOG-010 à LOG-031 et LOG-081.
+* La spécification sur l’observabilité fixe les événements d’audit, selon OBS-042, et les événements d’affaires, selon OBS-070.
+Elle fixe aussi la durée de conservation des événements dans un entrepôt de journaux, selon OBS-100 à OBS-104.
+* La spécification sur les vocabulaires fixe les schémas de concepts et leurs codes, selon VOC-001 à VOC-065.
+* La spécification sur les API RESTful fixe les événements, selon API-100 à API-103.
+Elle fixe aussi les recherches sur des renseignements personnels, selon API-049.
+* La spécification sur les essais fixe les scénarios, selon TST-020 à TST-036, et les suites de conformité, selon TST-044.
+Elle fixe aussi les données synthétiques, selon TST-050.
+* La spécification sur le nommage fixe les noms des champs, des événements et des codes, selon NAM-010, NAM-050 et NAM-060.
+
+== Exemples
+
+Le dossier `examples/pleasure-craft/` contient un registre synthétique de permis d’embarcation de plaisance, selon le profil `ca-federal`.
+Chaque personne, numéro et ordonnance y est fictif.
+
+* `parties.json` contient les parties, sous la forme de la spécification sur les modèles de données.
+* `filings/` contient quatre déclarations : un transfert dans les 30 jours, une ordonnance de destruction, une correction et un renouvellement.
+* `chain.json` contient la chaîne légère de six déclarations et deux traces de destruction.
+Une ordonnance légale a détruit la première déclaration, une délivrance, et la déclaration qui l’a corrigée en premier.
+* `log.json` tient lieu de la série de journal du registre.
+Il en donne les feuilles et les points de contrôle, en deux tranches annuelles.
+* `salts.json` tient lieu des sels que le registre conserve avec ses déclarations cachetées.
+* `snapshots.json` contient sept instantanés bitemporels, que le rejeu des déclarations doit redonner.
+* `views.json` contient un extrait pour les agents d’application de la loi et une vue publique du registre fermé.
+Il contient aussi un enregistrement de recherche.
+* `events/` contient les deux événements du transfert.
+* `../ca-qc/beneficiary-views.json` contient une vue publique d’un bénéficiaire québécois, pour la visibilité conditionnelle de REG-071.
+* `examples/features/` contient les scénarios en anglais et en français.
+
+Le script `examples/test-examples.sh` vérifie que `examples/check-examples.py` rejette des copies altérées de ces fichiers.
 
 == Conformité
 
@@ -11,35 +182,40 @@ ____
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 (link:https://www.rfc-editor.org/info/rfc2119[RFC 2119], link:https://www.rfc-editor.org/info/rfc8174[RFC 8174]) when, and only when, they appear in all capitals, as shown here.
 ____
 
-Les mots clés suivent l'exigence WRT-010 de la spécification de rédaction de la {abbr-fpsot-first}.
-La version française emploie les mots clés français de l'exigence WRT-011.
+Les mots clés suivent l’exigence WRT-010 de la spécification de rédaction de la {abbr-fpsot}.
+La version française emploie les mots clés français de l’exigence WRT-011.
 
-== Exigences
+== Normes
 
-Donnez à chaque exigence une ancre avec son identifiant, juste au-dessus de son paragraphe.
-L'ancre ressemble à `+[[XYZ-001]]+`.
-L'exemple ci-dessous montre la forme. Remplacez-le par la première exigence.
+Les règles résument les normes externes dans leurs propres mots et n’en reprennent aucun texte.
+Elles citent ces versions.
 
-[[TPL-001]]
-*TPL-001.* Un énoncé normatif DOIT employer un des mots clés du {abbr-bcp-first} 14, en majuscules.
-Le mot clé donne sa force à la règle.
+* Modèles : link:https://linkml.io/linkml/[LinkML], à la version que fixe la spécification sur les modèles de données.
+* Attestations vérifiables : link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], recommandation du {abbr-w3c-first}, 15 mai 2025.
+* Listes de statuts : link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], recommandation du {abbr-w3c}, 15 mai 2025.
+* Propriété effective : link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4].
+* Données d’entreprise : link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] de SEMIC.
+* Schémas de concepts, événements, scénarios et modèles : les versions que fixent les spécifications qui en sont responsables.
 
 == Références
-
-Donnez ici chaque source externe que cite cette page, avec la même adresse que son lien dans le texte.
-Chaque entrée donne le titre, l'éditeur, la version, la date et une copie archivée.
 
 === Références normatives
 
 * link:https://www.rfc-editor.org/info/rfc2119[RFC 2119, Key words for use in RFCs to Indicate Requirement Levels], IETF, BCP 14, 1997-03. link:https://web.archive.org/web/20261103005705/https://www.rfc-editor.org/info/rfc2119/[Copie archivée]
 * link:https://www.rfc-editor.org/info/rfc8174[RFC 8174, Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words], IETF, BCP 14, 2017-05. link:https://web.archive.org/web/20261103005743/https://www.rfc-editor.org/info/rfc8174/[Copie archivée]
+* link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Copie archivée]
+* link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261014182736/https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Copie archivée]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Copie archivée]
+* link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary], SEMIC, Commission européenne, version 2.2.0. link:https://web.archive.org/web/20250601165122/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Copie archivée]
+
+=== Références informatives
+
+* link:https://linkml.io/linkml/[LinkML documentation], Linked Data Modeling Language. link:https://web.archive.org/web/20261107221213/https://linkml.io/linkml/[Copie archivée]
 
 == Historique du document
-
-Ajoutez une ligne pour chaque version qui modifie cette page.
 
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Changement
-|0.1.0 |2026-11-03 |Première version.
+|0.1.0 |2026-11-18 |Première version.
 |===

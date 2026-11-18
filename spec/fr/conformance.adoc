@@ -1,0 +1,111 @@
+= Modules, événements et conformité
+include::_fpsot-terms.adoc[]
+
+Un même moteur de base peut servir plusieurs domaines, et un même domaine plusieurs collectivités publiques.
+Un module de domaine contient ce dont un domaine a besoin, comme les types de déclarations des permis d’embarcation.
+Un profil juridictionnel contient ce que fixe une loi, comme la durée de cinq ans.
+Cette page fixe le module, les événements d’un registre, ses interfaces et les essais de rejeu qui le prouvent.
+
+== Modules de domaine
+
+[[REG-100]]
+*REG-100.* Un module de domaine DOIT contenir ces éléments.
+
+* Un schéma LinkML qui importe `model/registry.yaml` et définit les classes de biens du domaine, selon DMO-010 et DMO-055.
+* Un fichier de la classe `DomainPack` avec ses sortes de biens, ses schémas d’identifiants et son catalogue de déclarations.
+* Le cycle de vie de chaque classe de droit, ses statuts de paiement et d’examen, ses rôles et ses pièces.
+* La visibilité et l’opposabilité par défaut des champs qu’il définit.
+* Des jeux d’essai de rejeu avec les instantanés attendus, selon REG-105.
+
+Le module des embarcations de plaisance comprend `model/pleasure-craft.yaml` et `packs/pleasure-craft.yaml`.
+Ses jeux d’essai se trouvent dans `examples/pleasure-craft/`.
+Les drones feront un bon deuxième module, une fois que la recherche aura lu leurs frais et leur validité officiels.
+
+[[REG-101]]
+*REG-101.* Chaque module DOIT avoir son propre numéro de version selon Semantic Versioning 2.0.0.
+Un schéma de module NE DOIT PAS redéfinir une classe de `model/registry.yaml` ou du modèle Party.
+Un module NE DOIT PAS contenir une valeur que fixe une loi, selon REG-015.
+
+== Événements
+
+[[REG-102]]
+*REG-102.* Un registre DOIT émettre un événement d’affaires selon OBS-070 chaque fois qu’une déclaration atteint un statut final.
+Il DOIT en émettre un autre chaque fois qu’une déclaration achevée change des lignes.
+Un événement qu’il envoie à un autre service DOIT être un événement CloudEvents selon API-100 et API-101.
+Les types sont `org.fpsot.registry.filing.recorded` et `org.fpsot.registry.state.changed`.
+Leurs schémas se trouvent dans `registry/events/`, selon API-103.
+
+Le second événement nomme chaque ligne que la déclaration a ouverte, fermée ou laissée détruite.
+Un consommateur peut alors mettre à jour sa propre copie sans lire la déclaration.
+
+[[REG-103]]
+*REG-103.* Un événement d’un registre NE DOIT PAS contenir un identifiant de partie, un nom ou une adresse.
+Il NE DOIT PAS non plus contenir un montant ou la valeur d’un identifiant.
+Il ne contient que les identifiants des déclarations et des lignes, des codes et des instants.
+
+Un numéro de permis ou un numéro de série de coque mène à une personne aussi sûrement qu’un nom.
+Le registre des embarcations de plaisance est fermé, et ses événements ne doivent pas l’ouvrir.
+
+== Interfaces
+
+[[REG-104]]
+*REG-104.* Une interface d’un registre DOIT suivre la spécification sur les API RESTful.
+Elle DOIT créer une déclaration avec `POST`, avec un en-tête `Idempotency-Key` selon API-060.
+Elle NE DOIT PAS offrir une opération qui change le contenu d’une déclaration ou la supprime.
+Un retrait DOIT être un changement du statut du traitement de REG-024 avant l’achèvement, jamais une suppression.
+Le fournisseur DOIT vérifier l’interface par rapport à sa description publiée, selon TST-040.
+
+Un chemin de base comme `/registry` PEUT précéder les chemins, selon API-019.
+
+== Jeux d’essai de rejeu
+
+[[REG-105]]
+*REG-105.* La suite de conformité d’un module DOIT contenir des jeux d’essai de rejeu, selon TST-044.
+Les jeux d’essai DOIVENT contenir des déclarations ordonnées, la chaîne légère et les instantanés attendus de REG-042.
+Ils DOIVENT aussi contenir des scénarios en anglais et en français, selon TST-020 à TST-036.
+Chaque scénario DOIT indiquer ses dates et nommer les types de déclarations qu’il emploie.
+La suite DOIT aussi vérifier chaque événement par rapport au schéma de son type, selon TST-043.
+
+Un essai de rejeu fait entrer des déclarations et compare les instantanés qui en sortent.
+C’est l’essai le plus fort pour un registre dont l’état vient d’événements.
+Il n’a besoin d’aucun accès au code.
+
+[[REG-106]]
+*REG-106.* Les jeux d’essai, les exemples et les essais DOIVENT employer des données synthétiques seulement, selon TST-050.
+Leurs parties DOIVENT être fictives, et leurs adresses DOIVENT employer des domaines réservés à la documentation.
+Leurs identifiants NE DOIVENT PAS correspondre à un vrai permis, à une vraie coque ou à une vraie ordonnance.
+
+Les numéros du jeu d’essai commencent par `EX`, et son ordonnance renvoie à `example.org`.
+
+== Adaptateur GovStack
+
+[[REG-107]]
+*REG-107.* Un registre PEUT offrir un profil adaptateur pour link:https://registries.govstack.global/[GovStack Digital Registries 3.0-alpha].
+Un tel adaptateur DOIT rattacher chaque exigence de GovStack qu’il déclare à une règle de cette spécification.
+
+GovStack reste générique quant aux schémas et n’en est qu’à une version alpha.
+Ses règles sur la journalisation des lectures et la suppression logique correspondent à REG-076 et REG-044.
+Un adaptateur donne aux acheteurs une liste connue, sans laisser un schéma générique piloter le moteur.
+
+== Remplacement
+
+[[REG-108]]
+*REG-108.* Un moteur de base qui en remplace un autre DOIT réussir les mêmes jeux d’essai de rejeu, selon TST-045.
+Il DOIT donner les mêmes instantanés et vérifier la même chaîne à partir des mêmes déclarations.
+
+Un registre peut alors changer de moteur sans que le droit change.
+Les deux moteurs donnent le même état à partir des mêmes déclarations.
+
+== Références
+
+=== Références informatives
+
+* link:https://registries.govstack.global/[Digital Registries Building Block Specification], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260811020249/https://registries.govstack.global/[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-18 |Première version.
+|===

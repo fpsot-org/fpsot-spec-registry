@@ -1,0 +1,108 @@
+= Recherche, extraits et attestations
+include::_fpsot-terms.adoc[]
+
+Dans un registre, la recherche est un choix encadré par la loi.
+Le Québec a ouvert à une date fixe la recherche par nom de personne dans son registre des entreprises.
+Le registre québécois des droits mobiliers fixe ses frais selon le critère de recherche.
+Une inscription manquée par une correspondance exacte ou approchée peut changer qui a priorité.
+Cette page traite donc chaque mode de recherche comme une donnée du profil, et chaque résultat comme un enregistrement.
+
+Un extrait ou un certificat est ce sur quoi un tiers se fonde.
+Il doit dire quel registre, quel sujet, quel instant et quelle dernière déclaration il reflète.
+Il doit porter un cachet selon la spécification sur les documents signés, qui vise déjà les extraits de registre.
+
+== Modes de recherche
+
+[[REG-080]]
+*REG-080.* Chaque registre DOIT déclarer ses modes de recherche dans son profil.
+Chaque mode DOIT donner ses clés, sa règle de correspondance et les vues qui peuvent l’employer.
+Un mode que la loi ouvre à une date DOIT donner cette date, selon REG-014.
+Un registre NE DOIT PAS offrir une recherche que son profil ne déclare pas.
+
+[[REG-081]]
+*REG-081.* La règle de correspondance d’un mode DOIT être `exact`, `normalized` ou `similar`.
+Un mode `normalized` DOIT comparer les clés selon les étapes de normalisation du schéma, selon REG-051.
+Un mode `similar` DOIT indiquer son algorithme et son seuil.
+
+Deux registres qui cherchent un même nom avec deux algorithmes peuvent donner deux réponses.
+Un algorithme déclaré permet à un tribunal de voir pourquoi une recherche a manqué une inscription.
+
+== Enregistrements de recherche
+
+[[REG-082]]
+*REG-082.* Un registre DOIT garder un enregistrement de chaque recherche, dans la classe `SearchRecord` de `model/registry.yaml`.
+L’enregistrement DOIT donner le mode, les clés, l’instant et le plus haut numéro d’ordre que reflète le résultat.
+Un registre qui certifie un résultat DOIT le délivrer comme un extrait selon REG-084.
+L’enregistrement DOIT nommer cet extrait.
+
+Le registre des biens personnels de la Colombie-Britannique garde ses résultats de recherche comme des enregistrements à part.
+La dernière déclaration de l’enregistrement distingue une déclaration tardive d’une recherche qui en a manqué une.
+
+[[REG-083]]
+*REG-083.* Une recherche sur des renseignements personnels DOIT employer `POST` sur la sous-ressource `searches` de sa collection, selon API-049.
+Chaque résultat DOIT respecter la visibilité de REG-070 pour la vue de l’appelant.
+
+Un nom ou une adresse dans une chaîne de requête finit dans les journaux du serveur et l’historique du navigateur.
+
+== Extraits et certificats
+
+[[REG-084]]
+*REG-084.* Un extrait ou un certificat DOIT être un enregistrement de la classe `Extract` de `model/registry.yaml`.
+Il DOIT indiquer le registre, le sujet, l’instant de validité, le moment d’enregistrement et la dernière déclaration qu’il reflète.
+Une vue publique d’un registre fermé n’indique ni sujet ni dernière déclaration, selon REG-012.
+Il DOIT aussi indiquer la vue qu’il applique, la politique d’accès qui la fonde et chaque omission avec son motif.
+Chaque valeur DOIT égaler le rejeu de REG-042 pour ces instants.
+Le registre DOIT apposer un cachet sur chaque extrait et le journaliser, au profil de cachet de son registre.
+
+Le jeu d’essai contient un extrait pour un agent d’application de la loi et une vue publique du registre fermé.
+La vérification du jeu d’essai reconstruit chaque valeur de l’extrait à partir des déclarations.
+
+[[REG-085]]
+*REG-085.* La mise en page d’un extrait DEVRAIT être une donnée du profil, à part de l’enregistrement de REG-084.
+La valeur juridique d’un extrait NE DOIT PAS figurer dans une règle.
+Un profil PEUT la décrire dans une note.
+
+Le certificat d’entreprise de l’UE prévu par la link:https://eur-lex.europa.eu/eli/dir/2025/25/oj/eng[directive 2025/25 de l’Union européenne] est une cible à nommer.
+Il doit s’appliquer à partir du 31 juillet 2028, et les autres États membres doivent l’accepter sans apostille.
+La valeur d’un état des renseignements du Québec ou d’un extrait Kbis français est une question pour les juristes.
+
+== Attestations vérifiables
+
+[[REG-086]]
+*REG-086.* Un registre DEVRAIT aussi délivrer chaque droit comme attestation vérifiable selon le link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0].
+Le statut de l’attestation DEVRAIT suivre les déclarations du cycle de vie, par une link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0].
+Un registre PEUT aussi délivrer un extrait comme attestation vérifiable.
+Cette version ne fixe aucun protocole de portefeuille.
+
+Les portefeuilles sont hors de portée dans la première version de la spécification sur l’identité, et dans celle-ci aussi.
+Une attestation avec `validFrom`, `validUntil` et une liste de statuts fonctionnera avec les portefeuilles à venir.
+La question de savoir si un registre fermé peut délivrer une attestation publique relève des juristes.
+
+== Registres d’entreprises
+
+[[REG-087]]
+*REG-087.* Un module de domaine pour les registres d’entreprises DEVRAIT exporter le link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4].
+Il DEVRAIT aussi rattacher ses champs au link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] de SEMIC.
+La partie reste une `Party` de DMO-040.
+
+Le Core Business Vocabulary donne une dénomination, un identifiant, une adresse, une forme et un statut, mais aucun historique.
+Les déclarations de cette spécification fournissent cet historique.
+BODS sépare les énoncés des enregistrements, comme on sépare ici les déclarations de l’état dérivé.
+
+== Références
+
+=== Références informatives
+
+* link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Copie archivée]
+* link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261014182736/https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Copie archivée]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Copie archivée]
+* link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary], SEMIC, Commission européenne, version 2.2.0. link:https://web.archive.org/web/20250601165122/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Copie archivée]
+* link:https://eur-lex.europa.eu/eli/dir/2025/25/oj/eng[Directive (EU) 2025/25 as regards further expanding and upgrading the use of digital tools and processes in company law], Union européenne, 2025, version anglaise. link:https://web.archive.org/web/20260830153003/https://eur-lex.europa.eu/eli/dir/2025/25/oj/eng[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-18 |Première version.
+|===

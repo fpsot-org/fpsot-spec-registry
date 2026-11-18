@@ -1,0 +1,124 @@
+= État dérivé et historique
+include::_fpsot-terms.adoc[]
+
+L’état d’un registre est ce que disent ses déclarations, prises dans l’ordre.
+Qui possède une embarcation aujourd’hui, et quel permis elle porte, découlent des déclarations que le registre a achevées.
+Un registre qui stocke cet état à part de ses déclarations peut s’en écarter.
+Personne ne sait alors lequel a raison.
+
+Deux horloges comptent.
+Le temps de validité dit quand un fait vaut dans le monde, comme le jour d’une vente.
+Le moment d’enregistrement dit quand le registre l’a su.
+Une correction rétroactive change le passé tel que le registre le connaît aujourd’hui.
+Le registre doit quand même montrer ce qu’il savait avant.
+La spécification sur les décisions garde les mêmes deux horloges pour les versions de règles, selon DEC-035.
+
+== Rejeu
+
+[[REG-040]]
+*REG-040.* Chaque vue de l’état d’un registre DOIT égaler un rejeu des déclarations achevées du registre.
+Le rejeu DOIT appliquer les changements déclarés de REG-029 dans l’ordre des instants d’effet, puis des numéros d’ordre.
+À partir du moment où une correction est enregistrée, il DOIT l’appliquer à la place de la déclaration corrigée.
+Les changements d’une correction prennent le numéro d’ordre de la déclaration qu’elle corrige, non le leur.
+Une fois qu’une déclaration réénonce une version selon REG-034, le rejeu DOIT employer la version réénoncée.
+Une déclaration qui n’a pas le statut `completed` NE DOIT PAS changer le rejeu.
+
+Le jeu d’essai `examples/pleasure-craft/snapshots.json` contient six instantanés.
+Le script `examples/check-examples.py` reconstruit chacun d’eux à partir des déclarations.
+Un registre qui réussit cet essai peut se reconstruire après toute panne de ses entrepôts.
+
+== Lignes d’historique
+
+[[REG-041]]
+*REG-041.* Chaque ligne de l’état dérivé DOIT être une version d’une entité, avec ses champs d’historique.
+
+* `createdByFiling` et `validFrom` : la déclaration qui a ouvert la version et son instant d’effet.
+* `endedByFiling` et `validTo` : la déclaration qui a fermé la version et son instant d’effet, s’il y en a une.
+
+Une version fermée DOIT rester récupérable, selon DMO-051.
+Les changements d’une déclaration NE DOIVENT PAS porter de champs d’historique, que seul le rejeu ajoute.
+
+Une ligne qui nomme ses déclarations répond à la question que pose chaque litige sur un registre.
+Cette question est de savoir quel acte juridique a rendu ce fait vrai, et lequel y a mis fin.
+Le link:https://github.com/bcgov/ppr[registre des biens personnels] de la Colombie-Britannique rattache chaque changement à l’inscription qui l’a fait.
+
+== Requêtes bitemporelles
+
+[[REG-042]]
+*REG-042.* Un registre DOIT répondre à chaque requête à un instant de validité V, tel qu’enregistré à un instant T.
+La réponse NE DOIT compter que les déclarations achevées à T ou avant.
+Elle DOIT contenir les lignes dont le temps de validité couvre V.
+Elle DOIT aussi donner le plus haut numéro d’ordre parmi les déclarations comptées.
+La réponse DOIT suivre la classe `StateSnapshot` de `model/registry.yaml`.
+
+Un tribunal peut demander qui détenait un permis le jour d’un accident.
+Il peut vouloir cette réponse telle que le registre la montrait le jour d’une recherche.
+Le jeu d’essai pose la question pour le 20 juin 2026, tel qu’enregistré le 30 juin.
+La réponse montre l’embarcation comme une ligne détruite.
+Le même jour, tel qu’enregistré le 10 août, montre le numéro de coque corrigé par la seconde correction.
+
+== Vues stockées
+
+[[REG-043]]
+*REG-043.* Un registre PEUT garder des vues stockées de son état, comme des tables ou des index, pour répondre vite.
+Une vue stockée DOIT être une projection que le registre peut reconstruire à partir des déclarations en tout temps.
+Quand une vue stockée diffère du rejeu, le rejeu l’emporte.
+Le registre DOIT alors traiter l’écart comme un incident.
+
+Une projection est une antémémoire, et non une seconde source de vérité.
+Le rapport d’incident signale à l’exploitant qu’une écriture a contourné les déclarations, contre REG-020.
+
+== Aucune suppression hors d’une déclaration
+
+[[REG-044]]
+*REG-044.* Un registre NE DOIT PAS supprimer de déclaration, de ligne ou de version, sauf par une déclaration de destruction.
+Cette déclaration suit REG-093.
+Il NE DOIT PAS supprimer un enregistrement pour la seule raison que sa période a pris fin, selon DMO-052.
+
+Depuis la version 3.0-alpha, la spécification link:https://registries.govstack.global/5-cross-cutting-requirements.md[GovStack Digital Registries] exige la même chose.
+Un registre garde l’enregistrement logique lors d’une suppression, sauf si une loi exige une suppression physique.
+La déclaration de destruction est ici la forme que prend une suppression physique légale.
+
+== États liés au temps et états liés à un acte
+
+[[REG-045]]
+*REG-045.* Le cycle de vie de chaque classe de droit DOIT être une donnée du module.
+Il comprend ses états et ses transitions.
+Chaque transition DOIT nommer le type de déclaration ou l’événement prévu qui la cause.
+Un état lié au temps, comme `expired` ou `lapsed`, DOIT découler des dates au moment de la requête.
+Il NE DOIT PAS venir d’une déclaration.
+Un état lié à un acte, comme `suspended`, `revoked`, `cancelled` ou `surrendered`, DOIT venir seulement d’une déclaration.
+
+Les registres d’identifiants d’entités juridiques distinguent un enregistrement échu d’un enregistrement retiré.
+Un enregistrement échu est un enregistrement que personne n’a renouvelé à temps.
+Dans le jeu d’essai, le permis renouvelé est `expired` le 1^er^ juin 2036, sans aucune déclaration après son renouvellement.
+Un registre qui inscrirait les expirations comme des déclarations dépendrait d’un traitement par lots dont l’échec changerait le droit.
+
+== Migration et expirations prévues
+
+[[REG-046]]
+*REG-046.* Un registre qui reprend des enregistrements d’un système existant DOIT faire entrer chacun par une déclaration de migration.
+La déclaration de migration DOIT nommer le système existant et l’enregistrement d’où il vient.
+Une date de fin qu’une loi fixe pour un groupe de droits DOIT être une donnée du profil, selon REG-014.
+Une déclaration de migration DOIT ouvrir chacun de ces droits avec la date de fin que donne le profil.
+
+L’article 106 du règlement modifié fixe la fin des permis délivrés avant le 29 avril 2010.
+Les dates vont en six étapes, du 31 mars 2026 au 31 décembre 2030.
+Le profil `ca-federal` contient ce tableau sous `scheduledExpiries`.
+Une déclaration de migration fait entrer chaque ancien permis avec sa date de fin.
+Le permis expire ensuite sans aucune déclaration.
+
+== Références
+
+=== Références informatives
+
+* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province de la Colombie-Britannique, dépôt de code source. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Copie archivée]
+* link:https://registries.govstack.global/5-cross-cutting-requirements.md[Digital Registries Building Block, cross-functional requirements], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260715201050/https://registries.govstack.global/5-cross-cutting-requirements.md[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-18 |Première version.
+|===

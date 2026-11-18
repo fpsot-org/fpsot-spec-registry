@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+# Core profile of the FPSOT registry specification (REG-013, REG-016), in the form of the class
+# Profile of model/registry.yaml. Released apart from the core rules (REG-014).
+# It declares no register and no value of a law. It sets the defaults that apply when no other
+# profile sets a value: seal-log as the floor of LOG-002, and restricted, not opposable, for a
+# field that neither the pack nor a profile lists, and the default tenancy codes.
+code: core
+version: 0.1.0
+title: {en: Core profile, fr: Profil de base}
+defaults:
+  sealProfile: seal-log
+  unlistedFieldVisibility: restricted
+  unlistedFieldOpposable: false
+  # Each register may replace these tenancy codes with those of its law (REG-053).
+  tenancies: [sole, joint, in-common]

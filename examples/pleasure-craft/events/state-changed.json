@@ -1,0 +1,38 @@
+{
+  "specversion": "1.0",
+  "id": "019a1b2c-3d4e-7f10-8a10-000000001002",
+  "source": "/v1/filings",
+  "type": "org.fpsot.registry.state.changed",
+  "time": "2026-06-26T15:00:00Z",
+  "datacontenttype": "application/json",
+  "subject": "019a1b2c-3d4e-7f05-8a05-000000000502",
+  "dataschema": "https://fpsot.org/schemas/registry/events/org.fpsot.registry.state.changed.schema.json",
+  "data": {
+    "filingId": "019a1b2c-3d4e-7f05-8a05-000000000502",
+    "registerCode": "pleasure-craft-licenses",
+    "sequence": 2,
+    "validFrom": "2026-06-10T16:00:00Z",
+    "rows": [
+      {
+        "kind": "owner-group",
+        "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301",
+        "change": "ended"
+      },
+      {
+        "kind": "entitlement",
+        "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+        "change": "ended"
+      },
+      {
+        "kind": "owner-group",
+        "entityId": "019a1b2c-3d4e-7f03-8a03-000000000302",
+        "change": "opened"
+      },
+      {
+        "kind": "entitlement",
+        "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+        "change": "opened"
+      }
+    ]
+  }
+}

@@ -1,0 +1,109 @@
+= Retention and destruction
+include::_fpsot-terms.adoc[]
+
+A filing is a legal record.
+The law of its register and the retention schedule of its body govern it.
+An audit event is an operational record, and the observability specification governs it.
+A filing emits events, but it is not one, and the two need different retention.
+The evidence that supports a filing often needs a third, shorter class.
+The Québec enterprise registrar destroys the copy of the identity document of a director once the declaration is on file.
+
+Destruction is not hypothetical either.
+In 2012, the link:https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/[Ending the Long-gun Registry Act], S.C. 2012, c. 6, ordered the government to destroy the long-gun records.
+The link:https://laws-lois.justice.gc.ca/eng/acts/F-11.6/rpdc.html[Firearms Act] now ties that destruction to a copy for Québec, _to be verified_.
+
+A blanket rule of no deletion would be unlawful there.
+A silent deletion would break the chain and the audit trail.
+The answer rests on the salted hashes of the signed records specification.
+
+== Retention classes
+
+[[REG-090]]
+*REG-090.* Each filing type and each evidence type of a register MUST have a retention class in its profile.
+Each class MUST name the rule of the retention schedule that it applies, as OBS-102 does for log stores.
+A {term-legal-hold} under OBS-103 MUST stop the register from destroying each record that it covers.
+
+The `ca-federal` profile names the disposition authorities of Library and Archives Canada, _to be verified_.
+The `ca-qc` profile names the retention schedule of the registrar.
+Its class for identity copies ends once a filing completes.
+
+[[REG-091]]
+*REG-091.* A register MUST NOT keep a filing only as long as the events that it emits.
+The periods that OBS-100 to OBS-104 set for audit events MUST NOT shorten the life of a filing.
+
+The `ca-qc-floor` profile of OBS-101 sets defaults for log stores, not for legal records.
+A register that applied it to filings would lose them years too early.
+
+[[REG-092]]
+*REG-092.* A filing MUST hold only references to its evidence.
+Each reference MUST give the salted SHA-256 hash of the document and its retention class.
+The register MUST keep the salt with the document, and destroy them together.
+A register MAY destroy a document of evidence at the end of its class without a destruction filing.
+The destruction MUST leave an event under OBS-104.
+
+The filing stays whole when its evidence goes, and the hash still proves which document it used.
+Without the salt, nobody can test a guess about a short document against the hash.
+A whole filing needs a destruction filing, under REG-093, because its content shapes the register.
+
+== Destruction filings
+
+[[REG-093]]
+*REG-093.* A register MUST destroy a filing only through a filing of the category `destruction`.
+The destruction filing MUST give its legal basis, the authority that ordered it and the values that it targets.
+It MUST name each target by its field and an opaque id, never by a personal value.
+It MUST name every filing that holds a targeted value, corrections and later filings included.
+It MUST destroy each of them, or list it as retained with the reason that the register cannot destroy it.
+It MUST also give the instant at which the register checked for legal holds, and each copy made before.
+
+The register MUST destroy the content and the salt of each named filing together, in every copy, under LOG-081.
+It MUST emit an event under OBS-104 for each destruction.
+
+Without the salt, nobody can test a guess against the commitment.
+The commitment that stays in the chain and in the log then says nothing about the content.
+A correction often repeats the values of the filing that it corrects.
+Destroying the original alone would leave them in place.
+A sealed filing cannot lose one field, so the register destroys every filing that holds a target.
+
+[[REG-094]]
+*REG-094.* Each destroyed filing MUST leave a tombstone in the class `Tombstone` of `model/registry.yaml`.
+The tombstone MUST keep the sequence, the type, the category, the effective and completion instants and the commitment.
+It MUST also keep the previous commitment and the ids of the rows that the filing opened and ended.
+For a correction, it MUST keep the corrected filing and the ids of the later versions that it restated.
+It MUST NOT keep any other value of the filing.
+
+A tombstone keeps what the chain and the replay need, and nothing that could identify a person.
+
+[[REG-095]]
+*REG-095.* After a destruction, the light chain MUST still verify, under REG-032.
+The replay MUST still give each snapshot whose filings remain whole.
+A row that only destroyed content supports MUST appear as a destroyed row.
+That row gives its kind, its id and its filing.
+A register MUST NOT guess the values of such a row.
+
+In the fixture, a lawful order targets an identity document that the issue and its first correction both held.
+The destruction filing destroys both, and a second correction, without the document, restates the issue.
+The chain verifies, because the second and fourth filings point to the commitments that the tombstones keep.
+As of 20 June 2026, recorded on 30 June, the craft shows as a destroyed row.
+
+[[REG-096]]
+*REG-096.* A copy that a register makes before a destruction MUST appear in the destruction filing.
+The filing MUST give its recipient category, its instant and its legal basis.
+The copy is a disclosure, so REG-074 and REG-076 apply to it.
+
+The Firearms Act ties the end of the long-gun records to a copy for Québec, _to be verified_.
+A record of that copy shows what left the register before the rest disappeared.
+
+== References
+
+=== Informative
+
+* link:https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/[Ending the Long-gun Registry Act, S.C. 2012, c. 6], Justice Laws Website, annual statutes. link:https://web.archive.org/web/20260309192405/https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/[Archived copy]
+* link:https://laws-lois.justice.gc.ca/eng/acts/F-11.6/rpdc.html[Firearms Act, related provisions], Justice Laws Website, read only in part. link:https://web.archive.org/web/20260809074237/https://laws-lois.justice.gc.ca/eng/acts/F-11.6/rpdc.html[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

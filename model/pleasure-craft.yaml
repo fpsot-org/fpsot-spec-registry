@@ -1,0 +1,33 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+id: https://fpsot.org/model/registry/pleasure-craft
+name: pleasure_craft
+title: FPSOT pleasure craft pack schema
+description: >-
+  LinkML schema of the pleasure craft domain pack of the FPSOT registry
+  specification. It adds one asset class to model/registry.yaml and nothing
+  else (REG-050, REG-100, REG-101). The pack data, which are the filing
+  types, the identifier schemes and the lifecycle, are in
+  packs/pleasure-craft.yaml. Each element cites its requirement IDs.
+version: 0.1.0
+license: Community-Spec-1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  registry: https://fpsot.org/model/registry/
+  pleasure_craft: https://fpsot.org/model/registry/pleasure-craft/
+default_prefix: pleasure_craft
+default_range: string
+imports:
+  - linkml:types
+  - registry
+
+classes:
+  PleasureCraft:
+    is_a: Asset
+    description: >-
+      A pleasure craft. The slots are the facts that decide whether a craft
+      needs a license under the Small Vessel Regulations, as SOR/2025-272
+      amends them: its propulsion, its engine power and its length. REG-050.
+    attributes:
+      propulsion: {range: CodeValue, required: true, description: "How the craft moves: engine, wind or human. The pack lists the codes."}
+      enginePowerKw: {range: DecimalString, description: "The total power of the main engines, in kilowatts. DAT-041, DAT-043."}
+      lengthMeters: {range: DecimalString, description: "The length of the craft, in meters. DAT-041, DAT-043."}

@@ -1,0 +1,27 @@
+# Comparison data. The format is defined by fpsot-spec-doc (model/jurisdiction.yaml).
+# SOR/2025-272 and its regulatory impact analysis statement were read at the source. The
+# advisory circular on aircraft was read through the research notes. The bill on the long-gun
+# registry was read only in its summary and the text on destruction. This file is informational and not legal advice.
+code: CA
+name: {en: Canada, fr: Canada}
+rows:
+  - id: REG-011
+    text: {en: "An aircraft certificate of registration is not a certificate of title, and Transport Canada records no liens.", fr: "Le certificat d’immatriculation d’un aéronef n’est pas un titre de propriété, et Transports Canada n’inscrit aucune sûreté."}
+    status: same
+    source: {title: "Transport Canada, Advisory Circular AC No. 202-002", url: "https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002", archive: "https://web.archive.org/web/20261101053933/https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002"}
+    last_checked: "2026-11-17"
+  - id: REG-012
+    text: {en: "Pleasure craft license information is private, and Transport Canada may not publish license holder data.", fr: "Les renseignements sur les permis d’embarcation de plaisance sont privés, et Transports Canada ne peut pas publier les données des titulaires."}
+    status: same
+    source: {title: "Regulations Amending the Small Vessel Regulations, SOR/2025-272, regulatory impact analysis statement", date: "2025-12-31", url: "https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html", archive: "https://web.archive.org/web/20260412123703/https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"}
+    last_checked: "2026-11-18"
+  - id: REG-058
+    text: {en: "A pleasure craft license is valid five years from the day of its issue, transfer or renewal. Licenses issued before 29 April 2010 end on fixed dates, from 31 March 2026 to 31 December 2030.", fr: "Un permis d’embarcation de plaisance vaut cinq ans à compter du jour de sa délivrance, de son transfert ou de son renouvellement. Les permis délivrés avant le 29 avril 2010 prennent fin à des dates fixes, du 31 mars 2026 au 31 décembre 2030."}
+    status: same
+    source: {title: "Regulations Amending the Small Vessel Regulations, SOR/2025-272, sections 105 and 106", date: "2025-12-31", url: "https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html", archive: "https://web.archive.org/web/20260412123703/https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html"}
+    last_checked: "2026-11-18"
+  - id: REG-093
+    text: {en: "The Ending the Long-gun Registry Act, S.C. 2012, c. 6, provides that the records of the long-gun registry be destroyed. The provisions are to be verified.", fr: "La Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6, prévoit la destruction des données du registre des armes d’épaule. Les dispositions sont à vérifier."}
+    status: same
+    source: {title: "Ending the Long-gun Registry Act, S.C. 2012, c. 6, Justice Laws Website", date: "2012", url: "https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/", archive: "https://web.archive.org/web/20260309192405/https://laws-lois.justice.gc.ca/eng/AnnualStatutes/2012_6/"}
+    last_checked: "2026-11-18"

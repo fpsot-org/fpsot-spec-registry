@@ -1,0 +1,110 @@
+= Packs, events and conformance
+include::_fpsot-terms.adoc[]
+
+One core engine can serve many domains, and one domain can serve many jurisdictions.
+A domain pack holds what a domain needs, such as the filing types of pleasure craft licensing.
+A jurisdiction profile holds what a law sets, such as the five-year term.
+This page sets the pack, the events of a register, its interfaces and the replay tests that prove it.
+
+== Domain packs
+
+[[REG-100]]
+*REG-100.* A domain pack MUST hold these parts.
+
+* A LinkML schema that imports `model/registry.yaml` and defines the asset classes of the domain, under DMO-010 and DMO-055.
+* A file of the class `DomainPack` with its asset kinds, its identifier schemes and the catalog of its filing types.
+* The lifecycle of each entitlement class, its payment and review statuses, its party roles and its evidence types.
+* The default visibility and opposability of the fields that it defines.
+* Replay fixtures with expected snapshots, under REG-105.
+
+The pleasure craft pack holds `model/pleasure-craft.yaml` and `packs/pleasure-craft.yaml`, with its fixtures in `examples/pleasure-craft/`.
+Drones will make a good second pack, once the research has read their official fee and validity.
+
+[[REG-101]]
+*REG-101.* Each pack MUST have its own version number under Semantic Versioning 2.0.0.
+A pack schema MUST NOT redefine a class of `model/registry.yaml` or of the Party model.
+A pack MUST NOT hold a value that a law sets, under REG-015.
+
+== Events
+
+[[REG-102]]
+*REG-102.* A register MUST emit a business event under OBS-070 each time a filing reaches a final status.
+It MUST emit another one each time a completed filing changes rows.
+An event that it sends to another service MUST be a CloudEvents event under API-100 and API-101.
+The types are `org.fpsot.registry.filing.recorded` and `org.fpsot.registry.state.changed`.
+Their schemas are in `registry/events/`, under API-103.
+
+The second event names each row that the filing opened, ended or left destroyed.
+A consumer can then refresh its own copy without reading the filing.
+
+[[REG-103]]
+*REG-103.* An event of a register MUST NOT hold a party id, a name or an address.
+It MUST NOT hold an amount or the value of an identifier either.
+It holds only the ids of filings and rows, codes and instants.
+
+A license number or a hull serial number leads to a person as surely as a name.
+The pleasure craft register is closed, and its events must not open it.
+
+== Interfaces
+
+[[REG-104]]
+*REG-104.* An interface of a register MUST follow the RESTful API specification.
+It MUST create a filing with `POST`, with an `Idempotency-Key` under API-060.
+It MUST NOT offer an operation that changes the content of a filing or deletes it.
+A withdrawal MUST be a change of the processing status of REG-024 before completion, never a deletion.
+The provider MUST test the interface against its published description, under TST-040.
+
+A base path such as `/registry` MAY prefix the paths, under API-019.
+
+== Replay fixtures
+
+[[REG-105]]
+*REG-105.* The conformance suite of a pack MUST hold replay fixtures, under TST-044.
+The fixtures MUST hold ordered filings, the light chain and the expected snapshots of REG-042.
+They MUST also hold scenarios in English and in French, under TST-020 to TST-036.
+Each scenario MUST state its dates and name the filing types that it uses.
+The suite MUST also test each event against the schema of its type, under TST-043.
+
+A replay test feeds filings in and compares the snapshots that come out.
+It is the strongest test of a register whose state comes from events.
+It needs no access to the code.
+
+[[REG-106]]
+*REG-106.* Fixtures, examples and tests MUST use synthetic data only, under TST-050.
+Their parties MUST be fictional, and their addresses MUST use domains reserved for documentation.
+Their identifiers MUST NOT match a real license, hull or order.
+
+The fixture numbers start with `EX`, and its order points to `example.org`.
+
+== GovStack adapter
+
+[[REG-107]]
+*REG-107.* A register MAY offer an adapter profile for link:https://registries.govstack.global/[GovStack Digital Registries 3.0-alpha].
+Such an adapter MUST map each GovStack requirement that it claims to a rule of this specification.
+
+GovStack is generic about schemas and is still at an alpha version.
+Its rules on read logging and logical deletion match REG-076 and REG-044.
+An adapter gives buyers a familiar checklist without letting a generic schema drive the core.
+
+== Replacement
+
+[[REG-108]]
+*REG-108.* A core engine that replaces another one MUST pass the same replay fixtures, under TST-045.
+It MUST give the same snapshots and verify the same chain from the same filings.
+
+A register can then change engines while the law stays the same.
+Both engines give the same state from the same filings.
+
+== References
+
+=== Informative
+
+* link:https://registries.govstack.global/[Digital Registries Building Block Specification], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260811020249/https://registries.govstack.global/[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

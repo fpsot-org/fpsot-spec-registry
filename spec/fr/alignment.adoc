@@ -1,0 +1,125 @@
+= Alignement sur d’autres normes
+include::_fpsot-terms.adoc[]
+
+Cette page est informative, et elle ne fixe aucune règle.
+Aucune norme publiée ne modélise un registre de biens et de droits pour plusieurs domaines.
+Chaque norme ci-dessous couvre une partie, donc cette spécification s’y rattache sans déclarer de conformité à aucune.
+Un rattachement permet à un adoptant d’exporter dans un format connu.
+Il répond aussi à un acheteur qui pose une question sur une norme précise.
+
+== Land Administration Domain Model
+
+La link:https://www.iso.org/standard/81263.html[norme ISO 19152-1:2024] est le modèle le plus proche d’un registre.
+La partie 1 est générique, et la link:https://www.iso.org/standard/81264.html[partie 2 de 2025] vise l’enregistrement foncier.
+L’ISO vend les deux parties, et la recherche n’a lu qu’un projet de la partie 1.
+Les noms de classes ci-dessous sont donc _à vérifier_.
+
+L’édition 2024 ajoute une durée de vie réelle à côté de la durée de vie dans le système.
+Le modèle devient ainsi bitemporel.
+Cette spécification reprend les concepts et laisse de côté les paquets spatiaux.
+
+[cols="2,2,3",options="header"]
+|===
+|LADM |Cette spécification |Note
+|Party |`Party` de DMO-040 |La spécification sur les modèles de données en est responsable.
+|Unité administrative de base |`Asset` |Une sous-classe pour chaque sorte de bien, dans le schéma du module.
+|Droit |`OwnerGroup` ou `Entitlement` |La propriété et le droit restent distincts, selon REG-056.
+|Restriction |`Encumbrance` |Une famille facultative, selon REG-059.
+|Responsabilité |Une condition d’un `Entitlement` |Une obligation qui accompagne un droit.
+|Source administrative |`Filing` |L’acte juridique derrière chaque changement.
+|Objet versionné |Champs d’historique de REG-041 |`validFrom` et `validTo` pour le monde, `completedAt` pour le système.
+|===
+
+== Beneficial Ownership Data Standard
+
+La link:https://standard.openownership.org/en/0.4.0/standard/reference.html[norme BODS 0.4] sépare les énoncés des enregistrements.
+Chaque énoncé a son propre identifiant, et chaque enregistrement a un statut : nouveau, mis à jour ou fermé.
+Cette séparation reflète celle entre les déclarations et l’état dérivé.
+
+[cols="2,2,3",options="header"]
+|===
+|BODS 0.4 |Cette spécification |Note
+|Énoncé (statement) |`Filing` |Un énoncé ne change jamais, une déclaration non plus.
+|Enregistrement et son état |Version de ligne et ses champs d’historique |Un enregistrement fermé est une ligne avec `validTo`.
+|Énoncé de personne |`Person` de DMO-041 |
+|Énoncé d’entité |`Organization` de DMO-042 |
+|Énoncé de relation |`OwnerGroup`, ou `PartyRelationship` de DMO-044 |Propriété d’une part, ou contrôle.
+|Sujet exempté de divulgation |Motif d’omission `withheld-on-application` ou `not-public-by-law` |REG-073.
+|Information inconnue de l’éditeur |Motif d’omission `unknown-to-register` |REG-073.
+|===
+
+== Core Business Vocabulary
+
+Le link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] de SEMIC décrit une entreprise immatriculée.
+Il ne définit aucun événement ni aucun cycle de vie, donc les déclarations de cette spécification fournissent l’historique.
+
+[cols="2,2,3",options="header"]
+|===
+|CBV 2.2.0 |Cette spécification |Note
+|Dénomination légale |`OrganizationName` de DMO-042 |
+|Identifiant légal |`PartyIdentification` de DMO-046 |
+|Adresse du siège |`PostalAddress` de DMO-033 |
+|Forme de l’entreprise |`PartyClassification` de DMO-047 |
+|Statut de l’entreprise |L’état de l’immatriculation, selon REG-045 |Dérivé des déclarations, jamais conservé seul.
+|===
+
+== GovStack Digital Registries
+
+La spécification link:https://registries.govstack.global/[GovStack Digital Registries 3.0-alpha], de juin 2026, crée des schémas avec un état de cycle de vie.
+Elle génère des opérations pour créer, lire, modifier et supprimer des enregistrements.
+Elle n’a ni titulaires, ni biens, ni droits.
+Certaines de ses règles transversales correspondent à cette spécification, et un adaptateur selon REG-107 peut les déclarer.
+
+[cols="2,2,3",options="header"]
+|===
+|GovStack |Cette spécification |Note
+|Création de schémas |Module de domaine, selon REG-100 |Un module est une donnée publiée, non un schéma créé à l’exécution.
+|Modification et suppression d’un enregistrement |Une nouvelle déclaration, selon REG-020 et REG-022 |L’adaptateur fait de chaque modification une déclaration.
+|DRS-8, journalisation de chaque lecture de données personnelles |REG-076 |Un événement d’audit selon OBS-042.
+|DRS-37, la personne concernée voit qui a lu ses données |REG-077 |Une recommandation ici.
+|Enregistrement logique gardé lors d’une suppression, sauf si une loi exige une suppression physique |REG-044 et REG-093 |La déclaration de destruction est la suppression physique légale.
+|===
+
+== Verifiable Credentials Data Model
+
+Le link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0] convient aux droits délivrés.
+La link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0] porte leur statut.
+
+[cols="2,2,3",options="header"]
+|===
+|VC 2.0 |Cette spécification |Note
+|Émetteur |L’organisme qui tient le registre |
+|Sujet de l’attestation |L’`Entitlement` et ses parties |
+|`validFrom` et `validUntil` |`validity` de l’`Entitlement` |Des jours dans le fuseau horaire du registre.
+|Statut de l’attestation |Déclarations du cycle de vie, selon REG-045 |Un état lié au temps n’exige aucun changement de statut.
+|Schéma de l’attestation |Le schéma du module |
+|Preuve |La déclaration et ses renvois aux pièces |Des renvois seulement, selon REG-092.
+|===
+
+== Système technique « une fois pour toutes »
+
+Le système technique européen « une fois pour toutes » rattache des types de preuves aux exigences de chaque État membre.
+Ses link:https://ec.europa.eu/digital-building-blocks/sites/display/OOTS/Technical+Design+Documents[documents de conception technique] décrivent ce modèle.
+La recherche a vu une version 2.0 de février 2026, ce qui est _à vérifier_.
+Un type d’extrait d’un profil, selon REG-085, est l’endroit naturel pour nommer le type de preuve correspondant.
+
+== Références
+
+=== Références informatives
+
+* link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024, Geographic information, Land Administration Domain Model, Part 1: Generic conceptual model], ISO, 2024, payante, non lue. link:https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html[Copie archivée]
+* link:https://www.iso.org/standard/81264.html[ISO 19152-2:2025, Geographic information, Land Administration Domain Model, Part 2: Land registration], ISO, 2025, payante, non lue. link:https://web.archive.org/web/20260620173630/https://www.iso.org/standard/81264.html[Copie archivée]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Copie archivée]
+* link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary], SEMIC, Commission européenne, version 2.2.0. link:https://web.archive.org/web/20250601165122/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Copie archivée]
+* link:https://registries.govstack.global/[Digital Registries Building Block Specification], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260811020249/https://registries.govstack.global/[Copie archivée]
+* link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Copie archivée]
+* link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261014182736/https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Copie archivée]
+* link:https://ec.europa.eu/digital-building-blocks/sites/display/OOTS/Technical+Design+Documents[OOTS Technical Design Documents], Commission européenne, version à vérifier. link:https://web.archive.org/web/20250412114847/https://ec.europa.eu/digital-building-blocks/sites/display/OOTS/Technical+Design+Documents[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-18 |Première version.
+|===

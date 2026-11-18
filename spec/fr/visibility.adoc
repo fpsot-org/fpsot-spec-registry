@@ -1,0 +1,126 @@
+= Visibilité, opposabilité et accès
+include::_fpsot-terms.adoc[]
+
+Les registres diffèrent surtout sur qui peut voir quoi.
+Le Québec publie le nom des bénéficiaires ultimes d’une entreprise, jamais leur date de naissance.
+Il ne montre leur adresse personnelle que s’ils ne déclarent aucune adresse professionnelle.
+La France n’ouvre son registre des bénéficiaires effectifs qu’aux personnes qui ont un intérêt légitime.
+Au Canada, les données des permis d’embarcation de plaisance sont fermées.
+Seuls des organismes d’application de la loi et de sauvetage les consultent.
+
+Un simple drapeau public ou privé ne peut traduire aucun de ces régimes.
+
+Une seconde propriété se tient à part de la première.
+Le Québec rend opposables aux tiers le nom et le domicile d’un bénéficiaire ultime, mais pas ses autres noms.
+La visibilité dit qui peut lire un champ.
+L’opposabilité dit si une partie peut faire valoir le champ contre un tiers.
+L’une ne découle pas de l’autre.
+
+La link:https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/[Cour de justice de l’Union européenne] a statué le 22 novembre 2022 sur les données des bénéficiaires effectifs.
+Elle a jugé que l’accès ouvert à tout le public allait trop loin.
+Le Canada et le Québec, que cette cour ne lie pas, ont ouvert des registres publics en 2023 et 2024.
+Un moteur qui coderait en dur l’une ou l’autre réponse aurait tort pour la moitié de ses adoptants.
+
+== Catégories de visibilité
+
+[[REG-070]]
+*REG-070.* Chaque champ d’un registre DOIT avoir une catégorie de visibilité, de la plus large à la plus étroite.
+
+* `public` : tout le monde.
+* `parties` : les parties de l’enregistrement, leurs représentants et l’organisme.
+* `agency` : l’organisme qui tient le registre et les destinataires d’une politique d’accès.
+* `restricted` : seulement les rôles que le profil nomme pour une fin précise.
+
+Le module de domaine DOIT donner la catégorie par défaut de chaque champ qu’il définit.
+Le profil PEUT la changer, selon REG-015.
+Une vue NE DOIT PAS montrer un champ dont la catégorie est plus étroite que la vue.
+
+Dans le jeu d’essai, une vue publique du permis d’embarcation de plaisance ne montre aucun champ.
+Un extrait pour un agent d’application de la loi montre le permis, sa validité et son titulaire.
+
+[[REG-071]]
+*REG-071.* La catégorie d’un champ PEUT dépendre d’une condition sur un autre champ du même enregistrement.
+Une telle politique DOIT donner la catégorie qui vaut quand la condition est remplie, et celle qui vaut sinon.
+
+Le profil `ca-qc` ne rend publique l’adresse personnelle d’un bénéficiaire ultime qu’en l’absence d’adresse professionnelle.
+
+== Opposabilité
+
+[[REG-072]]
+*REG-072.* Chaque champ DOIT aussi porter une marque d’opposabilité, que fixe le profil.
+Un système NE DOIT PAS dériver la marque de la catégorie de visibilité, ni la catégorie de la marque.
+Un champ que ni le module ni un profil n’énumère n’est pas opposable, selon REG-016.
+
+Le profil `ca-qc` marque le nom complet d’un bénéficiaire ultime comme public et opposable.
+Il marque ses autres noms comme publics et non opposables.
+Deux marques dans un même enregistrement rendent cet écart visible pour un lecteur et pour un essai.
+
+== Omissions
+
+[[REG-073]]
+*REG-073.* Une vue DOIT donner un code de motif pour chaque champ qu’elle omet.
+Le code DOIT être l’un de ceux-ci.
+
+* `not-public-by-law` : la loi ou le profil soustrait le champ à cette vue.
+* `withheld-on-application` : le registre retient le champ à la demande d’une personne, comme la loi le permet.
+* `unknown-to-register` : le registre ne détient pas la valeur.
+* `destroyed` : une destruction légale a supprimé la valeur, selon REG-093.
+
+Le link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4] distingue un sujet exempté de divulgation d’un fait que l’éditeur ignore.
+Une personne qui voit un champ vide doit savoir si la loi le cache ou si personne ne le connaît.
+
+== Politiques d’accès
+
+[[REG-074]]
+*REG-074.* Une vue plus large que `public` DOIT reposer sur un rôle dans l’enregistrement ou sur une politique d’accès.
+Chaque politique d’accès DOIT donner sa base juridique, ses destinataires, sa fin et la catégorie la plus large qu’elle ouvre.
+Elle DOIT aussi donner son échéance quand la loi la limite, et son obligation de journaliser chaque lecture.
+Quand la loi accorde l’accès demande par demande, chaque autorisation DEVRAIT être un droit d’une classe à part.
+
+Le profil `ca-federal` a trois politiques.
+Elles visent les agents d’application de la loi, les organismes de recherche et sauvetage et la Garde côtière.
+La France accorde l’accès à son registre des bénéficiaires effectifs par une attestation d’intérêt légitime.
+Des sources secondaires signalent un décret de 2026 qui la rend valide trois ans, ce qui est _à vérifier_.
+Une telle attestation est elle-même un droit, dont la personne qui la demande est titulaire.
+
+[[REG-075]]
+*REG-075.* Un registre DOIT interroger le moteur d’autorisation à chaque requête de vue, selon IAM-050.
+Il DOIT refuser par défaut, selon IAM-051.
+Les politiques d’accès du profil DOIVENT alimenter les politiques du moteur.
+Elles NE DOIVENT PAS vivre seulement dans le code du registre.
+
+== Lectures
+
+[[REG-076]]
+*REG-076.* Chaque lecture de renseignements personnels dans un registre DOIT être un événement d’audit selon OBS-042.
+L’événement DOIT porter le code de la politique d’accès comme fin, selon OBS-095.
+Cela vaut pour une recherche, une vue, un extrait et une exportation.
+
+Le link:https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf[registre des communications de la SAAQ] énumère les communications de renseignements personnels que fait l’organisme.
+Un événement d’audit pour chaque lecture donne au registre les faits dont une telle liste a besoin.
+
+[[REG-077]]
+*REG-077.* Un registre DEVRAIT permettre à une personne concernée d’obtenir la liste des lectures de ses renseignements personnels.
+La liste DEVRAIT donner la date, la catégorie de destinataires et la fin de chaque lecture.
+
+La spécification link:https://registries.govstack.global/6-functional-requirements.md[GovStack Digital Registries] exige que la personne concernée puisse voir qui a lu ses données.
+L’Estonie oblige ses registres à montrer aux citoyens qui a consulté leurs données, par son link:https://ria.ee/en/state-information-system/people-centred-data-exchange/data-tracker[Data Tracker].
+La question de savoir si un organisme peut taire certains destinataires, comme la police, relève d’une ou d’un juriste.
+
+== Références
+
+=== Références informatives
+
+* link:https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/[CJEU: No Unrestricted Access to Data of Beneficial Owners], eucrim, sur l’arrêt du 2022-11-22 dans les affaires jointes C-37/20 et C-601/20, source secondaire. link:https://web.archive.org/web/20260517174819/https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/[Copie archivée]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Copie archivée]
+* link:https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf[Registre des communications de renseignements personnels], Société de l’assurance automobile du Québec. link:https://web.archive.org/web/20260520071052/https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf[Copie archivée]
+* link:https://registries.govstack.global/6-functional-requirements.md[Digital Registries Building Block, functional requirements], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260715201724/https://registries.govstack.global/6-functional-requirements.md[Copie archivée]
+* link:https://ria.ee/en/state-information-system/people-centred-data-exchange/data-tracker[Data Tracker], Information System Authority of Estonia. link:https://web.archive.org/web/20261010132741/https://www.ria.ee/en/state-information-system/people-centred-data-exchange/data-tracker[Copie archivée]
+
+== Historique du document
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Changement
+|0.1.0 |2026-11-18 |Première version.
+|===

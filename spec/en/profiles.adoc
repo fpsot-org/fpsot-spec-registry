@@ -1,0 +1,143 @@
+= Jurisdiction profiles
+include::_fpsot-terms.adoc[]
+
+The registers that the research compared share their mechanics and split on every legal property.
+Québec and Canada publish the beneficial owners of businesses, while France limits that register to people with a legitimate interest.
+The law treats a right in the Québec register of movable rights as known to everyone.
+A Canadian aircraft registration, by contrast, does not prove title.
+The pleasure craft license database is closed to the public, while the aircraft register is public.
+No single rule could serve all of them.
+
+This page therefore keeps each legal property in a jurisdiction profile, apart from the core rules.
+
+A profile states the practice of {abbr-fpsot-first}, and it is not legal advice.
+Each profile file names the texts that it follows and marks the ones that are _to be verified_.
+
+== Register declarations
+
+[[REG-010]]
+*REG-010.* Each register MUST have a declaration in a profile, in the class `RegisterDeclaration` of `model/registry.yaml`.
+The declaration MUST give the legal instruments that establish the register, its legal effect and its publicity regime.
+It MUST also give its domain pack, the seal profile that it claims and the time zone of its dates.
+Each filing names its register, and a register without a declaration takes no filing.
+
+A declaration is the place where a buyer, an auditor and a court read what the register is.
+The profile `ca-federal` declares the register of pleasure craft licenses.
+The profile `ca-qc` declares two registers whose packs do not exist yet.
+
+== Legal effect
+
+[[REG-011]]
+*REG-011.* The legal effect of a register MUST be one of these three values.
+The declaration MUST cite its source.
+
+* `administrative-identification`: registration identifies an asset and a party for the administration, and says nothing about title.
+* `notice-opposability`: registration makes a right known to third parties, or opposable to them.
+* `title`: registration creates or proves title.
+
+A profile of this release MUST NOT declare `title`.
+A later release may allow it once counsel names a register in scope whose registration creates or proves title.
+
+Transport Canada states in link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular 202-002] that an aircraft certificate of registration is not a certificate of title.
+The link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[questions and answers of the RDPRM] say that the law treats a registered right as known to everyone.
+The research found no register in scope whose registration creates title.
+Question 1 of xref:questions-for-counsel.adoc[Questions for counsel] asks a lawyer.
+The legal effect drives other duties, such as the need for a trusted time stamp at the instant of registration.
+
+== Publicity regime
+
+[[REG-012]]
+*REG-012.* The publicity regime of a register MUST be one of `public`, `public-with-exceptions`, `gated` or `closed`, with its source.
+The field policies, access policies and search modes of the register MUST agree with it.
+A `closed` register MUST NOT make a field public, nor open a search mode to the public.
+A public view of a `closed` register MUST show no field.
+It MUST give a reason for each field that it leaves out.
+It MUST NOT confirm or deny that a record exists, so it gives the same answer to every query.
+
+France alone shows three regimes.
+Its national business register shows most fields to the public, with exceptions.
+Its beneficial owner register opens only to people with a legitimate interest, and its vehicle register stays closed.
+A regime as data lets one engine serve all three.
+
+== Profile files
+
+[[REG-013]]
+*REG-013.* Each profile MUST be a file of the class `Profile` of `model/registry.yaml`, in the folder `profiles/`.
+Each profile MUST list its sources.
+For each source, it MUST state whether the research read it, or mark it `to-be-verified`.
+Each parameter of a profile MUST cite one of those sources.
+The parameters are the legal instruments, the legal effect, the regime, the terms and the deadlines.
+The retention classes, the field policies and the access policies are parameters too.
+
+[cols="2,3,4",options="header"]
+|===
+|Profile |Applies to |Registers of this release
+|`core` |Every register |None. It sets the defaults of REG-016.
+|`ca-federal` |Federal registers of Canada |Pleasure craft licenses under the Small Vessel Regulations, as SOR/2025-272 amends them.
+|`ca-qc` |Québec registers |The enterprise register and the road vehicle register, whose packs are planned.
+|===
+
+A French profile does not exist in this release.
+The research read no French code at its source.
+The comparison data in `jurisdictions/fr.yaml` therefore describes France without a normative profile.
+
+The `ca-federal` profile follows link:https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html[SOR/2025-272], which the research read in full.
+A license runs five years from its issue, transfer or renewal, under section 105.
+A craft may run without a transferred license until the 30th day after a transfer, under section 103.
+Section 106 sets fixed end dates for licenses from before 29 April 2010.
+Those dates run from 31 March 2026 to 31 December 2030.
+The impact analysis statement says that license information is private and that Transport Canada may not publish it.
+
+== Releases and dated parameters
+
+[[REG-014]]
+*REG-014.* Each profile MUST have its own version number under Semantic Versioning 2.0.0, apart from the version of this specification.
+Each term and each deadline MUST carry the effective dates to which its value applies.
+A filing MUST use the value in force on the date of its effective instant.
+That date is in the time zone of its register.
+A release that removes or relaxes a parameter of the same profile MUST take a new major version.
+
+Registry law changed in all three jurisdictions between 2022 and 2026.
+When France changes the criteria of its beneficial owner register, the result is a profile release, not a breaking change.
+The decisions specification dates its parameters in the same way, under DEC-037.
+
+== No law in the core
+
+[[REG-015]]
+*REG-015.* A core engine MUST take each legal parameter from the profile of the register.
+It MUST NOT hard-code a term, a deadline, a visibility class or an opposability flag.
+It MUST NOT hard-code a retention period or a search mode either.
+A domain pack MUST NOT hold a value that a law sets.
+A profile MUST NOT relax a MUST of the core rules.
+
+A pack holds the mechanics of a domain, such as its filing types and its identifier schemes.
+A profile holds the law of a jurisdiction, such as the five-year term of a pleasure craft license.
+The same pack then serves every jurisdiction that licenses pleasure craft, each with its own profile.
+
+== Defaults and missing parameters
+
+[[REG-016]]
+*REG-016.* Each register MUST also follow the `core` profile, which sets the defaults.
+A field that neither the pack nor a profile lists is `restricted` and not opposable.
+The seal profile is at least `seal-log`.
+A rule may need a parameter that neither the profile nor the defaults give.
+The engine MUST then refuse to complete the filing.
+It MUST NOT assume a value.
+
+A silent default would turn a gap in a profile into a legal choice that nobody made.
+
+== References
+
+=== Informative
+
+* link:https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html[Regulations Amending the Small Vessel Regulations, SOR/2025-272], Canada Gazette, Part II, 2025-12-31, with its regulatory impact analysis statement. link:https://web.archive.org/web/20260412123703/https://gazette.gc.ca/rp-pr/p2/2025/2025-12-31/html/sor-dors272-eng.html[Archived copy]
+* link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular AC No. 202-002], Transport Canada. link:https://web.archive.org/web/20261101053933/https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Archived copy]
+* link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Questions et réponses], Registre des droits personnels et réels mobiliers, Gouvernement du Québec, archived copy.
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

@@ -1,0 +1,47 @@
+{
+  "records": [
+    {
+      "id": "019a1b2c-3d4e-7f11-8a11-000000001101",
+      "fullName": "Dominique Exemple",
+      "birthDate": "1980-01-01",
+      "homeAddress": "1, chemin du Domicile, Québec",
+      "professionalAddress": "100, rue de l’Exemple, Québec"
+    }
+  ],
+  "extracts": [
+    {
+      "id": "019a1b2c-3d4e-7f11-8a11-000000001102",
+      "createdAt": "2026-09-01T15:00:00Z",
+      "updatedAt": "2026-09-01T15:00:00Z",
+      "registerCode": "enterprise-register",
+      "extractType": "public-view",
+      "view": "public",
+      "validAt": "2026-09-01T15:00:00Z",
+      "recordedAt": "2026-09-01T15:00:00Z",
+      "lastFilingSequence": 0,
+      "fields": [
+        {
+          "path": "UltimateBeneficiary.fullName",
+          "entityId": "019a1b2c-3d4e-7f11-8a11-000000001101",
+          "value": "Dominique Exemple"
+        },
+        {
+          "path": "UltimateBeneficiary.professionalAddress",
+          "entityId": "019a1b2c-3d4e-7f11-8a11-000000001101",
+          "value": "100, rue de l’Exemple, Québec"
+        }
+      ],
+      "omissions": [
+        {
+          "path": "UltimateBeneficiary.homeAddress",
+          "reason": "not-public-by-law"
+        },
+        {
+          "path": "UltimateBeneficiary.birthDate",
+          "reason": "not-public-by-law"
+        }
+      ],
+      "issuedAt": "2026-09-01T15:00:00Z"
+    }
+  ]
+}

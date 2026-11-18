@@ -1,8 +1,169 @@
 = FPSOT registry specification
 include::_fpsot-terms.adoc[]
 
-Replace this page with the normative text of the specification.
-Start with the scope, then the conformance classes, then the requirements.
+This specification sets what software must record and prove about each {term-registry} that a law establishes.
+It covers registers of assets, ownership and entitlements, such as licenses, vehicle and vessel registrations, permits and business registers.
+It standardizes the filing and what software can derive from it.
+It leaves everything that varies by law to jurisdiction profiles.
+
+The research for this specification compared registers in Canada, Québec and France.
+They disagree on almost every legal property of a register.
+Some publish the owners, and others keep them closed.
+Some make a registered right opposable to everyone, and others say that registration proves nothing about title.
+They share the mechanics, though.
+Each legal act is one filing that never changes, and a correction is a new filing.
+
+The rules therefore rest on five parts that work under any law.
+
+* The filing: one legal event that never changes, with three dates, three statuses and the authority of the filer.
+Each filing also takes a place in a light chain.
+* Derived state: the current and past state, which anyone can rebuild by replaying the filings.
+A query reads it as of one instant, as recorded at another.
+* The register rows: the {term-asset}, the owner groups of its {term-ownership}, the {term-entitlement} and the encumbrance.
+* Views: visibility and opposability of each field as data, declared search modes, and sealed extracts.
+* Profiles and packs: the law of a jurisdiction and the mechanics of a domain, each released as data.
+
+The rules reuse the other {abbr-fpsot-first} specifications and redefine none of their parts.
+A {term-party} comes from the data models specification, and a representation comes from the identity specification.
+Fees and eligibility are decisions of the decisions specification.
+Seals, time stamps and the {term-transparency-log} come from the signed records specification.
+
+== Scope
+
+[[REG-001]]
+*REG-001.* These rules apply to software that keeps a register under a law, whatever the domain and whatever the storage.
+A register records assets, the parties that own them and the entitlements that the law grants to parties.
+A system MUST apply these rules to each such register that it keeps.
+The intake of an application, the fee of a filing and the work on a case are out of scope.
+Future {abbr-fpsot} specifications will cover them, and the decisions specification covers eligibility.
+
+A register in this sense keeps legal facts that third parties may rely on.
+A plain list of contacts or an inventory of equipment is out of scope.
+
+== Roles and conformance classes
+
+[[REG-002]]
+*REG-002.* Each party that claims conformance MUST state which of these four {term-conformance-class} names it claims.
+A party can claim more than one.
+
+[cols="1,2,3",options="header"]
+|===
+|Class |Who claims it |Rules
+|`core` |A core engine, which keeps filings and derives state for any domain |The rules of every page, except those that bind a pack, a profile or an operator only
+|`pack` |The author of a domain pack, such as pleasure craft or drones |REG-021, REG-045, REG-050 to REG-052, REG-058, REG-100, REG-101 and REG-105
+|`profile` |The author of a jurisdiction profile |REG-010 to REG-016, REG-033, REG-046, REG-053, REG-058, REG-060, REG-070 to REG-074, REG-080, REG-085 and REG-090
+|`publication` |A register operator, which runs a register and serves its views and extracts |REG-012, REG-031, REG-074 to REG-077, REG-082 to REG-086 and REG-093 to REG-096
+|===
+
+Each rule names the role that it binds.
+A buyer then knows what to ask of each supplier, and a tester knows what to check.
+
+== Legal status
+
+[[REG-003]]
+*REG-003.* A conformance claim MUST NOT state or suggest that a register meets any law.
+It MUST NOT suggest that conformance gives an extract or a search result any legal presumption.
+Conformance shows that a register can produce the records that several laws ask for.
+Only the body that keeps the register, with its counsel, can say what its law asks.
+
+This specification states the practice of {abbr-fpsot}, and it is not legal advice.
+Jurisdiction facts sit in the profile files and the comparison data, never in a rule.
+Legal questions sit on the page xref:questions-for-counsel.adoc[Questions for counsel].
+A legal text that the research did not read at its source carries the mark _to be verified_.
+LégisQuébec, CanLII and Légifrance refused automated readers, so every Québec and French article here is _to be verified_.
+
+== Owners of the parts
+
+[[REG-004]]
+*REG-004.* An implementation MUST take each part of this table from the specification that owns it.
+It MUST NOT define its own.
+
+[cols="2,3",options="header"]
+|===
+|Part |Owner and rules
+|Party, person, organization, party roles and relationships, extensions |Data models: DMO-040 to DMO-047, DMO-053 to DMO-057
+|Who acted for whom, and the check of each request |Identity: IAM-050, IAM-061 to IAM-064, IAM-091
+|Identifiers, instants, dates, intervals, money, geometry |Data types: DAT-010, DAT-014, DAT-023, DAT-050, DAT-060 to DAT-066, DAT-081
+|Eligibility, fees, exemptions and penalties as decisions |Decisions: DEC-030 to DEC-047
+|Code lists, such as filing types and reason codes |Vocabularies: VOC-001 to VOC-065
+|Seals, time stamps, the transparency log, proofs, destruction of sealed records |Signed records: LOG-002, LOG-010 to LOG-031, LOG-081
+|Audit events, business events, read logging and retention of events |Observability: OBS-042, OBS-070, OBS-100 to OBS-104
+|Methods, errors, paging, idempotency and events |RESTful API: API-030, API-049, API-060, API-100 to API-103
+|Scenarios, conformance suites and synthetic data |Testing: TST-020 to TST-036, TST-044, TST-050
+|===
+
+The identifier schemes, filing types and other code lists of this release are pack data in YAML and LinkML enumerations.
+A released scheme also needs its Turtle and JSON-LD files, under VOC-050.
+
+A domain specification sits on top of the others.
+If it defined its own party or its own seal, two models of the same fact would drift apart.
+
+== Versions and conformance testing
+
+[[REG-005]]
+*REG-005.* An implementation MUST follow the versions of the outside standards that this page lists under Standards.
+It MAY follow a later version of the same standard when the parts that it uses keep their meaning.
+A filing must stay readable as long as the register keeps it.
+Each reader must then know which text applied.
+
+[[REG-006]]
+*REG-006.* A conformance suite of this specification MUST check the output of an implementation, under TST-044.
+The output is the filings, the chain, the snapshots, the extracts, the search records and the events.
+The suite MUST NOT need the source code of the implementation.
+The folders `model/`, `packs/`, `profiles/`, `registry/` and `examples/` hold the first fixtures.
+The script `examples/check-examples.py` checks them.
+
+== Parts
+
+The rules come in nine parts, and two informative pages follow them.
+
+* xref:profiles.adoc[Jurisdiction profiles] sets the register declaration, the legal effect, the publicity regime and the profile files.
+* xref:filings.adoc[Filings] sets the filing, its dates, statuses and authority, corrections, orders and the light chain.
+* xref:history.adoc[Derived state and history] sets the replay, the history rows, bitemporal queries and lifecycles.
+* xref:assets-rights.adoc[Assets, ownership, entitlements and encumbrances] sets the rows of a register.
+* xref:visibility.adoc[Visibility, opposability and access] sets who may see each field, which fields are opposable and who may access more.
+* xref:search-extracts.adoc[Search, extracts and credentials] sets the search modes, the search records, the extracts and the verifiable credentials.
+* xref:retention.adoc[Retention and destruction] sets the retention classes, the destruction filings and the tombstones.
+* xref:conformance.adoc[Packs, events and conformance] sets the domain packs, the events, the interfaces and the replay fixtures.
+* xref:alignment.adoc[Alignment with other standards] is informative.
+It maps the model to LADM, BODS, SEMIC, GovStack, verifiable credentials and the Once-Only system.
+* xref:questions-for-counsel.adoc[Questions for counsel] is informative, and lists the legal points that a lawyer must settle.
+
+== Related specifications
+
+This specification builds on other {abbr-fpsot} specifications, and cites their rules by number.
+
+* The data models specification sets the party, under DMO-040 to DMO-047.
+It also sets the form of a LinkML model, under DMO-010 to DMO-024.
+* The identity and access specification sets representation, under IAM-061 to IAM-064, and the check of each request, under IAM-050.
+* The data types specification sets the form of instants, dates, intervals, money and identifiers, under DAT-010 to DAT-072.
+* The decisions specification sets the decision record, under DEC-040, and the rule versions with their dates, under DEC-030 to DEC-037.
+* The signed records specification sets the seals, the profiles and the transparency log, under LOG-002, LOG-010 to LOG-031 and LOG-081.
+* The observability specification sets the audit events, under OBS-042, and the business events, under OBS-070.
+It also sets how long a log store keeps events, under OBS-100 to OBS-104.
+* The vocabularies specification sets the concept schemes and their codes, under VOC-001 to VOC-065.
+* The RESTful API specification sets events, under API-100 to API-103, and searches on personal information, under API-049.
+* The testing specification sets scenarios, under TST-020 to TST-036, conformance suites, under TST-044, and synthetic data, under TST-050.
+* The naming specification sets the names of fields, events and codes, under NAM-010, NAM-050 and NAM-060.
+
+== Examples
+
+The folder `examples/pleasure-craft/` holds a synthetic register of pleasure craft licenses under the `ca-federal` profile.
+Every person, number and order in it is fictional.
+
+* `parties.json` holds the parties, in the form of the data models specification.
+* `filings/` holds four filings: a transfer within 30 days, a destruction order, a correction and a renewal.
+* `chain.json` holds the light chain of six filings and two tombstones.
+A lawful order destroyed the first filing, an issue, and the filing that first corrected it.
+* `log.json` stands in for the log series of the register: its leaves and checkpoints in two yearly shards.
+* `salts.json` stands in for the salts that the register keeps with its sealed filings.
+* `snapshots.json` holds seven bitemporal snapshots, which a replay of the filings must give back.
+* `views.json` holds an extract for enforcement officers, a public view of the closed register and a search record.
+* `events/` holds the two events of the transfer.
+* `../ca-qc/beneficiary-views.json` holds a public view of a Québec beneficiary record, for the conditional visibility of REG-071.
+* `examples/features/` holds the scenarios in English and in French.
+
+The script `examples/test-examples.sh` checks that `examples/check-examples.py` rejects broken copies of these files.
 
 == Conformance
 
@@ -11,35 +172,40 @@ ____
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 (link:https://www.rfc-editor.org/info/rfc2119[RFC 2119], link:https://www.rfc-editor.org/info/rfc8174[RFC 8174]) when, and only when, they appear in all capitals, as shown here.
 ____
 
-The keywords follow requirement WRT-010 of the {abbr-fpsot-first} writing specification.
+The keywords follow requirement WRT-010 of the {abbr-fpsot} writing specification.
 The French version uses the French keywords of WRT-011.
 
-== Requirements
+== Standards
 
-Give each requirement an anchor line with its ID, directly above its paragraph.
-The anchor looks like `+[[XYZ-001]]+`.
-The example below shows the form. Replace it with the first requirement.
+The rules summarize outside standards in their own words and take no text from them.
+They cite these versions.
 
-[[TPL-001]]
-*TPL-001.* A normative statement MUST use one of the {abbr-bcp-first} 14 keywords in capitals.
-The keyword gives the rule its strength.
+* Models: link:https://linkml.io/linkml/[LinkML], at the release that the data models specification pins.
+* Verifiable credentials: link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], a {abbr-w3c-first} Recommendation, 15 May 2025.
+* Status lists: link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], a {abbr-w3c} Recommendation, 15 May 2025.
+* Beneficial ownership: link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4].
+* Business data: link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] of SEMIC.
+* Concept schemes, events, scenarios and models: the versions that the vocabularies, interface, testing and data models specifications pin.
 
 == References
-
-List here each outside source that this page cites, with the same address as its link in the text.
-Each entry gives the title, publisher, version, date and an archived copy.
 
 === Normative
 
 * link:https://www.rfc-editor.org/info/rfc2119[RFC 2119, Key words for use in RFCs to Indicate Requirement Levels], IETF, BCP 14, 1997-03. link:https://web.archive.org/web/20261103005705/https://www.rfc-editor.org/info/rfc2119/[Archived copy]
 * link:https://www.rfc-editor.org/info/rfc8174[RFC 8174, Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words], IETF, BCP 14, 2017-05. link:https://web.archive.org/web/20261103005743/https://www.rfc-editor.org/info/rfc8174/[Archived copy]
+* link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Archived copy]
+* link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261014182736/https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Archived copy]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Archived copy]
+* link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary], SEMIC, European Commission, version 2.2.0. link:https://web.archive.org/web/20250601165122/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Archived copy]
+
+=== Informative
+
+* link:https://linkml.io/linkml/[LinkML documentation], Linked Data Modeling Language. link:https://web.archive.org/web/20261107221213/https://linkml.io/linkml/[Archived copy]
 
 == Document history
-
-Add one row for each version that changes this page.
 
 [cols="1,1,4",options="header"]
 |===
 |Version |Date |Change
-|0.1.0 |2026-11-03 |First version.
+|0.1.0 |2026-11-18 |First version.
 |===

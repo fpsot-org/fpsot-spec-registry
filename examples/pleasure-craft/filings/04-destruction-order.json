@@ -1,0 +1,49 @@
+{
+  "id": "019a1b2c-3d4e-7f05-8a05-000000000504",
+  "createdAt": "2026-08-03T15:00:00Z",
+  "updatedAt": "2026-08-04T15:00:00Z",
+  "registerCode": "pleasure-craft-licenses",
+  "filingType": "destruction-order",
+  "category": "destruction",
+  "sequence": 4,
+  "submittedAt": "2026-08-03T15:00:00Z",
+  "effectiveAt": "2026-08-04T15:00:00Z",
+  "completedAt": "2026-08-04T15:00:00Z",
+  "processingStatus": "completed",
+  "paymentStatus": "not-required",
+  "reviewStatus": "approved",
+  "actorId": "staff-5d21c8",
+  "onBehalfOfPartyId": "019a1b2c-3d4e-7f01-8a01-000000000103",
+  "authority": {
+    "kind": "order",
+    "legalSource": {
+      "uri": "https://example.org/orders/EX-2026-0042",
+      "citation": "Synthetic order EX-2026-0042"
+    },
+    "orderReference": "EX-2026-0042"
+  },
+  "destroys": [
+    "019a1b2c-3d4e-7f05-8a05-000000000501",
+    "019a1b2c-3d4e-7f05-8a05-000000000503"
+  ],
+  "destructionTargets": [
+    {
+      "path": "Filing.evidence.documentId",
+      "id": "019a1b2c-3d4e-7f07-8a07-000000000702"
+    }
+  ],
+  "legalBasis": {
+    "uri": "https://example.org/orders/EX-2026-0042",
+    "citation": "Synthetic order EX-2026-0042"
+  },
+  "legalHoldCheckedAt": "2026-08-04T14:55:00Z",
+  "evidence": [
+    {
+      "evidenceType": "order-copy",
+      "documentId": "019a1b2c-3d4e-7f07-8a07-000000000705",
+      "digest": "1559d7dddbb7b7594d5dd861d3269aea717a8a75b8eca2d06c8b597b15d7df9f",
+      "retentionClass": "license-evidence"
+    }
+  ],
+  "previousCommitment": "83cd71718c65ae0b5769e2d1875fe4088290f1f248128335c960525e627f9ef3"
+}

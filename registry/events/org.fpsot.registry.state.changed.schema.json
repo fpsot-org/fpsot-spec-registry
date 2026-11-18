@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fpsot.org/schemas/registry/events/org.fpsot.registry.state.changed.schema.json",
+  "$comment": "SPDX-License-Identifier: Community-Spec-1.0. FPSOT registry event data (REG-102). The data names rows by kind and entity id only, never by a value (REG-103). The CloudEvents attributes follow API-101.",
+  "title": "org.fpsot.registry.state.changed",
+  "description": "A completed filing opened, ended or destroyed rows of derived state (REG-029, REG-095, REG-102).",
+  "type": "object",
+  "required": [
+    "filingId",
+    "registerCode",
+    "sequence",
+    "validFrom",
+    "rows"
+  ],
+  "properties": {
+    "filingId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "The filing whose changes the rows come from (REG-029)."
+    },
+    "registerCode": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The register (REG-010)."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The number of the filing in its register (REG-030)."
+    },
+    "validFrom": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+      "description": "The effective instant of the changes (REG-041)."
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Each row that the filing opened, ended or left destroyed (REG-041, REG-095).",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "entityId",
+          "change"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "asset",
+              "owner-group",
+              "entitlement",
+              "encumbrance"
+            ]
+          },
+          "entityId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+          },
+          "change": {
+            "type": "string",
+            "enum": [
+              "opened",
+              "ended",
+              "destroyed"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

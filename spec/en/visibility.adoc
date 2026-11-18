@@ -1,0 +1,123 @@
+= Visibility, opposability and access
+include::_fpsot-terms.adoc[]
+
+Registers differ most on who may see what.
+Québec publishes the name of the ultimate beneficiaries of a business, never their date of birth.
+It shows their home address only when they declare no professional address.
+France lets only people with a legitimate interest read its beneficial owner register.
+The pleasure craft license database of Canada is closed, and only enforcement and rescue bodies use it.
+A single flag of public or private cannot hold any of these regimes.
+
+A second property stands apart from the first.
+Québec makes the name and the domicile of an ultimate beneficiary opposable to third parties, but not the other names.
+Visibility tells who may read a field.
+Opposability tells whether a party can rely on the field against a third party.
+One does not follow from the other.
+
+The link:https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/[Court of Justice of the European Union] ruled on 22 November 2022 on beneficial owner data.
+It held that open access for the whole public went too far.
+Canada and Québec, which that court does not bind, opened public registers in 2023 and 2024.
+An engine that hard-coded either answer would be wrong for half its adopters.
+
+== Visibility classes
+
+[[REG-070]]
+*REG-070.* Each field of a register MUST have one visibility class, from the widest to the narrowest.
+
+* `public`: anyone.
+* `parties`: the parties of the record, their representatives and the agency.
+* `agency`: the body that keeps the register and the recipients of an access policy.
+* `restricted`: only the roles that the profile names for one purpose.
+
+The domain pack MUST give the default class of each field that it defines.
+The profile MAY change it, under REG-015.
+A view MUST NOT show a field whose class is narrower than the view.
+
+In the fixture, a public view of the pleasure craft license shows no field at all.
+An extract for an enforcement officer shows the license, its validity and its holder.
+
+[[REG-071]]
+*REG-071.* The class of a field MAY depend on a condition on another field of the same record.
+Such a policy MUST give the class while the condition holds and the class while it does not.
+
+The `ca-qc` profile makes the home address of an ultimate beneficiary public only when no professional address exists.
+
+== Opposability
+
+[[REG-072]]
+*REG-072.* Each field MUST also carry an opposability flag, which the profile sets.
+A system MUST NOT derive the flag from the visibility class, nor the class from the flag.
+A field that neither the pack nor a profile lists is not opposable, under REG-016.
+
+The `ca-qc` profile marks the full name of an ultimate beneficiary public and opposable.
+It marks the other names public and not opposable.
+Two flags in one record make that difference visible to a reader and to a test.
+
+== Omissions
+
+[[REG-073]]
+*REG-073.* A view MUST give a reason code for each field that it leaves out.
+The code MUST be one of these.
+
+* `not-public-by-law`: the law or the profile keeps the field from this view.
+* `withheld-on-application`: the register withholds the field because a person applied, and the law allows it.
+* `unknown-to-register`: the register does not hold the value.
+* `destroyed`: a lawful destruction removed the value, under REG-093.
+
+The link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard 0.4] keeps an exempt subject apart from a fact that the publisher does not know.
+A reader who sees an empty field must know whether the law hides it or nobody knows it.
+
+== Access policies
+
+[[REG-074]]
+*REG-074.* A view wider than `public` MUST rest on a role in the record or on an access policy.
+Each access policy MUST give its legal basis, its recipient category, its purpose and the widest class that it opens.
+It MUST also give its expiry when the law limits it, and its duty to log each read.
+When the law grants access one request at a time, each grant SHOULD be an entitlement in its own class.
+
+The `ca-federal` profile has three policies, for enforcement officers, search and rescue agencies and the Coast Guard.
+France grants access to its beneficial owner register through a certificate of legitimate interest.
+Secondary sources report a decree of 2026 that makes it valid three years, which is _to be verified_.
+Such a certificate is itself an entitlement, with the requester as its holder.
+
+[[REG-075]]
+*REG-075.* A register MUST ask the authorization engine on every request for a view, under IAM-050.
+It MUST deny by default, under IAM-051.
+The access policies of the profile MUST feed the policies of the engine.
+They MUST NOT live only in the code of the register.
+
+== Reads
+
+[[REG-076]]
+*REG-076.* Each read of personal information in a register MUST be an audit event under OBS-042.
+The event MUST carry the code of the access policy as its purpose, under OBS-095.
+That holds for a search, a view, an extract and an export.
+
+The link:https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf[register of disclosures of the SAAQ] lists the disclosures of personal information that the body makes.
+An audit event for each read gives a register the facts that such a list needs.
+
+[[REG-077]]
+*REG-077.* A register SHOULD let a data subject obtain the list of reads of their personal information.
+The list SHOULD give the date, the recipient category and the purpose of each read.
+
+The link:https://registries.govstack.global/6-functional-requirements.md[GovStack Digital Registries] specification requires that a data owner can see who read their data.
+Estonia makes its registers show citizens who accessed their data, through its link:https://ria.ee/en/state-information-system/people-centred-data-exchange/data-tracker[Data Tracker].
+Whether a body may hold back some recipients, such as the police, is a question for counsel.
+
+== References
+
+=== Informative
+
+* link:https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/[CJEU: No Unrestricted Access to Data of Beneficial Owners], eucrim, on the judgment of 2022-11-22 in joined cases C-37/20 and C-601/20, secondary source. link:https://web.archive.org/web/20260517174819/https://eucrim.eu/news/cjeu-no-unrestricted-access-to-data-of-beneficial-owners/[Archived copy]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Archived copy]
+* link:https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf[Registre des communications de renseignements personnels], Société de l’assurance automobile du Québec. link:https://web.archive.org/web/20260520071052/https://saaq.gouv.qc.ca/blob/saaq/documents/publications/acces-information/registre-communications-saaq.pdf[Archived copy]
+* link:https://registries.govstack.global/6-functional-requirements.md[Digital Registries Building Block, functional requirements], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260715201724/https://registries.govstack.global/6-functional-requirements.md[Archived copy]
+* link:https://ria.ee/en/state-information-system/people-centred-data-exchange/data-tracker[Data Tracker], Information System Authority of Estonia. link:https://web.archive.org/web/20261010132741/https://www.ria.ee/en/state-information-system/people-centred-data-exchange/data-tracker[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

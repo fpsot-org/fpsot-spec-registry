@@ -1,0 +1,24 @@
+{
+  "specversion": "1.0",
+  "id": "019a1b2c-3d4e-7f10-8a10-000000001001",
+  "source": "/v1/filings",
+  "type": "org.fpsot.registry.filing.recorded",
+  "time": "2026-06-26T15:00:00Z",
+  "datacontenttype": "application/json",
+  "subject": "019a1b2c-3d4e-7f05-8a05-000000000502",
+  "dataschema": "https://fpsot.org/schemas/registry/events/org.fpsot.registry.filing.recorded.schema.json",
+  "data": {
+    "filingId": "019a1b2c-3d4e-7f05-8a05-000000000502",
+    "registerCode": "pleasure-craft-licenses",
+    "filingType": "ownership-transfer",
+    "category": "change",
+    "sequence": 2,
+    "processingStatus": "completed",
+    "paymentStatus": "paid",
+    "reviewStatus": "approved",
+    "deadlineStatus": "met",
+    "submittedAt": "2026-06-25T15:00:00Z",
+    "effectiveAt": "2026-06-10T16:00:00Z",
+    "completedAt": "2026-06-26T15:00:00Z"
+  }
+}

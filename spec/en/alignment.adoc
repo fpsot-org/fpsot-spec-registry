@@ -1,0 +1,123 @@
+= Alignment with other standards
+include::_fpsot-terms.adoc[]
+
+This page is informative, and it sets no rule.
+No published standard models a register of assets and entitlements across domains.
+Each standard below fits one part, so this specification maps to them and claims conformance to none.
+A mapping lets an adopter export to a known format.
+It also answers a buyer who asks about a standard by name.
+
+== Land Administration Domain Model
+
+link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024] is the closest model of a register.
+Part 1 is generic, and link:https://www.iso.org/standard/81264.html[Part 2 of 2025] covers land registration.
+ISO sells both parts, and the research read only a draft of Part 1.
+The class names below are therefore _to be verified_.
+The 2024 edition adds a real-world lifespan beside the system lifespan, which makes the model bitemporal.
+This specification takes the concepts and leaves the spatial packages out.
+
+[cols="2,2,3",options="header"]
+|===
+|LADM |This specification |Note
+|Party |`Party` of DMO-040 |The data models specification owns it.
+|Basic administrative unit |`Asset` |One subclass for each kind of asset, in the pack schema.
+|Right |`OwnerGroup` or `Entitlement` |Ownership and entitlement stay apart, under REG-056.
+|Restriction |`Encumbrance` |An optional family, under REG-059.
+|Responsibility |A condition of an `Entitlement` |A duty that comes with a right.
+|Administrative source |`Filing` |The legal act behind each change.
+|Versioned object |History slots of REG-041 |`validFrom` and `validTo` for the world, `completedAt` for the system.
+|===
+
+== Beneficial Ownership Data Standard
+
+link:https://standard.openownership.org/en/0.4.0/standard/reference.html[BODS 0.4] splits statements from records.
+Each statement has its own id, and each record has a status of new, updated or closed.
+That split mirrors the split between filings and derived state.
+
+[cols="2,2,3",options="header"]
+|===
+|BODS 0.4 |This specification |Note
+|Statement |`Filing` |A statement never changes, and a filing neither.
+|Record and its status |Row version and its history slots |A closed record is a row with `validTo`.
+|Person statement |`Person` of DMO-041 |
+|Entity statement |`Organization` of DMO-042 |
+|Relationship statement |`OwnerGroup`, or `PartyRelationship` of DMO-044 |Ownership of a share, or control.
+|Subject exempt from disclosure |Omission reason `withheld-on-application` or `not-public-by-law` |REG-073.
+|Information unknown to the publisher |Omission reason `unknown-to-register` |REG-073.
+|===
+
+== Core Business Vocabulary
+
+The link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary 2.2.0] of SEMIC describes a registered business.
+It defines no event and no lifecycle, so the filings of this specification supply the history.
+
+[cols="2,2,3",options="header"]
+|===
+|CBV 2.2.0 |This specification |Note
+|Legal name |`OrganizationName` of DMO-042 |
+|Legal identifier |`PartyIdentification` of DMO-046 |
+|Registered address |`PostalAddress` of DMO-033 |
+|Company type |`PartyClassification` of DMO-047 |
+|Company status |The state of the registration, under REG-045 |Derived from the filings, never stored alone.
+|===
+
+== GovStack Digital Registries
+
+link:https://registries.govstack.global/[GovStack Digital Registries 3.0-alpha], of June 2026, lets a register create schemas with a lifecycle state.
+It generates operations to create, read, update and delete records.
+It has no holders, assets or entitlements.
+Some of its cross-cutting rules match this specification, and an adapter under REG-107 can claim them.
+
+[cols="2,2,3",options="header"]
+|===
+|GovStack |This specification |Note
+|Schema creation |Domain pack, under REG-100 |A pack is released data, not a schema made at run time.
+|Update and delete of a record |A new filing, under REG-020 and REG-022 |The adapter turns each update into a filing.
+|DRS-8, logging of each read of personal data |REG-076 |An audit event under OBS-042.
+|DRS-37, the data owner sees who read their data |REG-077 |A SHOULD here.
+|Logical record kept on deletion, unless a law requires hard deletion |REG-044 and REG-093 |The destruction filing is the lawful hard deletion.
+|===
+
+== Verifiable Credentials Data Model
+
+The link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0] fits issued entitlements.
+The link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0] carries their status.
+
+[cols="2,2,3",options="header"]
+|===
+|VC 2.0 |This specification |Note
+|Issuer |The body that keeps the register |
+|Credential subject |The `Entitlement` and its parties |
+|`validFrom` and `validUntil` |`validity` of the `Entitlement` |Days in the time zone of the register.
+|Credential status |Lifecycle filings, under REG-045 |A time-driven state needs no status change.
+|Credential schema |The pack schema |
+|Evidence |The filing and its evidence references |References only, under REG-092.
+|===
+
+== Once-Only Technical System
+
+The European Once-Only Technical System maps evidence types to the requirements of each member state.
+Its link:https://ec.europa.eu/digital-building-blocks/sites/display/OOTS/Technical+Design+Documents[technical design documents] describe that model.
+The research saw a version 2.0 of February 2026, which is _to be verified_.
+An extract type of a profile, under REG-085, is the natural place to name the matching evidence type.
+
+== References
+
+=== Informative
+
+* link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024, Geographic information, Land Administration Domain Model, Part 1: Generic conceptual model], ISO, 2024, paywalled, not read. link:https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html[Archived copy]
+* link:https://www.iso.org/standard/81264.html[ISO 19152-2:2025, Geographic information, Land Administration Domain Model, Part 2: Land registration], ISO, 2025, paywalled, not read. link:https://web.archive.org/web/20260620173630/https://www.iso.org/standard/81264.html[Archived copy]
+* link:https://standard.openownership.org/en/0.4.0/standard/reference.html[Beneficial Ownership Data Standard, schema reference], Open Ownership, version 0.4. link:https://web.archive.org/web/20260504150704/https://standard.openownership.org/en/0.4.0/standard/reference.html[Archived copy]
+* link:https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Core Business Vocabulary], SEMIC, European Commission, version 2.2.0. link:https://web.archive.org/web/20250601165122/https://semiceu.github.io/Core-Business-Vocabulary/releases/2.2.0/[Archived copy]
+* link:https://registries.govstack.global/[Digital Registries Building Block Specification], GovStack, version 3.0-alpha, 2026-06. link:https://web.archive.org/web/20260811020249/https://registries.govstack.global/[Archived copy]
+* link:https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Verifiable Credentials Data Model v2.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261115025405/https://www.w3.org/TR/2025/REC-vc-data-model-2.0-20250515/[Archived copy]
+* link:https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Bitstring Status List v1.0], W3C, Recommendation, 2025-05-15. link:https://web.archive.org/web/20261014182736/https://www.w3.org/TR/2025/REC-vc-bitstring-status-list-20250515/[Archived copy]
+* link:https://ec.europa.eu/digital-building-blocks/sites/display/OOTS/Technical+Design+Documents[OOTS Technical Design Documents], European Commission, version to be verified. link:https://web.archive.org/web/20250412114847/https://ec.europa.eu/digital-building-blocks/sites/display/OOTS/Technical+Design+Documents[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

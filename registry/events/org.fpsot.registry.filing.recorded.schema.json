@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://fpsot.org/schemas/registry/events/org.fpsot.registry.filing.recorded.schema.json",
+  "$comment": "SPDX-License-Identifier: Community-Spec-1.0. FPSOT registry event data (REG-102). The data holds identifiers, codes and instants only, never a party id, a name, an address, the value of an identifier of an asset or of an entitlement, or an amount (REG-103). The CloudEvents attributes follow API-101.",
+  "title": "org.fpsot.registry.filing.recorded",
+  "description": "A register reached a final processing status for a filing and sealed it (REG-022, REG-031, REG-102).",
+  "type": "object",
+  "required": [
+    "filingId",
+    "registerCode",
+    "filingType",
+    "category",
+    "sequence",
+    "processingStatus",
+    "submittedAt",
+    "effectiveAt",
+    "completedAt"
+  ],
+  "properties": {
+    "filingId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "The id of the filing (REG-021)."
+    },
+    "registerCode": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The register (REG-010)."
+    },
+    "filingType": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The filing type, from the catalog of the pack (REG-021)."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "change",
+        "correction",
+        "destruction"
+      ],
+      "description": "The category of the filing type (REG-021)."
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The number of the filing in its register (REG-030)."
+    },
+    "processingStatus": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "rejected",
+        "withdrawn"
+      ],
+      "description": "The final processing status (REG-024)."
+    },
+    "paymentStatus": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The payment status (REG-024)."
+    },
+    "reviewStatus": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The review status (REG-024)."
+    },
+    "deadlineStatus": {
+      "type": "string",
+      "enum": [
+        "met",
+        "missed"
+      ],
+      "description": "Whether the filing met its deadline (REG-033)."
+    },
+    "submittedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+      "description": "When the register received the filing (REG-023)."
+    },
+    "effectiveAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+      "description": "When the legal act takes effect (REG-023)."
+    },
+    "completedAt": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,9})?Z$",
+      "description": "When the filing reached its final status (REG-023)."
+    },
+    "correctsFilingId": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+      "description": "The filing that a correction replaces (REG-027)."
+    },
+    "destroyedFilingIds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      },
+      "description": "The filings that a destruction filing destroyed (REG-093)."
+    }
+  },
+  "additionalProperties": false
+}

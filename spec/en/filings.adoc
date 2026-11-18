@@ -1,0 +1,230 @@
+= Filings
+include::_fpsot-terms.adoc[]
+
+A filing is one legal event in a register.
+It can be an application that a party submits, or an act of the registrar.
+It can also be a correction, an order of a court or a lawful destruction.
+
+The registers that the research studied already work this way.
+link:https://github.com/bcgov/lear[LEAR], the business register of British Columbia, stores each filing whole, with its filing, effective and completion dates.
+It records a correction as a new filing that points at the original.
+The link:https://github.com/bcgov/ppr[personal property register] of the same province makes each legal act a registration with a change class.
+Amendment, court order, renewal and discharge are such classes.
+
+This page sets the filing that every register keeps.
+It also sets the light chain, which makes a gap or a reordering visible.
+
+== One filing for each change
+
+[[REG-020]]
+*REG-020.* Each change to the state of a register MUST come from exactly one completed filing.
+That holds for the actions of staff, for migrations and for corrections.
+It holds for orders and for destructions too.
+A system MUST NOT write register state in any other way.
+
+A direct write leaves no legal event behind it.
+Nobody can then say who changed what, when and under which power.
+
+[[REG-021]]
+*REG-021.* Each filing MUST be a record of the class `Filing` of `model/registry.yaml`.
+Its filing type MUST come from the catalog of the domain pack of its register.
+Each filing type MUST belong to one of three categories, which tell the replay how to apply it.
+
+* `change` opens and ends rows of derived state.
+* `correction` replaces an earlier filing, under REG-027.
+* `destruction` destroys the content of earlier filings, under REG-093, and changes no row.
+
+The catalog of the pleasure craft pack has eight types.
+Issue, transfer, renewal, change of particulars and cancellation are of the `change` category.
+So is migration, while correction and destruction have their own categories.
+
+== Immutability
+
+[[REG-022]]
+*REG-022.* A register MUST NOT change the content of a filing once it receives it.
+Until the filing reaches a final processing status, the register MAY set only these fields.
+
+* The three statuses of REG-024, `completedAt` and `updatedAt`.
+* `sequence` and `previousCommitment`, under REG-030.
+* `changes`, under REG-029 and REG-034, and `deadlineStatus`, under REG-033.
+* `decisionIds`, under REG-026.
+
+After a final status, the register MUST NOT change the filing, except to destroy its content and salt under REG-093.
+A later change in the facts MUST be a new filing.
+
+The Québec enterprise register treats a correction as a filing type of its own, the corrective declaration.
+A filing that can change in place would let the register rewrite the evidence of what a party declared.
+
+== Three dates
+
+[[REG-023]]
+*REG-023.* Each filing MUST carry three instants under DAT-010.
+
+* `submittedAt`: when the register received the filing.
+* `effectiveAt`: when the legal act takes effect in the world, such as the day of a sale.
+* `completedAt`: when the filing reached a final processing status.
+
+A filing whose `effectiveAt` comes after its `completedAt` MUST change nothing before its `effectiveAt`.
+Only a filing type that the catalog marks as retroactive may have an `effectiveAt` before its `submittedAt`.
+
+In the pleasure craft pack, a transfer and a correction are retroactive types.
+A buyer often files days after a sale, so the sale and the filing have different dates.
+LEAR holds a future-effective filing until its effective date.
+Both dates matter in law, and the completion date tells when the register knew.
+
+== Three statuses
+
+[[REG-024]]
+*REG-024.* Each filing MUST carry three separate statuses: payment, review and processing.
+The values of the payment and review statuses MUST come from the lists of the domain pack.
+The processing status MUST be one of `received`, `in-progress`, `completed`, `rejected` or `withdrawn`, and the last three are final.
+Only `completed` changes the state of the register.
+A payment or a review status MUST NOT stand in for a processing status.
+
+A paid filing can still fail review, and an exempt filing still needs processing.
+One status for all three would hide which step holds a filing back.
+
+== Who filed, for whom and under what authority
+
+[[REG-025]]
+*REG-025.* Each filing MUST record the actor who submitted it, by an opaque identifier under IAM-091.
+It MUST record the party that the actor acted for, a `Party` under DMO-040, and the authority for the filing.
+The authority is one of these kinds.
+
+* `own-behalf`: the actor acted for their own party.
+* `representation`: a relationship of representation under IAM-061, which the filing names by its id.
+* `statutory-power`: a power that a provision gives the actor, which the filing cites.
+* `order`: an order of a court or of another authority, which the filing cites with its file number.
+
+At submission, the register MUST check under IAM-050 and IAM-064 that the authority covers the filing type.
+The identity specification owns representation, and this rule only records which one applied.
+
+A registrar who acts on a court order and an agent who acts for an owner leave different traces.
+A later dispute needs to know which one acted, and on what basis.
+
+== Decisions
+
+[[REG-026]]
+*REG-026.* Eligibility, fees, fee exemptions and penalties MUST be decisions under the decisions specification.
+A filing MUST name the decision records that it rests on, under DEC-040.
+A register MUST NOT compute a fee, an exemption or an eligibility result outside a decision record.
+
+Under section 113 of the amended regulations, the license fee of $24 follows the consumer price index each April 1.
+Under section 112, an owner who exercises a right of section 35 of the Constitution Act, 1982, pays no fee.
+Both rules belong in a decision type with dated parameters, under DEC-037, not in the register.
+
+== Corrections
+
+[[REG-027]]
+*REG-027.* A correction MUST name the filing that it corrects, which MUST have a lower sequence.
+It MUST carry the full corrected changes and the corrected effective instant.
+The corrected filing MUST stay retrievable, under DMO-051.
+Once the correction completes, the replay MUST use it in place of the corrected filing for each later record time.
+
+A correction that carries only the difference would force each reader to rebuild the original first.
+A whole replacement keeps the replay simple and gives both versions to anyone who asks how the register looked before.
+
+== Orders
+
+[[REG-028]]
+*REG-028.* A court order or a registrar order MUST be a filing, with the authority kind `order` or `statutory-power`.
+It MUST cite the order or the provision.
+It MAY take effect before its submission when its catalog entry allows it.
+A register MUST NOT carry out an order by any other means.
+
+The personal property register of British Columbia gives court orders their own change class.
+An order that bypasses the filing log leaves the register without a record of its own most sensitive changes.
+
+== Stated changes
+
+[[REG-029]]
+*REG-029.* When a filing completes, the register MUST state in it each row that it opens and ends.
+An opened row MUST hold its full values, and an ended row MUST name its kind and its entity id.
+The catalog entry of the filing type MUST list the kinds of rows that the type may open and end.
+The replay MUST apply the stated changes, and MUST NOT run the rules of the register again.
+
+A rule can change after a filing completes, and a replay that runs it again would rewrite history.
+The stated changes freeze what the register decided at completion.
+
+== The light chain
+
+[[REG-030]]
+*REG-030.* When a filing reaches a final processing status, the register MUST give it the next sequence number.
+Sequences MUST start at 1 and leave no gap.
+From sequence 2 on, each filing MUST hold in `previousCommitment` the commitment that REG-031 gives the filing before it.
+The register MUST complete its filings one at a time, so that each one knows the commitment before it.
+
+A gap or a swap in the sequence then shows at once, inside the register.
+The chain needs no key of its own, and no checkpoint or witness of its own.
+
+[[REG-031]]
+*REG-031.* The register MUST seal each filing that reaches a final status, and log it under the signed records specification.
+The commitment that a filing gets MUST be its entry in the transparency log, the salted hash of LOG-031.
+Each register MUST log its filings in a log series of its own, which holds no other entry.
+The series is cut into yearly shards under LOG-035, and the origin of each checkpoint names it under LOG-032.
+Each register MUST claim at least the `seal-log` profile of LOG-002, and `seal-log-preserve` when it keeps its filings forever.
+A register MUST NOT add a signature, a checkpoint or a witness of its own to the chain.
+
+The signed records specification already gives seals, trusted time stamps under LOG-020, a witnessed log and proofs.
+A second mechanism in the register would need its own keys, its own monitoring and its own verifier.
+The light chain catches gaps cheaply, and the log proves the rest.
+A register may make a right opposable from its registration.
+The time stamp of the seal is then evidence of that instant.
+
+[[REG-032]]
+*REG-032.* A verifier of a register MUST check each of these points, and report each result on its own.
+
+* The sequences run from 1 with no gap.
+* Each `previousCommitment` equals the commitment that the filing before it got.
+* Each filing that still has its content gives back its commitment, from its salt and its sealed bytes.
+* Each destroyed filing has a tombstone that keeps its commitment, under REG-094.
+* Each commitment is in the log series of the register, with its inclusion proof, under LOG-054.
+* The leaves of that series map one to one onto the chain entries and the tombstones.
+* The log indexes increase with the sequence, from one shard to the next.
+* The newest filing has as its commitment the last leaf of the newest checkpoint of the series.
+* Each checkpoint extends the one before, under LOG-061 and OBS-115.
+
+The chain alone cannot show a tail that someone removed or rewrote, nor a chain rebuilt from the start.
+The witnesses of LOG-041 and the mirrors of LOG-037 already hold the checkpoints of the series.
+A removed, rewritten or reordered filing then breaks the match between the chain and the log.
+A verifier that stops at the first failure hides the others, and LOG-054 asks for the same separate reporting.
+
+== Deadlines
+
+[[REG-033]]
+*REG-033.* A profile MAY set deadlines for filing types, each dated under REG-014.
+Each deadline counts from the date of the instant that its `countFrom` names.
+When it names none, the deadline counts from the effective date.
+When a deadline applies, the register MUST record in `deadlineStatus` whether the filing met it.
+A register MUST NOT reject a filing only because it came late.
+The exception is a profile that cites a provision that bars a late filing.
+
+Section 103 lets a craft run without a transferred license until the 30th day after a transfer.
+The impact analysis statement reads it as a 30-day window to apply, yet nothing in it bars a late application.
+A register that refused late transfers would leave the wrong owner on record.
+
+== Out-of-order completion
+
+[[REG-034]]
+*REG-034.* A filing may take effect before a version that an already completed filing opened for the same entity.
+It MUST then restate that later version in full, in the `restates` part of its stated changes.
+From its completion on, the replay MUST use the restated values in place of the later version.
+
+A correction that fixes an issue can change a value that a later transfer carried over.
+Without the restatement, the replay would have to run the rules again to carry the new value forward.
+In the fixture, each correction that fixes the issue restates the license version that the transfer opened.
+
+== References
+
+=== Informative
+
+* link:https://github.com/bcgov/lear[LEAR, Legal Entity Active Records], Province of British Columbia, source repository. link:https://web.archive.org/web/20241012195815/https://github.com/bcgov/lear[Archived copy]
+* link:https://github.com/bcgov/ppr[PPR, Personal Property Registry], Province of British Columbia, source repository. link:https://web.archive.org/web/20241012200056/https://github.com/bcgov/ppr[Archived copy]
+
+== Document history
+
+[cols="1,1,4",options="header"]
+|===
+|Version |Date |Change
+|0.1.0 |2026-11-18 |First version.
+|===

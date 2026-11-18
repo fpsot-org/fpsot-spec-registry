@@ -1,0 +1,903 @@
+# SPDX-License-Identifier: Community-Spec-1.0
+id: https://fpsot.org/model/registry
+name: registry
+title: FPSOT registry model
+description: >-
+  LinkML model of the FPSOT registry specification: the filing, its light
+  chain and its tombstone; the derived rows of a register, which are assets,
+  owner groups, entitlements and encumbrances, each with the filing that
+  created it and the filing that ended it; the bitemporal snapshot; the
+  extract and the search record; and the published artifacts that set a
+  register, which are the jurisdiction profile and the domain pack. A
+  domain pack adds one LinkML schema that imports this one, such as
+  model/pleasure-craft.yaml. Parties come from the Party model of the FPSOT
+  data models specification (DMO-040) and are never redefined here (REG-061).
+  Each element cites its requirement IDs. The model says nothing about
+  storage (DMO-003).
+  The filing, the derived rows, the extract and the search record are
+  entities under DMO-021, each with its id. A slot that names a profile, a
+  pack, a filing type or a scheme by its code refers to a published
+  versioned artifact, not to an entity, so DMO-021 does not apply to it,
+  and the classes that describe them (Profile, DomainPack and their parts)
+  have no id.
+version: 0.1.0
+license: Community-Spec-1.0
+prefixes:
+  linkml: https://w3id.org/linkml/
+  dat: https://fpsot.org/model/data-types/
+  party: https://fpsot.org/model/party/
+  registry: https://fpsot.org/model/registry/
+default_prefix: registry
+default_range: string
+imports:
+  - linkml:types
+  # A copy of model/data-types.yaml, release v0.1.2 of the FPSOT data types specification (DMO-012).
+  # The file is identical in releases v0.1.1 and v0.1.2.
+  - imports/data-types
+  # A copy of model/party.yaml, release v0.1.0 of the FPSOT data models specification, with no
+  # change (DMO-012). LinkML resolves its own import, imports/data-types, from its folder, so
+  # model/imports/imports/data-types.yaml holds a second copy of the same data types file.
+  - imports/party
+
+types:
+  SemanticVersion:
+    typeof: string
+    description: "A version number under Semantic Versioning 2.0.0, without a leading v, such as 1.2.0. REG-014, REG-101."
+    pattern: "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+  Sha256Digest:
+    typeof: string
+    description: "A SHA-256 hash as 64 lower-case hexadecimal digits. REG-030, REG-031."
+    pattern: "^[0-9a-f]{64}$"
+  OpaqueId:
+    typeof: string
+    description: "An opaque identifier of a person or a workload, such as the sub claim of IAM-036. Never a name, an email address or a number that identifies a person. IAM-091, REG-025."
+    pattern: "^\\S{1,255}$"
+  JurisdictionCode:
+    typeof: string
+    description: "An ISO 3166-1 alpha-2 code, or an ISO 3166-2 subdivision code, such as CA or CA-QC. REG-013."
+    pattern: "^[A-Z]{2}(-[A-Z0-9]{1,3})?$"
+  FieldPath:
+    typeof: string
+    description: "The path of a field of a class of this model or of a pack schema, as the class name, a dot and the slot names, such as Entitlement.parties.partyId. REG-070."
+    pattern: "^[A-Z][A-Za-z0-9]*(\\.[a-z][A-Za-z0-9]*)+$"
+
+slots:
+  createdByFiling:
+    range: Uuid
+    description: "The completed filing whose changes opened this row. Only in a derived row, never inside the changes of a filing. REG-041."
+  endedByFiling:
+    range: Uuid
+    description: "The completed filing whose changes ended this row, when one has. Only in a derived row. REG-041."
+  validFrom:
+    range: Instant
+    description: "The effective instant of the filing that opened the row: the start of its valid time. Only in a derived row. REG-041, REG-042."
+  validTo:
+    range: Instant
+    description: "The effective instant of the filing that ended the row, when one has. The end is excluded. Only in a derived row. REG-041, REG-042."
+  registerCode:
+    range: CodeValue
+    required: true
+    description: "The code of the register, as its profile declares it. REG-010."
+  sourceId:
+    range: CodeValue
+    description: "The id of the source, in the sources of the same profile, that sets this parameter. REG-013."
+
+classes:
+  Any:
+    class_uri: linkml:Any
+    description: "Any JSON value. Used only for the value of a field in an extract, whose type depends on the field. REG-084."
+
+  RegistryContainer:
+    tree_root: true
+    description: >-
+      A container that carries records of this model in one document, one
+      list per class, such as for a bulk export or a conformance test. It is
+      not an entity. DMO-014.
+    attributes:
+      filings: {range: Filing, multivalued: true, inlined_as_list: true, description: "Filings. REG-021."}
+      chainEntries: {range: ChainEntry, multivalued: true, inlined_as_list: true, description: "The commitments of the light chain. REG-030."}
+      tombstones: {range: Tombstone, multivalued: true, inlined_as_list: true, description: "What remains of destroyed filings. REG-094."}
+      snapshots: {range: StateSnapshot, multivalued: true, inlined_as_list: true, description: "Bitemporal snapshots of derived state. REG-042."}
+      extracts: {range: Extract, multivalued: true, inlined_as_list: true, description: "Extracts and certificates. REG-084."}
+      logShards: {range: LogShard, multivalued: true, inlined_as_list: true, description: "A stand-in for the read interface of LOG-036 over the log series of a register, for tests: the leaves and checkpoints of each shard. REG-031, REG-032."}
+      searchRecords: {range: SearchRecord, multivalued: true, inlined_as_list: true, description: "Records of searches. REG-082."}
+
+  HistoryRow:
+    mixin: true
+    description: >-
+      The history slots of a derived row. A filing that opens a row holds
+      none of them; the replay of REG-040 adds them. A row is one version of
+      an entity: a later filing ends it and may open a new version with the
+      same id. REG-041.
+    slots: [createdByFiling, endedByFiling, validFrom, validTo]
+
+  LegalSource:
+    description: "A provision or an order, by a stable URI. REG-025, REG-093."
+    attributes:
+      uri: {range: uri, required: true, description: "A stable URI of the provision or the order, down to the article when one exists. DEC-031."}
+      citation: {pattern: "\\S", description: "The short citation as the issuer writes it, such as SOR/2025-272, s. 105."}
+
+  Fraction:
+    description: "A share of the whole, as two integers. REG-053."
+    attributes:
+      numerator: {range: integer, required: true, minimum_value: 1, description: "The number of parts held."}
+      denominator: {range: integer, required: true, minimum_value: 1, description: "The number of equal parts in the whole."}
+
+  RowReference:
+    description: "Names one row of derived state by its kind and its entity id. REG-029."
+    attributes:
+      kind: {range: RowKind, required: true, description: "The kind of row."}
+      entityId: {range: Uuid, required: true, description: "The id of the entity that the row is a version of."}
+
+  # ---- Filings ----
+
+  Filing:
+    is_a: Entity
+    description: >-
+      One legal event in a register: an application that a party submits, an
+      act of the registrar, a correction, an order, a migration or a
+      destruction. Its content never changes once submitted. Until the filing
+      reaches a final processing status, the register sets only the three
+      statuses, completedAt, sequence, previousCommitment, changes,
+      deadlineStatus, decisionIds and updatedAt. After that status, the
+      register seals it and nothing changes, except the destruction of its
+      content and salt under REG-093. REG-020 to REG-033.
+    attributes:
+      registerCode:
+        range: CodeValue
+        required: true
+        description: "The register that the filing belongs to. REG-010."
+      filingType:
+        range: CodeValue
+        required: true
+        description: "The filing type, from the catalog of the domain pack. REG-021, REG-100."
+      category:
+        range: FilingCategory
+        required: true
+        description: "The category of the filing type, which tells the replay how to apply it. REG-021."
+      sequence:
+        range: integer
+        minimum_value: 1
+        description: "The number of the filing in its register, from 1 with no gap, set when the filing reaches a final processing status. REG-030."
+      previousCommitment:
+        range: Sha256Digest
+        description: "The commitment of the filing with the sequence just before, under REG-031. Absent only for sequence 1. REG-030."
+      submittedAt:
+        range: Instant
+        required: true
+        description: "When the register received the filing. REG-023."
+      effectiveAt:
+        range: Instant
+        required: true
+        description: "When the legal act takes effect in the world, such as the day of a sale. It may come before submittedAt or after completedAt. REG-023."
+      completedAt:
+        range: Instant
+        description: "When the filing reached a final processing status. Required once it has one. REG-023."
+      processingStatus:
+        range: ProcessingStatus
+        required: true
+        description: "The processing status. Only completed changes register state. REG-024."
+      paymentStatus:
+        range: CodeValue
+        required: true
+        description: "The payment status, from the list of the domain pack. REG-024."
+      reviewStatus:
+        range: CodeValue
+        required: true
+        description: "The review status, from the list of the domain pack. REG-024."
+      actorId:
+        range: OpaqueId
+        required: true
+        description: "The person or the workload that submitted the filing, as the actor of IAM-091. REG-025."
+      onBehalfOfPartyId:
+        range: Party
+        required: true
+        description: "The party that the actor acted for, a Party of DMO-040. The actor's own party when the actor acts alone. REG-025."
+      authority:
+        range: FilingAuthority
+        inlined: true
+        required: true
+        description: "What authorized the actor to submit the filing. REG-025."
+      parties:
+        range: FilingParty
+        multivalued: true
+        inlined_as_list: true
+        description: "The parties that the filing names, each in a role. REG-025, REG-061."
+      transferCause:
+        range: CodeValue
+        description: "Why ownership passes, for a transfer filing type: one of the causes of its catalog entry. REG-055."
+      deadlineStatus:
+        range: DeadlineStatus
+        description: "Whether the filing met the deadline that the profile sets for its type, when one applies. REG-033."
+      decisionIds:
+        range: Uuid
+        multivalued: true
+        description: "The decision records of the decisions specification that the filing rests on, such as eligibility or a fee. REG-026, DEC-040."
+      evidence:
+        range: EvidenceReference
+        multivalued: true
+        inlined_as_list: true
+        description: "References to the documents that support the filing. The documents themselves stay outside the filing. REG-092."
+      corrects:
+        range: Uuid
+        description: "The filing that this correction replaces. Only in the correction category. REG-027."
+      destructionTargets:
+        range: DestructionTarget
+        multivalued: true
+        inlined_as_list: true
+        description: "The values that the order or the schedule behind a destruction targets, each by its field path and an opaque id. Only in the destruction category. REG-093."
+      retainedFilings:
+        range: RetainedFiling
+        multivalued: true
+        inlined_as_list: true
+        description: "Each filing that holds a targeted value and that the register cannot destroy, with the reason. Only in the destruction category. REG-093."
+      destroys:
+        range: Uuid
+        multivalued: true
+        description: "The filings whose content and salt this destruction filing destroys: every filing that holds a targeted value, corrections and later filings included, except those listed in retainedFilings. Only in the destruction category. REG-093."
+      legalBasis:
+        range: LegalSource
+        inlined: true
+        description: "The provision or the order on which a destruction rests. REG-093."
+      legalHoldCheckedAt:
+        range: Instant
+        description: "When the register checked that no legal hold covers the filings that a destruction names. OBS-103, REG-093."
+      exportsBeforeDestruction:
+        range: ExportRecord
+        multivalued: true
+        inlined_as_list: true
+        description: "Each copy that the register gave out before a destruction. REG-096."
+      migratedFrom:
+        range: MigrationSource
+        inlined: true
+        description: "The legacy record that a migration filing brings in. REG-046."
+      changes:
+        range: FilingChanges
+        inlined: true
+        description: "The rows that a completed filing opens and ends. Set once, at completion. REG-029."
+
+  FilingAuthority:
+    description: "What authorized a filing. REG-025."
+    attributes:
+      kind: {range: AuthorityKind, required: true, description: "The kind of authority."}
+      representationId:
+        range: Uuid
+        description: "The representation of IAM-061, kept as a PartyRelationship of DMO-044 under IAM-062, that covered the filing when it arrived. Required for the kind representation."
+      legalSource:
+        range: LegalSource
+        inlined: true
+        description: "The provision or the order that gives the power. Required for the kinds statutory-power and order."
+      orderReference:
+        pattern: "\\S"
+        description: "The file number of the order, as its issuer writes it. Required for the kind order."
+
+  FilingParty:
+    description: "A party that a filing names, in a role. REG-025."
+    attributes:
+      partyId: {range: Party, required: true, description: "A Party of DMO-040."}
+      role: {range: CodeValue, required: true, description: "The role, from the party roles of the domain pack, such as applicant or new-owner."}
+
+  EvidenceReference:
+    description: "A reference to a supporting document, never the document. Restricted by default. REG-055, REG-092."
+    attributes:
+      evidenceType: {range: CodeValue, required: true, description: "The evidence type, from the domain pack."}
+      documentId: {range: Uuid, required: true, description: "The id of the stored document."}
+      digest: {range: Sha256Digest, required: true, description: "The salted SHA-256 hash of the document, so that the filing can prove which document it used. The register keeps the salt with the document and destroys them together. REG-092."}
+      retentionClass: {range: CodeValue, required: true, description: "The retention class of the document, from the profile. REG-090."}
+
+  ExportRecord:
+    description: "A copy that the register gave out before a destruction. REG-096."
+    attributes:
+      recipient: {range: CodeValue, required: true, description: "The category of the recipient."}
+      exportedAt: {range: Instant, required: true, description: "When the copy left the register."}
+      legalBasis: {range: LegalSource, inlined: true, required: true, description: "The provision or the order that allowed the copy."}
+
+  MigrationSource:
+    description: "The legacy system and record that a migration filing brings in. REG-046."
+    attributes:
+      system: {range: CodeValue, required: true, description: "The code of the legacy system."}
+      recordReference: {required: true, pattern: "\\S", description: "The key of the record in the legacy system, as that system writes it."}
+
+  FilingChanges:
+    description: "The rows that a completed filing opens and the rows that it ends. The replay applies them as they stand and never runs the rules again. REG-029."
+    attributes:
+      opens: {range: RowSet, inlined: true, description: "The rows that the filing opens."}
+      ends: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the filing ends: the version of each entity that is current at its effective instant."}
+      restates:
+        range: Restatement
+        multivalued: true
+        inlined_as_list: true
+        description: "The later versions that a retroactive filing affects, each restated in full. REG-029."
+
+  Restatement:
+    description: >-
+      A later version of an entity, which an already completed filing opened
+      with a later effective instant, restated in full by a filing whose
+      effective instant comes before it. From the completion of the restating
+      filing, the replay uses the restated values. REG-029.
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The completed filing that opened the later version."}
+      opens: {range: RowSet, inlined: true, required: true, description: "The later versions, restated, one list per kind."}
+
+  DestructionTarget:
+    description: "A value that a destruction targets, named by its field path and an opaque id, never by the value itself when that value is personal. REG-093."
+    attributes:
+      path: {range: FieldPath, required: true, description: "The field that holds the value."}
+      id: {range: Uuid, required: true, description: "The opaque id of the value, such as the id of a document or of a party."}
+
+  RetainedFiling:
+    description: "A filing that holds a targeted value and that the register cannot destroy, with the reason. REG-093."
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The filing that keeps the value."}
+      reason: {range: CodeValue, required: true, description: "Why the register cannot destroy it, such as legal-hold."}
+
+  RestatedReference:
+    description: "In a tombstone, a later version that the destroyed filing restated, by its filing, kind and id. REG-094."
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The filing that opened the later version."}
+      kind: {range: RowKind, required: true, description: "The kind of row."}
+      entityId: {range: Uuid, required: true, description: "The id of the entity."}
+
+  LogShard:
+    description: >-
+      A stand-in, for tests, for what the read interface of LOG-036 gives about
+      one shard of the log series of a register: its origin, its leaves in
+      order and the checkpoints that a monitor saw, oldest first. The
+      signatures and cosignatures of the checkpoints come from LOG-032 and
+      LOG-041, and the stand-in leaves them out. REG-031, REG-032.
+    attributes:
+      origin: {required: true, pattern: "\\S", description: "The origin line of the shard, under LOG-032, which names the series of the register and the year."}
+      leaves: {range: Sha256Digest, multivalued: true, required: true, description: "The leaves of the shard, in index order."}
+      checkpoints: {range: Checkpoint, multivalued: true, inlined_as_list: true, required: true, description: "The checkpoints that the monitor saw, oldest first. The last one is the newest."}
+
+  Checkpoint:
+    description: "The size and root of a shard at one checkpoint, as RFC 6962 computes the root. LOG-032."
+    attributes:
+      treeSize: {range: integer, required: true, minimum_value: 0, description: "The number of leaves that the checkpoint covers."}
+      rootHash: {range: Sha256Digest, required: true, description: "The root of the tree of those leaves."}
+
+  RowSet:
+    description: "Rows of derived state, one list per kind. REG-029, REG-042."
+    attributes:
+      assets: {range: Asset, multivalued: true, inlined_as_list: true, description: "Assets, each in the class of its pack schema. REG-050."}
+      ownerGroups: {range: OwnerGroup, multivalued: true, inlined_as_list: true, description: "Owner groups. REG-053."}
+      entitlements: {range: Entitlement, multivalued: true, inlined_as_list: true, description: "Entitlements. REG-057."}
+      encumbrances: {range: Encumbrance, multivalued: true, inlined_as_list: true, description: "Encumbrances. REG-059."}
+
+  ChainEntry:
+    description: "The commitment of one filing in the light chain. REG-030, REG-031."
+    attributes:
+      registerCode: {range: CodeValue, required: true, description: "The register of the filing. REG-010."}
+      sequence: {range: integer, required: true, minimum_value: 1, description: "The sequence of the filing. REG-030."}
+      filingId: {range: Uuid, required: true, description: "The filing, live or destroyed."}
+      commitment: {range: Sha256Digest, required: true, description: "The salted hash of the sealed filing: its entry in the transparency log under LOG-031."}
+
+  Tombstone:
+    description: >-
+      What remains of a filing after a lawful destruction: the chain slots,
+      the dates, the type and the ids of the rows that it opened and ended,
+      and for a correction, the corrected filing and the ids of the versions
+      that it restated. It holds no other value of the filing. REG-094.
+    attributes:
+      filingId: {range: Uuid, required: true, description: "The id of the destroyed filing."}
+      registerCode: {range: CodeValue, required: true, description: "The register of the destroyed filing."}
+      sequence: {range: integer, required: true, minimum_value: 1, description: "The sequence of the destroyed filing. REG-030."}
+      filingType: {range: CodeValue, required: true, description: "The filing type of the destroyed filing."}
+      category: {range: FilingCategory, required: true, description: "The category of the destroyed filing."}
+      effectiveAt: {range: Instant, required: true, description: "The effective instant of the destroyed filing, which the replay needs to place its rows."}
+      completedAt: {range: Instant, required: true, description: "When the destroyed filing was completed."}
+      commitment: {range: Sha256Digest, required: true, description: "The commitment of the destroyed filing, as its chain entry keeps it. REG-031."}
+      previousCommitment: {range: Sha256Digest, description: "The previous commitment that the destroyed filing held. REG-030."}
+      opened: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the destroyed filing opened, by kind and id only."}
+      ended: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the destroyed filing ended, by kind and id only."}
+      destroyedByFiling: {range: Uuid, required: true, description: "The destruction filing that destroyed the content. REG-093."}
+      corrects: {range: Uuid, description: "For a destroyed correction, the filing that it corrected. The effective instant is then the corrected one. REG-094."}
+      restated: {range: RestatedReference, multivalued: true, inlined_as_list: true, description: "The later versions that the destroyed filing restated, by id only. REG-094."}
+
+  # ---- Derived rows ----
+
+  Asset:
+    is_a: Entity
+    mixins: [HistoryRow]
+    description: >-
+      A thing that a register identifies, such as a vessel, a vehicle or a
+      firearm. Each domain pack defines one subclass per kind of asset in its
+      own schema, such as PleasureCraft. REG-050 to REG-052.
+    attributes:
+      assetKind: {range: CodeValue, required: true, description: "The kind of asset, from the domain pack, which names its subclass. REG-050."}
+      identifiers:
+        range: AssetIdentifier
+        multivalued: true
+        inlined_as_list: true
+        required: true
+        description: "The identifiers of the asset, each in a scheme of the domain pack. REG-051."
+      links:
+        range: AssetLink
+        multivalued: true
+        inlined_as_list: true
+        description: "Typed links to other assets, such as an engine fitted to a hull. REG-052."
+
+  AssetIdentifier:
+    description: "An identifier of an asset or of an entitlement, in the exact form of its issuer, with its normalized search key. REG-051, DAT-066."
+    attributes:
+      scheme: {range: CodeValue, required: true, description: "The identifier scheme, from the domain pack."}
+      value: {required: true, pattern: "\\S", description: "The identifier in the exact form of its issuer. DAT-066."}
+      searchKey: {required: true, pattern: "^\\S+$", description: "The value after the normalization steps of its scheme. REG-051."}
+
+  AssetLink:
+    description: "A typed link from one asset to another. REG-052."
+    attributes:
+      linkType: {range: CodeValue, required: true, description: "The kind of link, from the domain pack."}
+      targetAssetId: {range: Uuid, required: true, description: "The asset that the link points to."}
+
+  OwnerGroup:
+    is_a: Entity
+    mixins: [HistoryRow]
+    description: >-
+      One group of owners of an asset, which holds an interest in it. The
+      ownership of an asset is the set of its current owner groups. A transfer
+      ends groups and opens new ones, and never edits the members of a group.
+      REG-053, REG-054.
+    attributes:
+      assetId: {range: Uuid, required: true, description: "The asset that the group holds an interest in."}
+      tenancy: {range: CodeValue, required: true, description: "How the group holds its interest, from the tenancy codes of the profile, which default to sole, joint and in-common. REG-053."}
+      interest: {range: Fraction, inlined: true, required: true, description: "The share of the asset that the group holds."}
+      members:
+        description: "The parties of the group. A sole group has one, a joint group two or more."
+        range: OwnerGroupMember
+        multivalued: true
+        inlined_as_list: true
+        required: true
+
+  OwnerGroupMember:
+    description: "A party in an owner group. REG-053, REG-061."
+    attributes:
+      partyId: {range: Party, required: true, description: "A Party of DMO-040."}
+
+  Entitlement:
+    is_a: Entity
+    mixins: [HistoryRow]
+    description: >-
+      A right that a register grants to parties, such as a license, a permit
+      or a registration, with its number, its validity, the roles of its
+      parties, the assets it covers and its conditions. It is separate from
+      ownership. REG-056 to REG-058.
+    attributes:
+      entitlementClass: {range: CodeValue, required: true, description: "The class of entitlement, from the domain pack."}
+      number: {range: AssetIdentifier, inlined: true, required: true, description: "The number of the entitlement, in its scheme. REG-051, REG-057."}
+      validity: {range: DateInterval, inlined: true, required: true, description: "The days on which the entitlement is valid. The end is excluded. DAT-023."}
+      lifecycleState:
+        range: CodeValue
+        required: true
+        description: "The state that the last filing set: an act-driven state of the lifecycle of the class, never a time-driven one. REG-045."
+      state:
+        range: CodeValue
+        description: "Only in a snapshot: the state at the valid instant, which is a time-driven state when the dates call for one, and lifecycleState otherwise. REG-045."
+      parties:
+        description: "The parties of the entitlement, each in a role, such as holder."
+        range: EntitlementParty
+        multivalued: true
+        inlined_as_list: true
+        required: true
+      assetIds: {range: Uuid, multivalued: true, description: "The assets that the entitlement covers, when it covers any."}
+      conditions:
+        description: "The conditions that apply to the entitlement."
+        range: Condition
+        multivalued: true
+        inlined_as_list: true
+
+  EntitlementParty:
+    description: "A party of an entitlement, in a role such as holder or operator. REG-057."
+    attributes:
+      partyId: {range: Party, required: true, description: "A Party of DMO-040."}
+      role: {range: CodeValue, required: true, description: "The role, from the party roles of the domain pack."}
+
+  Condition:
+    description: "A condition of an entitlement, as a code. REG-057."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the condition, from the domain pack or the profile."}
+
+  Encumbrance:
+    is_a: Entity
+    mixins: [HistoryRow]
+    description: "A lien, a seizure, a stop order or a flag on an asset or on an entitlement, with its parties and its term. REG-059."
+    attributes:
+      encumbranceType: {range: CodeValue, required: true, description: "The kind of encumbrance, from the domain pack, such as lien or seizure."}
+      assetId: {range: Uuid, description: "The asset that the encumbrance bears on, when it bears on one."}
+      entitlementId: {range: Uuid, description: "The entitlement that the encumbrance bears on, when it bears on one."}
+      parties: {range: EntitlementParty, multivalued: true, inlined_as_list: true, description: "The parties of the encumbrance, each in a role, such as secured party."}
+      term: {range: DateInterval, inlined: true, description: "The days on which the encumbrance holds, when it has a term."}
+      amount: {range: Money, inlined: true, description: "The amount that the encumbrance secures, when it secures one. DAT-050."}
+
+  DestroyedRow:
+    description: "In a snapshot, a row that only destroyed content supports. It shows the row and its filing, never a value. REG-095."
+    attributes:
+      kind: {range: RowKind, required: true, description: "The kind of the row."}
+      entityId: {range: Uuid, required: true, description: "The id of the entity."}
+      createdByFiling: {range: Uuid, required: true, description: "The destroyed filing that opened the row."}
+
+  StateSnapshot:
+    description: "The derived state of a register as of a valid instant, as recorded at a record instant. REG-042."
+    attributes:
+      registerCode: {range: CodeValue, required: true, description: "The register."}
+      validAt: {range: Instant, required: true, description: "The instant in the world that the snapshot describes."}
+      recordedAt: {range: Instant, required: true, description: "Only filings completed at or before this instant count."}
+      lastFilingSequence: {range: integer, required: true, minimum_value: 0, description: "The highest sequence among the filings that count."}
+      assets: {range: Asset, multivalued: true, inlined_as_list: true, description: "The assets current at validAt."}
+      ownerGroups: {range: OwnerGroup, multivalued: true, inlined_as_list: true, description: "The owner groups current at validAt."}
+      entitlements: {range: Entitlement, multivalued: true, inlined_as_list: true, description: "The entitlements current at validAt."}
+      encumbrances: {range: Encumbrance, multivalued: true, inlined_as_list: true, description: "The encumbrances current at validAt."}
+      destroyedRows: {range: DestroyedRow, multivalued: true, inlined_as_list: true, description: "The rows current at validAt that only destroyed content supports. REG-095."}
+
+  # ---- Views ----
+
+  ExtractField:
+    description: "One field of an extract, by its path, with its value. REG-084."
+    attributes:
+      path: {range: FieldPath, required: true, description: "The path of the field."}
+      entityId: {range: Uuid, required: true, description: "The row that the value comes from."}
+      value: {range: Any, required: true, description: "The value as the replay gives it."}
+
+  Omission:
+    description: "A field that a view leaves out, with the reason. REG-073."
+    attributes:
+      path: {range: FieldPath, required: true, description: "The path of the field left out."}
+      reason: {range: OmissionReason, required: true, description: "Why the view leaves the field out."}
+
+  Extract:
+    is_a: Entity
+    description: "An extract or a certificate of a register, sealed and logged under the signed records specification. REG-084."
+    attributes:
+      registerCode: {range: CodeValue, required: true, description: "The register. REG-084."}
+      extractType: {range: CodeValue, required: true, description: "The kind of extract, from the profile, such as certified-extract."}
+      subjects: {range: RowReference, multivalued: true, inlined_as_list: true, description: "The rows that the extract is about. Absent only in a public view of a closed register, which neither confirms nor denies a record. REG-012, REG-084."}
+      view: {range: VisibilityClass, required: true, description: "The widest visibility class that the reader may see. REG-070."}
+      accessPolicy: {range: CodeValue, description: "The access policy of the profile that grants the view, for a view wider than public. REG-074."}
+      validAt: {range: Instant, required: true, description: "The instant in the world that the extract describes. REG-084."}
+      recordedAt: {range: Instant, required: true, description: "Only filings completed at or before this instant count. REG-084."}
+      lastFilingSequence: {range: integer, required: true, minimum_value: 0, description: "The highest sequence among the filings that count. REG-084."}
+      lastFilingId: {range: Uuid, description: "The filing with that sequence. REG-084."}
+      fields: {range: ExtractField, multivalued: true, inlined_as_list: true, description: "The fields that the view shows."}
+      omissions: {range: Omission, multivalued: true, inlined_as_list: true, description: "The fields that the view leaves out, each with its reason. REG-073."}
+      issuedAt: {range: Instant, required: true, description: "When the register issued the extract."}
+
+  SearchRecord:
+    is_a: Entity
+    description: "The record of one search: the query, the instant and the last filing that the result reflects. REG-082."
+    attributes:
+      registerCode: {range: CodeValue, required: true, description: "The register."}
+      mode: {range: CodeValue, required: true, description: "A search mode of the profile. REG-080."}
+      keys: {range: AssetIdentifier, multivalued: true, inlined_as_list: true, required: true, description: "The search keys, each with its scheme or field code, as entered and as normalized."}
+      executedAt: {range: Instant, required: true, description: "When the search ran."}
+      lastFilingSequence: {range: integer, required: true, minimum_value: 0, description: "The highest sequence among the filings that the result reflects. REG-082."}
+      resultIds: {range: Uuid, multivalued: true, description: "The rows that the search found."}
+      certified: {range: boolean, required: true, description: "Whether the register certified the result in a sealed extract. REG-082."}
+      extractId: {range: Uuid, description: "The extract that certifies the result, when certified is true. REG-082."}
+
+  # ---- Published artifacts: profiles ----
+
+  Profile:
+    description: "A jurisdiction profile: the legal parameters of the registers of one jurisdiction, each with its source. REG-010 to REG-016."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the profile, which is also its file name."}
+      version: {range: SemanticVersion, required: true, description: "The version of the profile. REG-014."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The title of the profile, in English and French."}
+      jurisdiction: {range: JurisdictionCode, description: "The jurisdiction whose law the profile follows. Absent for core."}
+      sources: {range: ProfileSource, multivalued: true, inlined_as_list: true, description: "The outside sources of the profile. REG-013."}
+      defaults: {range: ProfileDefaults, inlined: true, description: "Only in core: the values that apply when no other profile sets one."}
+      registers: {range: RegisterDeclaration, multivalued: true, inlined_as_list: true, description: "The registers that the profile declares. REG-010."}
+
+  ProfileDefaults:
+    description: "The defaults of the core profile. REG-016, REG-070."
+    attributes:
+      sealProfile: {range: SealProfile, required: true, description: "The floor of LOG-002 for every register."}
+      unlistedFieldVisibility: {range: VisibilityClass, required: true, description: "The class of a field that neither the pack nor a profile lists."}
+      unlistedFieldOpposable: {range: boolean, required: true, description: "Whether a field that neither the pack nor a profile lists is opposable."}
+      tenancies: {range: CodeValue, multivalued: true, required: true, description: "The default tenancy codes: sole, joint and in-common. REG-053."}
+
+  ProfileSource:
+    description: "An outside source that a profile relies on, with whether the research read it. REG-013."
+    attributes:
+      id: {range: CodeValue, required: true, description: "The id that parameters of the profile cite."}
+      title: {required: true, pattern: "\\S", description: "The title of the source, as its publisher gives it."}
+      url: {range: uri, required: true, description: "The address of the source."}
+      version: {pattern: "\\S", description: "The version of the source, when it has one."}
+      date: {pattern: "\\S", description: "The date of the source, as its publisher gives it."}
+      archive: {range: uri, description: "An archived copy of the source."}
+      verification: {range: Verification, required: true, description: "Whether the research read the source at its origin."}
+
+  PackReference:
+    description: "The domain pack that a register uses. REG-010, REG-100."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the pack."}
+      version: {range: SemanticVersion, description: "Required unless status is planned."}
+      status: {range: PackStatus, required: true, description: "Whether the pack is published or planned."}
+
+  RegisterDeclaration:
+    description: "One register of a profile: its legal instrument, legal effect, publicity regime and parameters. REG-010 to REG-012."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the register, which filings name."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The name of the register, in English and French."}
+      pack: {range: PackReference, inlined: true, required: true, description: "The domain pack of the register."}
+      legalInstruments: {range: CodeValue, multivalued: true, required: true, description: "The ids of the sources that establish the register."}
+      legalEffect: {range: LegalEffect, required: true, description: "What registration does in law. REG-011."}
+      legalEffectSources: {range: CodeValue, multivalued: true, required: true, description: "The sources of the legal effect. REG-011."}
+      publicityRegime: {range: PublicityRegime, required: true, description: "Who may see the register. REG-012."}
+      publicitySources: {range: CodeValue, multivalued: true, required: true, description: "The sources of the publicity regime. REG-012."}
+      sealProfile: {range: SealProfile, required: true, description: "The profile of LOG-002 that the register claims for its filings and extracts. REG-031."}
+      timeZone: {range: TimeZoneName, required: true, description: "The time zone that turns an effective instant into a date. REG-057, DAT-030."}
+      tenancies: {range: CodeValue, multivalued: true, description: "The tenancy codes of the register, when its law needs others than the defaults of the core profile, such as a code for the Québec indivision. REG-053."}
+      externalRightsRegisters: {range: ExternalRegister, multivalued: true, inlined_as_list: true, description: "Other registers that hold rights over the assets. REG-060."}
+      fieldPolicies: {range: FieldPolicy, multivalued: true, inlined_as_list: true, description: "The visibility and opposability of fields, over the pack defaults. REG-070."}
+      accessPolicies: {range: AccessPolicy, multivalued: true, inlined_as_list: true, description: "The access policies. REG-074."}
+      searchModes: {range: SearchMode, multivalued: true, inlined_as_list: true, description: "The search modes. REG-080."}
+      retentionClasses: {range: RetentionClass, multivalued: true, inlined_as_list: true, description: "The retention classes. REG-090."}
+      terms: {range: EntitlementTerm, multivalued: true, inlined_as_list: true, description: "The terms of entitlement classes. REG-058."}
+      deadlines: {range: Deadline, multivalued: true, inlined_as_list: true, description: "The deadlines of filing types. REG-033."}
+      scheduledExpiries: {range: ScheduledExpiry, multivalued: true, inlined_as_list: true, description: "The fixed end dates that the law sets. REG-046."}
+
+  ExternalRegister:
+    description: "A register of another body that holds rights over the assets of this one. REG-060."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the other register."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The name of the other register, in English and French."}
+      rightsKinds: {range: CodeValue, multivalued: true, required: true, description: "The kinds of rights that the other register holds."}
+      searchKeys: {range: CodeValue, multivalued: true, required: true, description: "The identifier schemes by which the other register can be searched."}
+      sourceId: {range: CodeValue, required: true, description: "The source that describes the other register."}
+
+  FieldCondition:
+    description: "A test on another field of the same record. REG-071."
+    attributes:
+      field: {range: FieldPath, required: true, description: "The other field that the condition tests."}
+      test: {range: ConditionTest, required: true, description: "The test."}
+
+  FieldPolicy:
+    description: "The visibility and the opposability of one field. REG-070 to REG-073."
+    attributes:
+      path: {range: FieldPath, required: true, description: "The path of the field."}
+      visibility: {range: VisibilityClass, required: true, description: "The visibility class of the field, while the condition holds when there is one."}
+      opposable: {range: boolean, required: true, description: "Whether the field is opposable to third parties. Never derived from visibility. REG-072."}
+      when: {range: FieldCondition, inlined: true, description: "When present, visibility applies only while the condition holds."}
+      otherwise: {range: VisibilityClass, description: "The class while the condition does not hold."}
+      omissionReason: {range: OmissionReason, required: true, description: "The reason that a view gives when it leaves the field out."}
+      sourceId: {range: CodeValue, description: "The source of the policy, in a profile."}
+
+  AccessPolicy:
+    description: "Grants a recipient category a view wider than public. REG-074."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the policy, which an extract names."}
+      recipientCategory: {range: CodeValue, required: true, description: "The category of recipient that the policy serves."}
+      purpose: {range: CodeValue, required: true, description: "The purpose code, which each read event carries under OBS-095."}
+      grants: {range: VisibilityClass, required: true, description: "The widest visibility class that the policy opens."}
+      legalBasisSourceIds: {range: CodeValue, multivalued: true, required: true, description: "The sources of the legal basis."}
+      expiry: {range: Duration, description: "How long a grant lasts, when the law limits it."}
+      viaEntitlementClass: {range: CodeValue, description: "The entitlement class that holds each grant, when the law issues grants one by one. REG-074."}
+      loggingDuty: {range: boolean, required: true, description: "Always true: each read under the policy is an audit event. REG-076."}
+
+  SearchMode:
+    description: "A search mode of a register. REG-080, REG-081."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the mode, which a search record names."}
+      keys: {range: CodeValue, multivalued: true, required: true, description: "The identifier schemes or field codes that the mode searches."}
+      matching: {range: MatchingRule, required: true, description: "How the mode compares keys."}
+      algorithm: {pattern: "\\S", description: "For similar matching: the algorithm and its threshold."}
+      openTo: {range: VisibilityClass, multivalued: true, required: true, description: "The views that may use the mode."}
+      validity: {range: DateInterval, inlined: true, description: "The dates on which the law opens the mode, when it dates it. REG-014."}
+      sourceId: {range: CodeValue, description: "The source that opens the mode."}
+
+  RetentionClass:
+    description: "How long one kind of filing or evidence stays, and the rule of the retention schedule that says so. REG-090."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the class, which evidence references name."}
+      appliesTo: {range: RetentionTarget, required: true, description: "Whether the class applies to filing types or to evidence types."}
+      types: {range: CodeValue, multivalued: true, required: true, description: "The filing types or the evidence types of the class."}
+      period: {range: Duration, description: "How long the records stay after the trigger, when the schedule gives a period."}
+      trigger: {range: CodeValue, required: true, description: "The event from which the period runs, such as entitlement-ended."}
+      scheduleRule: {required: true, pattern: "\\S", description: "The rule of the retention schedule, as OBS-102 names one."}
+      sourceId: {range: CodeValue, required: true, description: "The source of the class."}
+
+  EntitlementTerm:
+    description: "The term of an entitlement class, counted from the effective date of some filing types. REG-058."
+    attributes:
+      entitlementClass: {range: CodeValue, required: true, description: "The entitlement class."}
+      startsWith: {range: CodeValue, multivalued: true, required: true, description: "The filing types that start a new term."}
+      countFrom: {range: CountFrom, description: "The instant of the filing whose date starts the term. effective-date when absent. REG-058."}
+      term: {range: Duration, required: true, description: "The length of the term. DAT-020."}
+      validity: {range: DateInterval, inlined: true, required: true, description: "The effective dates of filings to which this value applies. REG-014."}
+      sourceId: {range: CodeValue, required: true, description: "The source of the term."}
+
+  Deadline:
+    description: "A deadline for a filing type, counted from its effective date. REG-033."
+    attributes:
+      filingType: {range: CodeValue, required: true, description: "The filing type that the deadline applies to."}
+      within: {range: Duration, required: true, description: "The time within which the filing is due. DAT-020."}
+      countFrom: {range: CountFrom, description: "The instant of the filing whose date starts the deadline. effective-date when absent. REG-033."}
+      validity: {range: DateInterval, inlined: true, required: true, description: "The effective dates of filings to which this value applies. REG-014."}
+      lateFilingBarred: {range: boolean, required: true, description: "True only when the cited provision bars a late filing."}
+      sourceId: {range: CodeValue, required: true, description: "The source of the deadline."}
+
+  ScheduledExpiry:
+    description: "A fixed end date that the law sets for entitlements issued in a period, such as a phase-out. REG-046."
+    attributes:
+      entitlementClass: {range: CodeValue, required: true, description: "The entitlement class."}
+      issuedWithin: {range: DateInterval, inlined: true, required: true, description: "The issue dates that the expiry applies to."}
+      endsOn: {range: CalendarDate, required: true, description: "The last day of validity."}
+      sourceId: {range: CodeValue, required: true, description: "The source of the expiry."}
+
+  # ---- Published artifacts: domain packs ----
+
+  DomainPack:
+    description: "The data of a domain pack: its asset kinds, identifier schemes, filing types, lifecycles, statuses and visibility defaults. REG-100."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the pack, which is also its file name."}
+      version: {range: SemanticVersion, required: true, description: "The version of the pack. REG-101."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The title of the pack, in English and French."}
+      schema: {required: true, pattern: "\\S", description: "The path of the LinkML schema of the pack, which imports model/registry.yaml."}
+      assetKinds: {range: AssetKind, multivalued: true, inlined_as_list: true, required: true, description: "The kinds of assets of the pack."}
+      identifierSchemes: {range: IdentifierScheme, multivalued: true, inlined_as_list: true, required: true, description: "The identifier schemes of the pack. REG-051."}
+      filingTypes: {range: FilingTypeDeclaration, multivalued: true, inlined_as_list: true, required: true, description: "The catalog of filing types. REG-021."}
+      entitlementClasses: {range: EntitlementClassDeclaration, multivalued: true, inlined_as_list: true, description: "The entitlement classes and their lifecycles. REG-045."}
+      paymentStatuses: {range: CodeValue, multivalued: true, required: true, description: "The payment statuses. REG-024."}
+      reviewStatuses: {range: CodeValue, multivalued: true, required: true, description: "The review statuses. REG-024."}
+      partyRoles: {range: CodeValue, multivalued: true, required: true, description: "The party roles. REG-025."}
+      evidenceTypes: {range: CodeValue, multivalued: true, description: "The evidence types. REG-090."}
+      linkTypes: {range: CodeValue, multivalued: true, description: "The kinds of links between assets. REG-052."}
+      fieldDefaults: {range: FieldPolicy, multivalued: true, inlined_as_list: true, required: true, description: "The default visibility and opposability of fields. REG-070."}
+
+  AssetKind:
+    description: "A kind of asset and the class of the pack schema that holds it. REG-050."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the kind, which assets name in assetKind."}
+      schemaClass: {required: true, pattern: "^[A-Z][A-Za-z0-9]*$", description: "The class of the pack schema, which is_a Asset."}
+
+  IdentifierScheme:
+    description: "An identifier scheme of a pack. Each one is also a concept of a scheme under the vocabularies specification. REG-051."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the scheme."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The name of the scheme, in English and French."}
+      issuer: {required: true, pattern: "\\S", description: "Who assigns the identifiers."}
+      format: {pattern: "\\S", description: "A regular expression for the issuer form, when the pack read one at the source."}
+      formatVerified: {range: boolean, required: true, description: "Whether the pack read the format at the source of the issuer."}
+      checkDigit: {range: CodeValue, required: true, description: "The check digit method, or none."}
+      uniquenessScope: {range: UniquenessScope, required: true, description: "Where an identifier of the scheme is unique."}
+      normalization: {range: NormalizationStep, multivalued: true, required: true, description: "The steps, in order, that give the search key."}
+
+  FilingTypeDeclaration:
+    description: "A filing type of the catalog of a pack. REG-021, REG-029, REG-100."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the filing type."}
+      category: {range: FilingCategory, required: true, description: "The category of the filing type."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The name of the filing type, in English and French."}
+      mayOpen: {range: RowKind, multivalued: true, description: "The kinds of rows that a filing of the type may open."}
+      mayEnd: {range: RowKind, multivalued: true, description: "The kinds of rows that a filing of the type may end."}
+      transferCauses: {range: CodeValue, multivalued: true, description: "For a transfer type, the causes it accepts. REG-055."}
+      retroactive: {range: boolean, required: true, description: "Whether effectiveAt may come before submittedAt."}
+
+  EntitlementClassDeclaration:
+    description: "An entitlement class of a pack, with its lifecycle. REG-045, REG-058."
+    attributes:
+      code: {range: CodeValue, required: true, description: "The code of the class."}
+      title: {range: MultilingualText, inlined: true, required: true, description: "The name of the class, in English and French."}
+      numberScheme: {range: CodeValue, required: true, description: "The identifier scheme of the numbers of the class."}
+      actStates: {range: CodeValue, multivalued: true, required: true, description: "The states that only a filing sets."}
+      timeStates: {range: CodeValue, multivalued: true, required: true, description: "The states that only dates set."}
+      transitions: {range: LifecycleTransition, multivalued: true, inlined_as_list: true, required: true, description: "The transitions of the lifecycle."}
+
+  LifecycleTransition:
+    description: "One transition of a lifecycle, with the filing type or the scheduled event that causes it. REG-045."
+    attributes:
+      from: {range: CodeValue, required: true, description: "The state before."}
+      to: {range: CodeValue, required: true, description: "The state after."}
+      filingType: {range: CodeValue, description: "The filing type that causes an act-driven transition."}
+      scheduledEvent: {range: CodeValue, description: "The scheduled event that causes a time-driven transition, such as validity-ended."}
+
+enums:
+  FilingCategory:
+    description: "How the replay applies a filing type. REG-021."
+    permissible_values:
+      change: {description: "Opens and ends rows."}
+      correction: {description: "Replaces the changes and the effective instant of an earlier filing. REG-027."}
+      destruction: {description: "Destroys the content and the salt of earlier filings, and changes no row. REG-093."}
+  ProcessingStatus:
+    description: "The processing status of a filing. completed, rejected and withdrawn are final. REG-024."
+    permissible_values:
+      received: {description: "The register holds the filing."}
+      in-progress: {description: "The register works on the filing."}
+      completed: {description: "The filing took effect in the register."}
+      rejected: {description: "The register refused the filing."}
+      withdrawn: {description: "The filer withdrew the filing."}
+  AuthorityKind:
+    description: "What authorized a filing. REG-025."
+    permissible_values:
+      own-behalf: {description: "The actor acted for their own party."}
+      representation: {description: "A representation of IAM-061."}
+      statutory-power: {description: "A power that a provision gives the actor, such as a registrar's power."}
+      order: {description: "An order of a court or of an authority."}
+  DeadlineStatus:
+    description: "Whether a filing met the deadline of its type. REG-033."
+    permissible_values:
+      met: {}
+      missed: {}
+  RowKind:
+    description: "The kinds of rows of derived state. REG-029."
+    permissible_values:
+      asset: {}
+      owner-group: {}
+      entitlement: {}
+      encumbrance: {}
+  CountFrom:
+    description: "Which instant of a filing starts a term or a deadline, in the time zone of the register. REG-033, REG-058."
+    permissible_values:
+      effective-date: {description: "The date of effectiveAt. The default."}
+      submission-date: {description: "The date of submittedAt."}
+      completion-date: {description: "The date of completedAt."}
+  VisibilityClass:
+    description: "Who may see a field, from the widest to the narrowest. REG-070."
+    permissible_values:
+      public: {description: "Anyone."}
+      parties: {description: "The parties of the record and their representatives, and the agency."}
+      agency: {description: "The register body and the recipients of an access policy."}
+      restricted: {description: "Only the roles that a profile names for the purpose."}
+  OmissionReason:
+    description: "Why a view leaves a field out, after the exempt and unknown cases of BODS 0.4. REG-073."
+    permissible_values:
+      not-public-by-law: {description: "The law or the profile keeps the field from this view."}
+      withheld-on-application: {description: "The register withholds the field because a person applied and the law allows it."}
+      unknown-to-register: {description: "The register does not hold the value."}
+      destroyed: {description: "A lawful destruction removed the value."}
+  LegalEffect:
+    description: "What registration does in law, as the profile states it. REG-011."
+    permissible_values:
+      administrative-identification: {description: "Registration identifies an asset and a party for the administration, and says nothing about title."}
+      notice-opposability: {description: "Registration makes a right known to third parties or opposable to them."}
+      title: {description: "Registration creates or proves title."}
+  PublicityRegime:
+    description: "Who may see the register. REG-012."
+    permissible_values:
+      public: {}
+      public-with-exceptions: {}
+      gated: {}
+      closed: {}
+  SealProfile:
+    description: "The profiles of LOG-002 that a register may claim. REG-031."
+    permissible_values:
+      seal-log: {}
+      seal-log-preserve: {}
+  Verification:
+    description: "Whether the research read a source at its origin. REG-013."
+    permissible_values:
+      read: {}
+      to-be-verified: {}
+  PackStatus:
+    description: "Whether a pack is published or only planned. REG-010."
+    permissible_values:
+      published: {}
+      planned: {}
+  MatchingRule:
+    description: "How a search mode compares keys. REG-080, REG-081."
+    permissible_values:
+      exact: {description: "The key equals the stored value."}
+      normalized: {description: "The normalized key equals the stored search key."}
+      similar: {description: "An algorithm with a threshold, which the mode states."}
+  ConditionTest:
+    description: "A test of FieldCondition. REG-071."
+    permissible_values:
+      present: {}
+      absent: {}
+  RetentionTarget:
+    description: "What a retention class applies to. REG-090."
+    permissible_values:
+      filing-type: {}
+      evidence-type: {}
+  UniquenessScope:
+    description: "Where an identifier is unique. REG-051."
+    permissible_values:
+      register-forever: {description: "Never reused in the register."}
+      register-while-active: {description: "Unique among active rows, and reusable after an end."}
+      issuer-global: {description: "Unique wherever the issuer assigns it."}
+  NormalizationStep:
+    description: "A step that turns an identifier into its search key. REG-051."
+    permissible_values:
+      upper-case: {}
+      remove-spaces: {}
+      remove-hyphens: {}

@@ -1,0 +1,355 @@
+{
+  "snapshots": [
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2026-06-01T12:00:00Z",
+      "recordedAt": "2026-06-01T12:00:00Z",
+      "lastFilingSequence": 1,
+      "destroyedRows": [
+        {
+          "kind": "asset",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000501"
+        },
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000501"
+        },
+        {
+          "kind": "owner-group",
+          "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000501"
+        }
+      ]
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2026-06-01T12:00:00Z",
+      "recordedAt": "2026-07-31T12:00:00Z",
+      "lastFilingSequence": 3,
+      "destroyedRows": [
+        {
+          "kind": "asset",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000503"
+        },
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000503"
+        },
+        {
+          "kind": "owner-group",
+          "entityId": "019a1b2c-3d4e-7f03-8a03-000000000301",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000503"
+        }
+      ]
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2026-06-20T12:00:00Z",
+      "recordedAt": "2026-06-30T12:00:00Z",
+      "lastFilingSequence": 2,
+      "destroyedRows": [
+        {
+          "kind": "asset",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000501"
+        }
+      ],
+      "entitlements": [
+        {
+          "id": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "entitlementClass": "pleasure-craft-license",
+          "number": {
+            "scheme": "pleasure-craft-license-number",
+            "value": "EX 000001",
+            "searchKey": "EX000001"
+          },
+          "validity": {
+            "start": "2026-06-10",
+            "end": "2031-06-10"
+          },
+          "lifecycleState": "active",
+          "parties": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+              "role": "holder"
+            }
+          ],
+          "assetIds": [
+            "019a1b2c-3d4e-7f02-8a02-000000000201"
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z",
+          "state": "active"
+        }
+      ],
+      "ownerGroups": [
+        {
+          "id": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "assetId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "tenancy": "sole",
+          "interest": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "members": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102"
+            }
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2026-06-20T12:00:00Z",
+      "recordedAt": "2026-07-31T12:00:00Z",
+      "lastFilingSequence": 3,
+      "destroyedRows": [
+        {
+          "kind": "asset",
+          "entityId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000503"
+        },
+        {
+          "kind": "entitlement",
+          "entityId": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502"
+        }
+      ],
+      "ownerGroups": [
+        {
+          "id": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "assetId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "tenancy": "sole",
+          "interest": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "members": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102"
+            }
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2026-06-20T12:00:00Z",
+      "recordedAt": "2026-08-10T12:00:00Z",
+      "lastFilingSequence": 5,
+      "assets": [
+        {
+          "id": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "assetKind": "pleasure-craft",
+          "identifiers": [
+            {
+              "scheme": "hull-serial-number",
+              "value": "EXA 12354 B626",
+              "searchKey": "EXA12354B626"
+            }
+          ],
+          "propulsion": "engine",
+          "enginePowerKw": "67.1",
+          "lengthMeters": "5.80",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000505",
+          "validFrom": "2026-05-04T16:00:00Z"
+        }
+      ],
+      "entitlements": [
+        {
+          "id": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "entitlementClass": "pleasure-craft-license",
+          "number": {
+            "scheme": "pleasure-craft-license-number",
+            "value": "EX 000001",
+            "searchKey": "EX000001"
+          },
+          "validity": {
+            "start": "2026-06-10",
+            "end": "2031-06-10"
+          },
+          "lifecycleState": "active",
+          "parties": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+              "role": "holder"
+            }
+          ],
+          "assetIds": [
+            "019a1b2c-3d4e-7f02-8a02-000000000201"
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z",
+          "state": "active"
+        }
+      ],
+      "ownerGroups": [
+        {
+          "id": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "assetId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "tenancy": "sole",
+          "interest": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "members": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102"
+            }
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2031-06-01T12:00:00Z",
+      "recordedAt": "2031-06-01T12:00:00Z",
+      "lastFilingSequence": 6,
+      "assets": [
+        {
+          "id": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "assetKind": "pleasure-craft",
+          "identifiers": [
+            {
+              "scheme": "hull-serial-number",
+              "value": "EXA 12354 B626",
+              "searchKey": "EXA12354B626"
+            }
+          ],
+          "propulsion": "engine",
+          "enginePowerKw": "67.1",
+          "lengthMeters": "5.80",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000505",
+          "validFrom": "2026-05-04T16:00:00Z"
+        }
+      ],
+      "entitlements": [
+        {
+          "id": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "entitlementClass": "pleasure-craft-license",
+          "number": {
+            "scheme": "pleasure-craft-license-number",
+            "value": "EX 000001",
+            "searchKey": "EX000001"
+          },
+          "validity": {
+            "start": "2031-05-20",
+            "end": "2036-05-20"
+          },
+          "lifecycleState": "active",
+          "parties": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+              "role": "holder"
+            }
+          ],
+          "assetIds": [
+            "019a1b2c-3d4e-7f02-8a02-000000000201"
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000506",
+          "validFrom": "2031-05-20T16:00:00Z",
+          "state": "active"
+        }
+      ],
+      "ownerGroups": [
+        {
+          "id": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "assetId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "tenancy": "sole",
+          "interest": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "members": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102"
+            }
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z"
+        }
+      ]
+    },
+    {
+      "registerCode": "pleasure-craft-licenses",
+      "validAt": "2036-06-01T12:00:00Z",
+      "recordedAt": "2036-06-01T12:00:00Z",
+      "lastFilingSequence": 6,
+      "assets": [
+        {
+          "id": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "assetKind": "pleasure-craft",
+          "identifiers": [
+            {
+              "scheme": "hull-serial-number",
+              "value": "EXA 12354 B626",
+              "searchKey": "EXA12354B626"
+            }
+          ],
+          "propulsion": "engine",
+          "enginePowerKw": "67.1",
+          "lengthMeters": "5.80",
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000505",
+          "validFrom": "2026-05-04T16:00:00Z"
+        }
+      ],
+      "entitlements": [
+        {
+          "id": "019a1b2c-3d4e-7f04-8a04-000000000401",
+          "entitlementClass": "pleasure-craft-license",
+          "number": {
+            "scheme": "pleasure-craft-license-number",
+            "value": "EX 000001",
+            "searchKey": "EX000001"
+          },
+          "validity": {
+            "start": "2031-05-20",
+            "end": "2036-05-20"
+          },
+          "lifecycleState": "active",
+          "parties": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102",
+              "role": "holder"
+            }
+          ],
+          "assetIds": [
+            "019a1b2c-3d4e-7f02-8a02-000000000201"
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000506",
+          "validFrom": "2031-05-20T16:00:00Z",
+          "state": "expired"
+        }
+      ],
+      "ownerGroups": [
+        {
+          "id": "019a1b2c-3d4e-7f03-8a03-000000000302",
+          "assetId": "019a1b2c-3d4e-7f02-8a02-000000000201",
+          "tenancy": "sole",
+          "interest": {
+            "numerator": 1,
+            "denominator": 1
+          },
+          "members": [
+            {
+              "partyId": "019a1b2c-3d4e-7f01-8a01-000000000102"
+            }
+          ],
+          "createdByFiling": "019a1b2c-3d4e-7f05-8a05-000000000502",
+          "validFrom": "2026-06-10T16:00:00Z"
+        }
+      ]
+    }
+  ]
+}
