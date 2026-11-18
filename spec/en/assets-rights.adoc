@@ -131,7 +131,7 @@ The profile MUST then declare that other register.
 It MUST also state the kinds of rights there and the identifier schemes that search them.
 The register MUST NOT copy those rights as its own encumbrances.
 
-The link:https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Québec register of movable rights], the RDPRM, takes a search by the vehicle identification number.
+The link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Québec register of movable rights], the RDPRM, takes a search by the vehicle identification number.
 The `ca-qc` profile declares it for the road vehicle register.
 A copy of another body's rights would soon differ from the original and mislead a buyer.
 
@@ -153,7 +153,7 @@ A register that kept its own copy would hold two truths about one person.
 * link:https://www.iso.org/standard/81263.html[ISO 19152-1:2024, Geographic information, Land Administration Domain Model, Part 1: Generic conceptual model], ISO, 2024, paywalled, not read. link:https://web.archive.org/web/20261012003939/https://www.iso.org/standard/81263.html[Archived copy]
 * link:https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Advisory Circular AC No. 202-002], Transport Canada. link:https://web.archive.org/web/20261101053933/https://tc.canada.ca/en/aviation/reference-centre/advisory-circulars/advisory-circular-ac-no-202-002[Archived copy]
 * link:https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[SIV, système d’immatriculation des véhicules], Commission nationale de l’informatique et des libertés. link:https://web.archive.org/web/20261003200905/https://www.cnil.fr/fr/siv-systeme-dimmatriculation-des-vehicules[Archived copy]
-* link:https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Questions et réponses], Registre des droits personnels et réels mobiliers, Gouvernement du Québec. link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Archived copy]
+* link:https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf[Questions et réponses], Registre des droits personnels et réels mobiliers, Gouvernement du Québec, archived copy.
 
 == Document history
 

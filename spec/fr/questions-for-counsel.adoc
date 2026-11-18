@@ -64,7 +64,7 @@ Elles se trouvent dans la Loi concernant le cadre juridique des technologies de 
 Des sources secondaires renvoient aux articles 5 à 7 et 39, _à vérifier_.
 Un journal de déclarations cachetées, en ajout seul, y satisfait-il quand il sert de document juridique ?
 
-. *Destruction et chaîne.* En 2012, la Loi sur l’abolition du registre des armes d’épaule, L.C. 2012, ch. 6, en a ordonné la destruction.
+. *Destruction et chaîne.* En 2012, une xref:retention.adoc[loi] a ordonné de détruire les données du registre des armes d’épaule.
 Supprimer le contenu et le sel, avec une trace de destruction qui garde un condensé, satisfait-il une telle ordonnance ?
 La trace de destruction de REG-094 garde-t-elle trop, ou trop peu ?
 Un registre doit-il aussi détruire les corrections et les déclarations ultérieures qui répètent une valeur visée, comme le demande REG-093 ?

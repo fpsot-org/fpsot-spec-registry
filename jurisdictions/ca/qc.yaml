@@ -23,7 +23,7 @@ rows:
   - id: REG-060
     text: {en: "Rights over vehicles live in a separate register, the RDPRM, which takes a search by vehicle identification number. A registered right is deemed known to everyone.", fr: "Les droits sur les véhicules se trouvent dans un registre distinct, le RDPRM, qui accepte une recherche par numéro d’identification du véhicule. Un droit inscrit est réputé connu de tous."}
     status: same
-    source: {title: "Registre des droits personnels et réels mobiliers, Questions et réponses", url: "https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf", archive: "https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf"}
+    source: {title: "Registre des droits personnels et réels mobiliers, Questions et réponses", url: "https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf", archive: "https://web.archive.org/web/20250801011407/https://www.rdprm.gouv.qc.ca/fr/documents/publications/10_q_r_rdprm.pdf"}
     last_checked: "2026-11-17"
   - id: REG-076
     text: {en: "The SAAQ discloses vehicle data under listed articles of the Highway Safety Code and publishes a register of its disclosures. The articles are to be verified.", fr: "La SAAQ communique des données sur les véhicules selon des articles énumérés du Code de la sécurité routière et publie un registre de ses communications. Les articles sont à vérifier."}

@@ -63,7 +63,7 @@ They sit in the Act to establish a legal framework for information technology.
 Secondary sources point to sections 5 to 7 and 39, _to be verified_.
 Does an append-only log of sealed filings meet them when it serves as the legal record?
 
-. *Destruction and the chain.* In 2012, the Ending the Long-gun Registry Act, S.C. 2012, c. 6, ordered the government to destroy the long-gun records.
+. *Destruction and the chain.* In 2012, an xref:retention.adoc[Act of Parliament] ordered the long-gun records destroyed.
 Does a deletion of the content and the salt, with a tombstone that keeps a hash, satisfy such an order?
 Does the tombstone of REG-094 keep too much, or too little?
 Must a register also destroy the corrections and later filings that repeat a targeted value, as REG-093 asks?
